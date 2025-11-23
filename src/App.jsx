@@ -32,7 +32,7 @@ function App() {
         <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="text-2xl font-bold text-primary-600 dark:text-primary-400 transition-colors duration-300">
-              MyWebsite
+              Bhupinder Singh Gill
             </div>
             <div className="flex items-center space-x-6">
               <a
@@ -42,10 +42,16 @@ function App() {
                 About
               </a>
               <a
-                href="#features"
+                href="#services"
                 className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-300 hidden sm:inline-block"
               >
-                Features
+                Services
+              </a>
+              <a
+                href="#experience"
+                className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-300 hidden sm:inline-block"
+              >
+                Experience
               </a>
               <a
                 href="#contact"
@@ -98,39 +104,49 @@ function App() {
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight transition-colors duration-300">
-              Build Something
+              Empowering Families with
               <span className="block text-primary-600 dark:text-primary-400 mt-2">
-                Amazing Today
+                The New Art of Living
               </span>
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto transition-colors duration-300">
-              A modern, beautiful, and responsive website built with React and
-              Tailwind CSS. Experience the perfect blend of design and
-              performance.
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-4 leading-relaxed max-w-2xl mx-auto transition-colors duration-300">
+              Financial Services Professional | Entrepreneur | Wealth Management Specialist
+            </p>
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto transition-colors duration-300">
+              Helping North American families achieve financial freedom through income growth, 
+              wealth creation, and self-improvement strategies.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="w-full sm:w-auto px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-                Get Started
-              </button>
-              <button className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-semibold rounded-xl shadow-md hover:shadow-lg border border-gray-200 dark:border-gray-700 transform hover:-translate-y-1 transition-all duration-300">
-                Learn More
-              </button>
+              <a 
+                href="https://www.linkedin.com/in/moneymatterswithgill" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-center"
+              >
+                Connect on LinkedIn
+              </a>
+              <a 
+                href="#contact"
+                className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-semibold rounded-xl shadow-md hover:shadow-lg border border-gray-200 dark:border-gray-700 transform hover:-translate-y-1 transition-all duration-300 text-center"
+              >
+                Get In Touch
+              </a>
             </div>
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Services Section */}
         <section
-          id="features"
+          id="services"
           className="bg-white dark:bg-gray-800 py-16 sm:py-24 transition-colors duration-300"
         >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">
-                Modern Features
+                Financial Services
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                Everything you need for a modern web experience
+                Comprehensive solutions for your financial well-being
               </p>
             </div>
 
@@ -147,16 +163,16 @@ function App() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 transition-colors duration-300">
-                  Lightning Fast
+                  Wealth Management
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
-                  Built with Vite for instant hot module replacement and
-                  optimized production builds.
+                  Investment strategies, retirement planning, and comprehensive 
+                  financial analysis to build generational wealth.
                 </p>
               </div>
 
@@ -172,16 +188,16 @@ function App() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
                     />
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 transition-colors duration-300">
-                  Mobile First
+                  Income Protection
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
-                  Designed with mobile devices in mind, ensuring perfect
-                  responsiveness on all screen sizes.
+                  Life, health, and disability insurance solutions to secure your 
+                  family's financial future.
                 </p>
               </div>
 
@@ -197,16 +213,91 @@ function App() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                     />
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 transition-colors duration-300">
-                  Dark Mode
+                  Debt Reduction
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
-                  Beautiful dark mode implementation that respects user
-                  preferences and system settings.
+                  Strategic plans to eliminate debt and achieve financial freedom 
+                  through disciplined money management.
+                </p>
+              </div>
+
+              <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300">
+                  <svg
+                    className="w-6 h-6 text-primary-600 dark:text-primary-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 transition-colors duration-300">
+                  Financial Education
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
+                  Educational workshops and one-on-one mentorship to understand 
+                  how money works and build wealth.
+                </p>
+              </div>
+
+              <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300">
+                  <svg
+                    className="w-6 h-6 text-primary-600 dark:text-primary-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 transition-colors duration-300">
+                  Tax Optimization
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
+                  Smart strategies to minimize tax burden and maximize your 
+                  wealth-building potential.
+                </p>
+              </div>
+
+              <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2">
+                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300">
+                  <svg
+                    className="w-6 h-6 text-primary-600 dark:text-primary-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 transition-colors duration-300">
+                  Business Solutions
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
+                  Specialized financial services for business owners and 
+                  entrepreneurs building their legacy.
                 </p>
               </div>
             </div>
@@ -216,22 +307,149 @@ function App() {
         {/* About Section */}
         <section id="about" className="py-16 sm:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-6 text-center transition-colors duration-300">
-                About This Project
+                About Me
               </h2>
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 sm:p-12 transition-colors duration-300">
-                <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6 transition-colors duration-300">
-                  This is a modern website built with the latest technologies
-                  and design principles. It showcases a clean, professional
-                  aesthetic with perfect responsiveness and accessibility.
-                </p>
-                <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
-                  Built with React, Vite, and Tailwind CSS, this project
-                  demonstrates best practices in modern web development,
-                  including mobile-first design, dark mode support, and smooth
-                  animations.
-                </p>
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">
+                    My Mission
+                  </h3>
+                  <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-4 transition-colors duration-300">
+                    I am dedicated to revolutionizing the financial lives of North American families through 
+                    <strong> "The New Art of Living"</strong> — a transformative approach that addresses the core challenges 
+                    families face today: lack of family time, overwhelming debt, limited income, and insecure retirement.
+                  </p>
+                </div>
+
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">
+                    Three Core Philosophies
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    <div className="border-l-4 border-primary-600 dark:border-primary-400 pl-6">
+                      <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
+                        1. Multi-Handed Income Philosophy
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
+                        Shift from "rented" income (salary, commission) to "owned" income (royalty, dividend, capital gains). 
+                        Create multiple streams of generational income that work for you.
+                      </p>
+                    </div>
+
+                    <div className="border-l-4 border-primary-600 dark:border-primary-400 pl-6">
+                      <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
+                        2. The 10% - 3 Rules - 3 Goals
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
+                        Master the discipline of saving 10%, apply the 3 Rules of Money (Compounding, Risk, and Tax Effects), 
+                        and achieve the 3 Goals: Income Protection, Income Replacement, and Generational Wealth.
+                      </p>
+                    </div>
+
+                    <div className="border-l-4 border-primary-600 dark:border-primary-400 pl-6">
+                      <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">
+                        3. Self-Improvement Philosophy
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
+                        Create an environment to realize your true potential and cultivate a winning spirit. 
+                        Personal growth is the foundation of lasting financial success.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">
+                    My Commitment
+                  </h3>
+                  <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300">
+                    I am committed to helping families get educated about how money works, multiply their income, 
+                    live a debt-free life, and ultimately experience a world-class lifestyle. As an independent business 
+                    owner with World Financial Group (WFG), I provide comprehensive financial services backed by proven 
+                    strategies and personalized guidance.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Experience Section */}
+        <section
+          id="experience"
+          className="bg-white dark:bg-gray-800 py-16 sm:py-24 transition-colors duration-300"
+        >
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-12 text-center transition-colors duration-300">
+                Professional Experience
+              </h2>
+
+              <div className="space-y-8">
+                <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 shadow-sm transition-colors duration-300">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                        Entrepreneur
+                      </h3>
+                      <p className="text-primary-600 dark:text-primary-400 font-semibold">
+                        Self-employed
+                      </p>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-400 mt-2 sm:mt-0">
+                      Apr 2022 – Present
+                    </p>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Focusing on Income Growth, Wealth Creation, and Self-Improvement through educational workshops, 
+                    community building, and one-on-one mentorship. Helping families achieve financial independence 
+                    through proven strategies and personalized guidance.
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 shadow-sm transition-colors duration-300">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                        Computer Network Technician
+                      </h3>
+                      <p className="text-primary-600 dark:text-primary-400 font-semibold">
+                        BC FROZEN FOODS LTD
+                      </p>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-400 mt-2 sm:mt-0">
+                      Nov 2018 – Mar 2023
+                    </p>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Provided technical support and network management solutions. Developed strong teamwork 
+                    and analytical skills while maintaining critical IT infrastructure.
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 shadow-sm transition-colors duration-300">
+                  <div className="mb-4">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                      Education
+                    </h3>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                        Computer Information Systems Diploma
+                      </p>
+                      <p className="text-primary-600 dark:text-primary-400 font-semibold">
+                        University of the Fraser Valley
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        2016 – 2017 | GPA: 3.88
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -240,20 +458,93 @@ function App() {
         {/* Contact Section */}
         <section
           id="contact"
-          className="bg-white dark:bg-gray-800 py-16 sm:py-24 transition-colors duration-300"
+          className="py-16 sm:py-24 transition-colors duration-300"
         >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-xl mx-auto text-center">
+            <div className="max-w-2xl mx-auto text-center">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-300">
-                Get In Touch
+                Let's Connect
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 transition-colors duration-300">
-                Have questions or want to collaborate? We'd love to hear from
-                you.
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 transition-colors duration-300">
+                Ready to transform your financial future? Let's discuss how I can help you 
+                achieve your wealth creation goals.
               </p>
-              <button className="px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-                Contact Us
-              </button>
+              
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-8 transition-colors duration-300">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-center space-x-3">
+                    <svg
+                      className="w-6 h-6 text-primary-600 dark:text-primary-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      Mission, British Columbia, Canada
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-center justify-center space-x-3">
+                    <svg
+                      className="w-6 h-6 text-primary-600 dark:text-primary-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      Independent Business Owner - World Financial Group (WFG)
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-center space-x-3">
+                    <svg
+                      className="w-6 h-6 text-primary-600 dark:text-primary-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      500+ Connections | 5,465 Followers
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <a 
+                href="https://www.linkedin.com/in/moneymatterswithgill" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+              >
+                Connect on LinkedIn
+              </a>
             </div>
           </div>
         </section>
@@ -263,8 +554,14 @@ function App() {
       <footer className="bg-gray-900 dark:bg-gray-950 text-white py-12 transition-colors duration-300">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-gray-400">
-              © 2024 MyWebsite. Built with React & Tailwind CSS.
+            <h3 className="text-xl font-bold text-white mb-2">
+              Bhupinder Singh Gill
+            </h3>
+            <p className="text-gray-400 mb-4">
+              Empowering families with "The New Art of Living"
+            </p>
+            <p className="text-gray-500 text-sm">
+              © 2024 Bhupinder Singh Gill. All rights reserved. | Built with React & Tailwind CSS
             </p>
           </div>
         </div>
