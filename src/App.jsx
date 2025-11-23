@@ -110,7 +110,7 @@ function App() {
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-4 leading-relaxed max-w-2xl mx-auto transition-colors duration-300">
-              Educator | Community Empowerment Leader
+              Financial Educator | Community Empowerment Leader
             </p>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto transition-colors duration-300">
               Teaching North American families to achieve financial freedom
