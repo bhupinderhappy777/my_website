@@ -1,71 +1,67 @@
-# Modern Website
+# Educator Website — Income Growth, Financial Education, Self-Improvement
 
-A modern, beautiful, and responsive website built with React, Vite, and Tailwind CSS.
+This repository contains a small React + Vite site that presents an educator-led offering focused on three core areas:
 
-## Features
+- Income Growth — practical frameworks to create multiple income streams
+- Financial Education — clear, actionable financial lessons and systems
+- Self-Improvement — habit design and accountability to turn plans into results
 
-- ⚡ **Lightning Fast**: Built with Vite for instant hot module replacement and optimized production builds
-- 📱 **Mobile First**: Designed with mobile devices in mind, ensuring perfect responsiveness on all screen sizes
-- 🌓 **Dark Mode**: Beautiful dark mode implementation that respects user preferences and system settings
-- 🎨 **Modern Design**: Clean, professional aesthetic with rounded corners, generous spacing, and smooth animations
-- ♿ **Accessible**: High contrast ratios and proper semantic HTML for better accessibility
+## Quick start
 
-## Tech Stack
-
-- **Framework**: React 19
-- **Build Tool**: Vite 7
-- **Styling**: Tailwind CSS 3
-- **Code Quality**: ESLint + Prettier
-
-## Getting Started
-
-### Installation
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-### Development
+Run the development server:
 
 ```bash
 npm run dev
 ```
 
-### Build
+Build for production:
 
 ```bash
 npm run build
 ```
 
-The build output will be generated in the `/dist` directory.
-
-### Preview Production Build
+Preview the production build locally:
 
 ```bash
 npm run preview
 ```
 
-## Deployment
+## Deployment (Cloudflare Pages)
 
-This project is configured for deployment on Cloudflare Pages:
+Recommended: deploy as a static site on Cloudflare Pages.
 
-- **Build Command**: `npm run build`
-- **Output Directory**: `dist`
+- Build command: `npm run build`
+- Build output directory: `dist`
+- If you previously added a custom deploy step like `npx wrangler deploy`, remove it — Pages only needs the build command and `dist`.
 
-## Project Structure
+If you prefer deploying site assets with Wrangler (Workers), add a `wrangler.toml` or `wrangler.jsonc` that points to `dist` as the site bucket/asset directory.
+
+## What changed
+
+This repository has been simplified to reflect the educator positioning: the homepage, programs, resources, and contact views have been updated to present a clean, actionable message for learners.
+
+## Project structure
 
 ```
 /
 ├── src/
-│   ├── App.jsx       # Main application component
-│   ├── index.css     # Global styles with Tailwind directives
+│   ├── App.jsx       # Main application component (educator content)
+│   ├── index.css     # Global styles
 │   └── main.jsx      # Application entry point
-├── public/           # Static assets
+├── public/           # Static assets (starter guide, images)
 ├── dist/             # Build output (generated)
-└── index.html        # HTML template
+└── index.html        # HTML template and metadata
 ```
 
-## Code Quality
+If you want, I can further:
 
-- **Linting**: `npm run lint`
-- **Formatting**: `npm run format`
+- Add a short signup form wired to Netlify/Forms or a simple Mailchimp link
+- Create a downloadable `starter-guide.pdf` in `public/` and link it from Resources
+- Prepare a `wrangler.jsonc` that uploads `dist` when you explicitly want Wrangler-based deploys
+
