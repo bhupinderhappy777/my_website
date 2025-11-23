@@ -54,6 +54,12 @@ function App() {
                 Experience
               </a>
               <a
+                href="#schedule"
+                className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-300 hidden sm:inline-block"
+              >
+                Schedule
+              </a>
+              <a
                 href="#contact"
                 className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-300 hidden sm:inline-block"
               >
@@ -119,18 +125,18 @@ function App() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a
+                href="#schedule"
+                className="w-full sm:w-auto px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-center"
+              >
+                Schedule a Meeting
+              </a>
+              <a
                 href="https://www.linkedin.com/in/moneymatterswithgill"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-center"
-              >
-                Connect on LinkedIn
-              </a>
-              <a
-                href="#contact"
                 className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-semibold rounded-xl shadow-md hover:shadow-lg border border-gray-200 dark:border-gray-700 transform hover:-translate-y-1 transition-all duration-300 text-center"
               >
-                Get In Touch
+                Connect on LinkedIn
               </a>
             </div>
           </div>
@@ -368,10 +374,39 @@ function App() {
           </div>
         </section>
 
+        {/* Schedule Section */}
+        <section
+          id="schedule"
+          className="py-16 sm:py-24 transition-colors duration-300"
+        >
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-6 text-center transition-colors duration-300">
+                Schedule a Meeting
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 text-center transition-colors duration-300">
+                Book a convenient time to discuss your financial goals and learn
+                how The New Art of Living can help you achieve financial freedom.
+              </p>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-8 transition-colors duration-300">
+                <div className="w-full" style={{ minHeight: '600px' }}>
+                  <iframe
+                    src="https://cal.com/moneymatterswithgill"
+                    className="w-full rounded-xl"
+                    style={{ border: 0, minHeight: '600px', height: '700px' }}
+                    title="Schedule a meeting with Bhupinder Singh Gill"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Contact Section */}
         <section
           id="contact"
-          className="py-16 sm:py-24 transition-colors duration-300"
+          className="bg-white dark:bg-gray-800 py-16 sm:py-24 transition-colors duration-300"
         >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl mx-auto text-center">
@@ -451,14 +486,22 @@ function App() {
                 </div>
               </div>
 
-              <a
-                href="https://www.linkedin.com/in/moneymatterswithgill"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-              >
-                Connect on LinkedIn
-              </a>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a
+                  href="#schedule"
+                  className="inline-block px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                >
+                  Schedule a Meeting
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/moneymatterswithgill"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-8 py-4 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-950 text-gray-900 dark:text-white font-semibold rounded-xl shadow-md hover:shadow-lg border border-gray-200 dark:border-gray-700 transform hover:-translate-y-1 transition-all duration-300"
+                >
+                  Connect on LinkedIn
+                </a>
+              </div>
             </div>
           </div>
         </section>
