@@ -2,10 +2,12 @@
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
 
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('active');
-});
+if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    });
+}
 
 // Close mobile menu when a link is clicked
 document.querySelectorAll('.nav-links a').forEach(link => {
@@ -35,34 +37,32 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // Form submission handler
 const contactForm = document.querySelector('.contact-form');
-contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Get form data
-    const formData = new FormData(contactForm);
-    
-    // Show success message
-    alert('Thank you for your message! We will get back to you soon.');
-    
-    // Reset form
-    contactForm.reset();
-});
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Show success message
+        alert('Thank you for your message! We will get back to you soon.');
+        
+        // Reset form
+        contactForm.reset();
+    });
+}
 
 // Add scroll effect to navbar
-let lastScroll = 0;
 const navbar = document.querySelector('header');
 
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 100) {
-        navbar.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
-    } else {
-        navbar.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
-    }
-    
-    lastScroll = currentScroll;
-});
+if (navbar) {
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 100) {
+            navbar.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+        } else {
+            navbar.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+        }
+    });
+}
 
 // Animate elements on scroll
 const observerOptions = {
@@ -89,8 +89,13 @@ document.querySelectorAll('.service-card').forEach(card => {
 
 // CTA button interaction
 const ctaButton = document.querySelector('.cta-button');
-ctaButton.addEventListener('click', () => {
-    document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' });
-});
+if (ctaButton) {
+    ctaButton.addEventListener('click', () => {
+        const contactSection = document.querySelector('#contact');
+        if (contactSection) {
+            contactSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+}
 
 console.log('Website loaded successfully!');
