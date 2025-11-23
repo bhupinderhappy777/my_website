@@ -363,6 +363,10 @@ function App() {
                     and generational wealth.
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Contact Section */}
         <section
