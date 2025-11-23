@@ -144,7 +144,7 @@ function App() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4 transition-colors duration-300">
-                Problems I Solve
+                The New Art of Living
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300">
                 Empowering families through education and proven strategies
@@ -363,31 +363,6 @@ function App() {
                     and generational wealth.
                   </p>
                 </div>
-
-                <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-8 shadow-sm transition-colors duration-300">
-                  <div className="mb-4">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
-                      Education
-                    </h3>
-                  </div>
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                        Computer Information Systems Diploma
-                      </p>
-                      <p className="text-primary-600 dark:text-primary-400 font-semibold">
-                        University of the Fraser Valley
-                      </p>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        2016 – 2017 | GPA: 3.88
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Contact Section */}
         <section
