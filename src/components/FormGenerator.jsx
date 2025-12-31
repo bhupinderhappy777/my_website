@@ -26,7 +26,7 @@ export default function FormGenerator() {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState(null);
 
-  // 👇 FIXED: useForm with watch() to capture ALL changes
+  // 👇 FULL useForm with all hooks needed for KYCForm
   const { register, handleSubmit, reset, setValue, watch, getValues } = useForm();
 
   const fetchData = useCallback(async () => {
@@ -68,15 +68,15 @@ export default function FormGenerator() {
     const fieldMappings = selectedTemplate.field_mappings || {};
 
     console.group('🎯 FORM AUTO-FILL DEBUG');
-    console.log('👤 Client data:', client);
-    console.log('📋 Field mappings:', fieldMappings);
+    console.log('👤 Client:', client);
+    console.log('📋 Mappings:', fieldMappings);
 
-    // 👇 FIXED: Map client data to form fields
+    // Map client data to PDF fields
     Object.entries(fieldMappings).forEach(([pdfField, clientField]) => {
       const value = client[clientField];
       
-      console.group(`🔍 Mapping "${pdfField}" ← "${clientField}"`);
-      console.log('Raw Value:', value);
+      console.group(`🔍 "${pdfField}" ← "${clientField}"`);
+      console.log('Value:', value);
       
       if (value !== undefined && value !== null && value !== '') {
         setValue(pdfField, String(value));
@@ -87,14 +87,28 @@ export default function FormGenerator() {
       console.groupEnd();
     });
 
-    console.log('🎉 AUTO-FILL COMPLETE');
+    // Direct mapping for common fields
+    const directFields = [
+      'first_name', 'last_name', 'email', 'dob', 'sin', 'address',
+      'city', 'province', 'postal_code', 'phone_residence', 
+      'phone_business', 'employer', 'occupation', 'net_worth'
+    ];
+
+    directFields.forEach((field) => {
+      if (client[field] !== undefined && client[field] !== null) {
+        setValue(field, String(client[field]));
+        console.log(`✅ DIRECT: "${field}" = "${client[field]}"`);
+      }
+    });
+
+    console.log('🎉 PREFILL COMPLETE');
     console.groupEnd();
   }, [client, selectedTemplate, setValue]);
 
-  // 👇 FIXED: Reset + prefill when template changes
+  // Reset + prefill when template changes
   useEffect(() => {
     if (client && selectedTemplate) {
-      reset(); // Clear form first
+      reset();
       prefillForm();
     }
   }, [client, selectedTemplate, prefillForm, reset]);
@@ -113,18 +127,15 @@ export default function FormGenerator() {
     const templateId = e.target.value;
     const template = templates.find((t) => t.id === templateId);
     setSelectedTemplate(template || null);
-    reset(); // 👇 FIXED: Reset form when changing templates
+    reset();
   };
 
-  // 👇 FIXED: onSubmit uses CURRENT form values (getValues/watch)
   const onSubmit = async (data) => {
-    console.group('📤 PDF GENERATION DEBUG');
-    console.log('🔥 CURRENT FORM DATA (includes changes):', data);
-    console.log('📄 Template:', selectedTemplate);
+    console.group('📤 PDF GENERATION');
+    console.log('🔥 FORM DATA (50+ fields):', data);
     
     if (!selectedTemplate?.pdf_url) {
-      setError('No PDF template URL configured');
-      console.groupEnd();
+      setError('No PDF template URL');
       return;
     }
 
@@ -132,14 +143,13 @@ export default function FormGenerator() {
     setError(null);
 
     try {
-      // 👇 USES CURRENT FORM DATA (your changes + prefilled)
       const pdfBytes = await fillPDF(selectedTemplate.pdf_url, data);
       const filename = `${selectedTemplate.name}_${client?.first_name || 'client'}_${client?.last_name || 'unknown'}.pdf`;
       downloadPDF(pdfBytes, filename);
-      console.log(`✅ PDF Downloaded: ${filename}`);
+      console.log(`✅ PDF: ${filename}`);
     } catch (err) {
       console.error('❌ PDF Error:', err);
-      setError('Failed to generate PDF');
+      setError('PDF generation failed');
     } finally {
       setGenerating(false);
       console.groupEnd();
@@ -148,8 +158,7 @@ export default function FormGenerator() {
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-CA');
+    return new Date(dateString).toLocaleDateString('en-CA');
   };
 
   const formatCurrency = (value) => {
@@ -165,32 +174,32 @@ export default function FormGenerator() {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-300">Loading...</p>
+          <div className="w-12 h-12 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-xl text-gray-600 dark:text-gray-300">Loading client & templates...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-all duration-300">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm transition-colors duration-300">
+      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate('/agent/clients')}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-300"
+              className="p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+              <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                 Form Generator
               </h1>
               {client && (
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Client: {client.first_name} {client.last_name}
+                <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
+                  {client.first_name} {client.last_name}
                 </p>
               )}
             </div>
@@ -198,61 +207,65 @@ export default function FormGenerator() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl">
         {error && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-            <p className="text-red-700 dark:text-red-400 text-sm">{error}</p>
+          <div className="mb-8 p-6 bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-800 rounded-2xl flex items-center gap-4">
+            <AlertCircle className="w-6 h-6 text-red-500 flex-shrink-0" />
+            <p className="text-lg text-red-800 dark:text-red-200 font-medium">{error}</p>
           </div>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column */}
-          <div className="space-y-6">
+          {/* Left Column - Client & Template */}
+          <div className="space-y-6 lg:max-w-md">
             {/* Client Card */}
             {client && (
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
-                    <User className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+              <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/50 dark:border-gray-700/50">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <User className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                       {client.first_name} {client.last_name}
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-lg text-primary-600 dark:text-primary-400 font-semibold">
                       {client.email || 'No email'}
                     </p>
                   </div>
                 </div>
-                {/* Client details */}
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">DOB:</span>
-                    <span>{formatDate(client.dob) || '-'}</span>
+
+                <div className="space-y-4 text-sm">
+                  <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-600 dark:text-gray-400">DOB</span>
+                    <span className="font-semibold">{formatDate(client.dob) || '-'}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Net Worth:</span>
-                    <span>{formatCurrency(client.net_worth) || '-'}</span>
+                  <div className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-600 dark:text-gray-400">Net Worth</span>
+                    <span className="font-semibold text-green-600">{formatCurrency(client.net_worth) || '-'}</span>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <span className="text-gray-600 dark:text-gray-400">Risk Tolerance</span>
+                    <span className="font-semibold">{client.risk_tolerance || '-'}</span>
                   </div>
                 </div>
               </div>
             )}
 
             {/* Template Selection */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <FileText className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                  Select Form Template
+            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/50 dark:border-gray-700/50">
+              <div className="flex items-center gap-3 mb-6">
+                <FileText className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Form Template
                 </h2>
               </div>
 
               <select
                 onChange={handleTemplateChange}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-5 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-700 text-lg font-medium text-gray-900 dark:text-white focus:ring-4 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                <option value="">Choose a template...</option>
+                <option value="">Choose template...</option>
                 {templates.map((template) => (
                   <option key={template.id} value={template.id}>
                     {template.name} ({template.company})
@@ -261,96 +274,119 @@ export default function FormGenerator() {
               </select>
 
               {selectedTemplate && (
-                <div className="mt-4 p-3 bg-primary-50 dark:bg-primary-900/20 rounded-xl">
-                  <p className="text-sm font-medium">
-                    <strong>{selectedTemplate.name}</strong> - {selectedTemplate.company}
-                  </p>
+                <div className="mt-6 p-4 bg-gradient-to-r from-emerald-500/20 to-green-500/20 border-2 border-emerald-200 dark:border-emerald-800 rounded-2xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />
+                    <div>
+                      <p className="font-bold text-emerald-800 dark:text-emerald-200 text-lg">
+                        {selectedTemplate.name}
+                      </p>
+                      <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                        {selectedTemplate.company}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Right Column - DYNAMIC FORM */}
+          {/* Right Column - FULL KYC FORM */}
           <div className="lg:col-span-2">
             {!selectedTemplate ? (
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 text-center">
-                <FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                  Select a Form Template
+              <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-xl rounded-3xl shadow-2xl p-16 text-center border border-white/30 dark:border-gray-700/50">
+                <FileText className="w-24 h-24 text-gray-300 dark:text-gray-600 mx-auto mb-6 opacity-50" />
+                <h3 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-3">
+                  Select Form Template
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Choose from the dropdown to prefill client data
+                <p className="text-xl text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+                  Choose a template to load the pre-filled form and generate PDF
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-                  {selectedTemplate.name} - Edit & Generate
-                </h2>
-
-                {/* 👇 DYNAMIC FORM - ALL REGISTERED FIELDS */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 max-h-96 overflow-y-auto p-2">
-                  {/* Personal Info */}
-                  <div className="md:col-span-2 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                    <h3 className="font-semibold mb-3">Personal Information</h3>
-                    
-                    <input {...register('first_name')} placeholder="First Name" className="w-full p-3 border rounded-lg mb-3" />
-                    <input {...register('last_name')} placeholder="Last Name" className="w-full p-3 border rounded-lg mb-3 md:mr-2" />
-                    <input {...register('sin')} placeholder="SIN" className="w-full p-3 border rounded-lg mb-3" />
-                    <input type="date" {...register('dob')} className="w-full p-3 border rounded-lg mb-3" />
-                  </div>
-
-                  {/* Contact */}
-                  <div className="md:col-span-2 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                    <h3 className="font-semibold mb-3">Contact</h3>
-                    <input {...register('email')} type="email" placeholder="Email" className="w-full p-3 border rounded-lg mb-3" />
-                    <input {...register('phone_residence')} placeholder="Phone Residence" className="w-full p-3 border rounded-lg mb-3 md:mr-2" />
-                    <input {...register('phone_business')} placeholder="Phone Business" className="w-full p-3 border rounded-lg mb-3" />
-                  </div>
-
-                  {/* Address */}
-                  <div className="md:col-span-2 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-                    <h3 className="font-semibold mb-3">Address</h3>
-                    <input {...register('address')} placeholder="Street Address" className="w-full p-3 border rounded-lg mb-3" />
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      <input {...register('city')} placeholder="City" className="p-3 border rounded-lg" />
-                      <input {...register('province')} placeholder="Province" className="p-3 border rounded-lg" />
-                      <input {...register('postal_code')} placeholder="Postal Code" className="p-3 border rounded-lg" />
-                    </div>
-                  </div>
-
-                  {/* Financial */}
-                  <div className="md:col-span-2 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
-                    <h3 className="font-semibold mb-3">Financial Information</h3>
-                    <input {...register('net_worth')} placeholder="Net Worth" className="w-full p-3 border rounded-lg mb-3" />
-                    <input {...register('liquid_assets')} type="number" placeholder="Liquid Assets" className="w-full p-3 border rounded-lg mb-3" />
-                    <input {...register('annual_income')} placeholder="Annual Income" className="w-full p-3 border rounded-lg" />
+              <form onSubmit={handleSubmit(onSubmit)} className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/50 dark:border-gray-700/50">
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                    {selectedTemplate.name}
+                  </h2>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    {Object.keys(getValues()).length} fields ready
                   </div>
                 </div>
 
-                {/* 👇 GENERATE BUTTON - Uses ALL form changes */}
-                <button
-                  type="submit"
-                  disabled={generating}
-                  className="w-full px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-bold rounded-2xl shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 text-lg"
-                >
-                  {generating ? (
-                    <>
-                      <Loader2 className="w-6 h-6 animate-spin" />
-                      Generating PDF...
-                    </>
-                  ) : (
-                    <>
-                      <Download className="w-6 h-6" />
-                      Download {selectedTemplate.name} PDF
-                    </>
-                  )}
-                </button>
+                {/* ✅ FULL KYC EXTENDED FORM */}
+                {selectedTemplate.name?.toLowerCase().includes('kyc') ? (
+                  <>
+                    <div className="mb-8 p-6 bg-gradient-to-r from-emerald-500/10 to-green-500/10 border-2 border-emerald-200 dark:border-emerald-800 rounded-3xl">
+                      <div className="flex items-center gap-4">
+                        <div className="w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-bold text-white">✓</span>
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-emerald-800 dark:text-emerald-200">
+                            KYC Extended Form Loaded (50+ Fields)
+                          </h3>
+                          <p className="text-emerald-700 dark:text-emerald-300">
+                            Personal, Tax, Financial, Investment, ID sections
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <KYCForm register={register} setValue={setValue} client={client} />
+                  </>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                        First Name
+                      </label>
+                      <input
+                        {...register('first_name')}
+                        className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-700 text-lg focus:ring-4 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 shadow-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                        Last Name
+                      </label>
+                      <input
+                        {...register('last_name')}
+                        className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-700 text-lg focus:ring-4 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 shadow-sm"
+                      />
+                    </div>
+                    {/* Add more generic fields as needed */}
+                  </div>
+                )}
 
-                {/* 👇 DEBUG INFO */}
-                <details className="mt-4 p-4 bg-gray-900 text-white rounded-xl text-xs">
-                  <summary>Debug Form Data (click to expand)</summary>
-                  <pre>{JSON.stringify(getValues(), null, 2)}</pre>
+                {/* Generate Button */}
+                <div className="mt-12 pt-10 border-t-4 border-gradient-to-r border-transparent from-primary-500 to-primary-600 bg-gradient-to-r p-1 rounded-3xl">
+                  <button
+                    type="submit"
+                    disabled={generating}
+                    className="w-full px-12 py-6 bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold text-xl rounded-3xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-4 group"
+                  >
+                    {generating ? (
+                      <>
+                        <Loader2 className="w-8 h-8 animate-spin" />
+                        <span>Generating PDF...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-8 h-8 group-hover:scale-110 transition-transform" />
+                        <span>Download {selectedTemplate.name} PDF</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Debug Panel */}
+                <details className="mt-8 p-6 bg-gray-900/95 backdrop-blur-xl text-white rounded-3xl border border-gray-700 text-sm shadow-2xl">
+                  <summary className="cursor-pointer font-bold pb-3 border-b border-gray-700 flex items-center gap-2">
+                    🔍 Debug: Form Data ({Object.keys(getValues()).length} fields)
+                  </summary>
+                  <pre className="mt-4 overflow-auto max-h-80 font-mono text-xs">
+                    {JSON.stringify(getValues(), null, 2)}
+                  </pre>
                 </details>
               </form>
             )}
