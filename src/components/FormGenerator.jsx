@@ -119,12 +119,17 @@ export default function FormGenerator() {
     return <Navigate to="/agent/login" replace />;
   }
 
-  const handleTemplateChange = (e) => {
-    const templateId = e.target.value;
-    const template = templates.find((t) => t.id === parseInt(templateId, 10));
-    setSelectedTemplate(template || null);
-    reset(); // Reset form when template changes
-  };
+const handleTemplateChange = (e) => {
+  const templateId = e.target.value;
+  console.log('🔍 Template ID selected:', templateId);
+  console.log('🔍 All templates:', templates);
+  
+  const template = templates.find((t) => t.id === parseInt(templateId, 10));
+  console.log('🔍 Found template:', template);
+  
+  setSelectedTemplate(template || null);
+  reset();
+};
 
   const onSubmit = async (data) => {
     if (!selectedTemplate?.pdf_url) {
@@ -284,6 +289,9 @@ export default function FormGenerator() {
                   </option>
                 ))}
               </select>
+
+              {console.log('🔍 Current selectedTemplate state:', selectedTemplate)}
+              {selectedTemplate && console.log('🔍 Template IS selected, form should show')}
 
               {selectedTemplate && (
                 <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
