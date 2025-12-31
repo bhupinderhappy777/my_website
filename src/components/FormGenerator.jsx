@@ -26,7 +26,8 @@ export default function FormGenerator() {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState(null);
 
-  const { register, handleSubmit, reset, setValue } = useForm();
+  // 👇 FIXED: useForm with watch() to capture ALL changes
+  const { register, handleSubmit, reset, setValue, watch, getValues } = useForm();
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -66,67 +67,37 @@ export default function FormGenerator() {
 
     const fieldMappings = selectedTemplate.field_mappings || {};
 
-// COMPLETE DEBUG VERSION - Replace your mapping function
-console.group('🎯 FORM AUTO-FILL DEBUG');
-console.log('👤 Client data:', client);
-console.log('📋 Field mappings:', fieldMappings);
-console.log('📄 Available PDF fields:', Object.keys(fieldMappings));
-console.groupEnd();
+    console.group('🎯 FORM AUTO-FILL DEBUG');
+    console.log('👤 Client data:', client);
+    console.log('📋 Field mappings:', fieldMappings);
 
-Object.entries(fieldMappings).forEach(([pdfField, clientField], index) => {
-  const value = client[clientField];
-  
-  console.groupCollapsed(`Field ${index + 1}/${Object.keys(fieldMappings).length}: "${pdfField}"`);
-  console.log(`   PDF Field → "${pdfField}"`);
-  console.log(`   Client Field → "${clientField}"`);
-  console.log(`   Raw Value →`, value);
-  console.log(`   Type →`, typeof value);
-  console.log(`   Exists? →`, value !== undefined && value !== null && value !== '');
-  
-  if (value !== undefined && value !== null && value !== '') {
-    const displayValue = String(value);
-    setValue(pdfField, displayValue);
-    console.log(`   ✅ SUCCESS: SET "${pdfField}" = "${displayValue}"`);
-  } else {
-    console.log(`   ❌ SKIPPED: empty/null/undefined`);
-  }
-  
-  console.groupEnd();
-});
-
-console.log('🎉 AUTO-FILL COMPLETE');
-console.log(`📊 SUCCESS: ${Object.values(fieldMappings).filter(field => client[field] !== undefined && client[field] !== null).length}/${Object.keys(fieldMappings).length} fields filled`);
-
-
-    // Also set common fields directly if no mapping exists
-    const directFields = [
-      'first_name',
-      'last_name',
-      'email',
-      'dob',
-      'sin',
-      'address',
-      'city',
-      'province',
-      'postal_code',
-      'phone_residence',
-      'phone_business',
-      'employer',
-      'occupation',
-      'annual_income',
-      'net_worth',
-      'liquid_assets',
-      'investment_knowledge',
-      'risk_tolerance',
-      'investment_objective',
-    ];
-
-    directFields.forEach((field) => {
-      if (client[field] !== undefined && client[field] !== null) {
-        setValue(field, String(client[field]));
+    // 👇 FIXED: Map client data to form fields
+    Object.entries(fieldMappings).forEach(([pdfField, clientField]) => {
+      const value = client[clientField];
+      
+      console.group(`🔍 Mapping "${pdfField}" ← "${clientField}"`);
+      console.log('Raw Value:', value);
+      
+      if (value !== undefined && value !== null && value !== '') {
+        setValue(pdfField, String(value));
+        console.log(`✅ SET "${pdfField}" = "${String(value)}"`);
+      } else {
+        console.log('❌ SKIPPED - empty');
       }
+      console.groupEnd();
     });
+
+    console.log('🎉 AUTO-FILL COMPLETE');
+    console.groupEnd();
   }, [client, selectedTemplate, setValue]);
+
+  // 👇 FIXED: Reset + prefill when template changes
+  useEffect(() => {
+    if (client && selectedTemplate) {
+      reset(); // Clear form first
+      prefillForm();
+    }
+  }, [client, selectedTemplate, prefillForm, reset]);
 
   useEffect(() => {
     if (session) {
@@ -134,27 +105,26 @@ console.log(`📊 SUCCESS: ${Object.values(fieldMappings).filter(field => client
     }
   }, [session, fetchData]);
 
-  useEffect(() => {
-    if (client && selectedTemplate) {
-      prefillForm();
-    }
-  }, [client, selectedTemplate, prefillForm]);
-
-  // Redirect if not logged in (must be after all hooks)
   if (!session) {
     return <Navigate to="/agent/login" replace />;
   }
 
-const handleTemplateChange = (e) => {
-  const templateId = e.target.value;
-  const template = templates.find((t) => t.id === templateId);
-  setSelectedTemplate(template || null);
-  reset();
-};
+  const handleTemplateChange = (e) => {
+    const templateId = e.target.value;
+    const template = templates.find((t) => t.id === templateId);
+    setSelectedTemplate(template || null);
+    reset(); // 👇 FIXED: Reset form when changing templates
+  };
 
+  // 👇 FIXED: onSubmit uses CURRENT form values (getValues/watch)
   const onSubmit = async (data) => {
+    console.group('📤 PDF GENERATION DEBUG');
+    console.log('🔥 CURRENT FORM DATA (includes changes):', data);
+    console.log('📄 Template:', selectedTemplate);
+    
     if (!selectedTemplate?.pdf_url) {
-      setError('No PDF template URL configured for this form');
+      setError('No PDF template URL configured');
+      console.groupEnd();
       return;
     }
 
@@ -162,14 +132,17 @@ const handleTemplateChange = (e) => {
     setError(null);
 
     try {
+      // 👇 USES CURRENT FORM DATA (your changes + prefilled)
       const pdfBytes = await fillPDF(selectedTemplate.pdf_url, data);
-      const filename = `${selectedTemplate.name}_${client.first_name}_${client.last_name}.pdf`;
+      const filename = `${selectedTemplate.name}_${client?.first_name || 'client'}_${client?.last_name || 'unknown'}.pdf`;
       downloadPDF(pdfBytes, filename);
+      console.log(`✅ PDF Downloaded: ${filename}`);
     } catch (err) {
-      console.error('PDF generation error:', err);
-      setError('Failed to generate PDF. Please try again.');
+      console.error('❌ PDF Error:', err);
+      setError('Failed to generate PDF');
     } finally {
       setGenerating(false);
+      console.groupEnd();
     }
   };
 
@@ -234,11 +207,11 @@ const handleTemplateChange = (e) => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Client Info & Template Selection */}
+          {/* Left Column */}
           <div className="space-y-6">
             {/* Client Card */}
             {client && (
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 transition-colors duration-300">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
                     <User className="w-6 h-6 text-primary-600 dark:text-primary-400" />
@@ -252,46 +225,22 @@ const handleTemplateChange = (e) => {
                     </p>
                   </div>
                 </div>
-
+                {/* Client details */}
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      DOB:
-                    </span>
-                    <span className="text-gray-900 dark:text-white">
-                      {formatDate(client.dob) || '-'}
-                    </span>
+                    <span className="text-gray-600 dark:text-gray-400">DOB:</span>
+                    <span>{formatDate(client.dob) || '-'}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      Net Worth:
-                    </span>
-                    <span className="text-gray-900 dark:text-white">
-                      {formatCurrency(client.net_worth) || '-'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      Risk Tolerance:
-                    </span>
-                    <span className="text-gray-900 dark:text-white">
-                      {client.risk_tolerance || '-'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      Objective:
-                    </span>
-                    <span className="text-gray-900 dark:text-white">
-                      {client.investment_objective || '-'}
-                    </span>
+                    <span className="text-gray-600 dark:text-gray-400">Net Worth:</span>
+                    <span>{formatCurrency(client.net_worth) || '-'}</span>
                   </div>
                 </div>
               </div>
             )}
 
             {/* Template Selection */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 transition-colors duration-300">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
               <div className="flex items-center gap-3 mb-4">
                 <FileText className="w-6 h-6 text-primary-600 dark:text-primary-400" />
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">
@@ -301,315 +250,108 @@ const handleTemplateChange = (e) => {
 
               <select
                 onChange={handleTemplateChange}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="">Choose a template...</option>
                 {templates.map((template) => (
                   <option key={template.id} value={template.id}>
-                    {template.name} {template.company && `(${template.company})`}
+                    {template.name} ({template.company})
                   </option>
                 ))}
               </select>
 
-              {console.log('🔍 Current selectedTemplate state:', selectedTemplate)}
-              {selectedTemplate && console.log('🔍 Template IS selected, form should show')}
-
               {selectedTemplate && (
-                <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    <strong>Company:</strong> {selectedTemplate.company || 'N/A'}
+                <div className="mt-4 p-3 bg-primary-50 dark:bg-primary-900/20 rounded-xl">
+                  <p className="text-sm font-medium">
+                    <strong>{selectedTemplate.name}</strong> - {selectedTemplate.company}
                   </p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Right Column - Form Fields */}
+          {/* Right Column - DYNAMIC FORM */}
           <div className="lg:col-span-2">
             {!selectedTemplate ? (
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 text-center transition-colors duration-300">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 text-center">
                 <FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   Select a Form Template
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Choose a form template from the dropdown to prefill client
-                  data and generate a PDF.
+                  Choose from the dropdown to prefill client data
                 </p>
               </div>
             ) : (
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 transition-colors duration-300"
-              >
+              <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-                  {selectedTemplate.name}
+                  {selectedTemplate.name} - Edit & Generate
                 </h2>
 
-                {/* Check if this is a KYC form template */}
-                {selectedTemplate.name && selectedTemplate.name.toLowerCase().includes('kyc') ? (
-                  <KYCForm register={register} setValue={setValue} client={client} />
-                ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Personal Information */}
-                  <div className="md:col-span-2">
-                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-gray-700 pb-2">
-                      Personal Information
-                    </h3>
+                {/* 👇 DYNAMIC FORM - ALL REGISTERED FIELDS */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 max-h-96 overflow-y-auto p-2">
+                  {/* Personal Info */}
+                  <div className="md:col-span-2 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                    <h3 className="font-semibold mb-3">Personal Information</h3>
+                    
+                    <input {...register('first_name')} placeholder="First Name" className="w-full p-3 border rounded-lg mb-3" />
+                    <input {...register('last_name')} placeholder="Last Name" className="w-full p-3 border rounded-lg mb-3 md:mr-2" />
+                    <input {...register('sin')} placeholder="SIN" className="w-full p-3 border rounded-lg mb-3" />
+                    <input type="date" {...register('dob')} className="w-full p-3 border rounded-lg mb-3" />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      First Name
-                    </label>
-                    <input
-                      {...register('first_name')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Last Name
-                    </label>
-                    <input
-                      {...register('last_name')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      {...register('email')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Date of Birth
-                    </label>
-                    <input
-                      type="date"
-                      {...register('dob')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      SIN
-                    </label>
-                    <input
-                      {...register('sin')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Residence Phone
-                    </label>
-                    <input
-                      {...register('phone_residence')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Business Phone
-                    </label>
-                    <input
-                      {...register('phone_business')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
+                  {/* Contact */}
+                  <div className="md:col-span-2 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                    <h3 className="font-semibold mb-3">Contact</h3>
+                    <input {...register('email')} type="email" placeholder="Email" className="w-full p-3 border rounded-lg mb-3" />
+                    <input {...register('phone_residence')} placeholder="Phone Residence" className="w-full p-3 border rounded-lg mb-3 md:mr-2" />
+                    <input {...register('phone_business')} placeholder="Phone Business" className="w-full p-3 border rounded-lg mb-3" />
                   </div>
 
                   {/* Address */}
-                  <div className="md:col-span-2 mt-4">
-                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-gray-700 pb-2">
-                      Address
-                    </h3>
+                  <div className="md:col-span-2 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+                    <h3 className="font-semibold mb-3">Address</h3>
+                    <input {...register('address')} placeholder="Street Address" className="w-full p-3 border rounded-lg mb-3" />
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      <input {...register('city')} placeholder="City" className="p-3 border rounded-lg" />
+                      <input {...register('province')} placeholder="Province" className="p-3 border rounded-lg" />
+                      <input {...register('postal_code')} placeholder="Postal Code" className="p-3 border rounded-lg" />
+                    </div>
                   </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Street Address
-                    </label>
-                    <input
-                      {...register('address')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      City
-                    </label>
-                    <input
-                      {...register('city')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Province
-                    </label>
-                    <input
-                      {...register('province')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Postal Code
-                    </label>
-                    <input
-                      {...register('postal_code')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  {/* Employment */}
-                  <div className="md:col-span-2 mt-4">
-                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-gray-700 pb-2">
-                      Employment
-                    </h3>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Employer
-                    </label>
-                    <input
-                      {...register('employer')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Occupation
-                    </label>
-                    <input
-                      {...register('occupation')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  {/* Financial Information */}
-                  <div className="md:col-span-2 mt-4">
-                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-gray-700 pb-2">
-                      Financial Information
-                    </h3>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Annual Income
-                    </label>
-                    <input
-                      {...register('annual_income')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Net Worth
-                    </label>
-                    <input
-                      {...register('net_worth')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Liquid Assets
-                    </label>
-                    <input
-                      {...register('liquid_assets')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Investment Knowledge
-                    </label>
-                    <select
-                      {...register('investment_knowledge')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    >
-                      <option value="">Select Level</option>
-                      <option value="None">None</option>
-                      <option value="Limited">Limited</option>
-                      <option value="Good">Good</option>
-                      <option value="Expert">Expert</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Risk Tolerance
-                    </label>
-                    <select
-                      {...register('risk_tolerance')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    >
-                      <option value="">Select Level</option>
-                      <option value="Low">Low</option>
-                      <option value="Medium">Medium</option>
-                      <option value="High">High</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Investment Objective
-                    </label>
-                    <select
-                      {...register('investment_objective')}
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    >
-                      <option value="">Select Objective</option>
-                      <option value="Safety">Safety</option>
-                      <option value="Income">Income</option>
-                      <option value="Growth">Growth</option>
-                      <option value="Aggressive Growth">Aggressive Growth</option>
-                    </select>
+                  {/* Financial */}
+                  <div className="md:col-span-2 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
+                    <h3 className="font-semibold mb-3">Financial Information</h3>
+                    <input {...register('net_worth')} placeholder="Net Worth" className="w-full p-3 border rounded-lg mb-3" />
+                    <input {...register('liquid_assets')} type="number" placeholder="Liquid Assets" className="w-full p-3 border rounded-lg mb-3" />
+                    <input {...register('annual_income')} placeholder="Annual Income" className="w-full p-3 border rounded-lg" />
                   </div>
                 </div>
-                )}
 
-                {/* Generate Button */}
-                <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                  <button
-                    type="submit"
-                    disabled={generating}
-                    className="w-full sm:w-auto px-8 py-4 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    {generating ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Generating PDF...
-                      </>
-                    ) : (
-                      <>
-                        <Download className="w-5 h-5" />
-                        Generate PDF
-                      </>
-                    )}
-                  </button>
-                </div>
+                {/* 👇 GENERATE BUTTON - Uses ALL form changes */}
+                <button
+                  type="submit"
+                  disabled={generating}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-bold rounded-2xl shadow-xl transform hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 text-lg"
+                >
+                  {generating ? (
+                    <>
+                      <Loader2 className="w-6 h-6 animate-spin" />
+                      Generating PDF...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-6 h-6" />
+                      Download {selectedTemplate.name} PDF
+                    </>
+                  )}
+                </button>
+
+                {/* 👇 DEBUG INFO */}
+                <details className="mt-4 p-4 bg-gray-900 text-white rounded-xl text-xs">
+                  <summary>Debug Form Data (click to expand)</summary>
+                  <pre>{JSON.stringify(getValues(), null, 2)}</pre>
+                </details>
               </form>
             )}
           </div>
