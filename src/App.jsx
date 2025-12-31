@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import ClientsTable from './components/ClientsTable';
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -46,6 +47,12 @@ function App() {
                 className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-300 hidden sm:inline-block"
               >
                 Features
+              </a>
+              <a
+                href="#clients"
+                className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-300 hidden sm:inline-block"
+              >
+                Clients
               </a>
               <a
                 href="#contact"
@@ -235,6 +242,14 @@ function App() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* Clients Section */}
+        <section
+          id="clients"
+          className="py-16 sm:py-24 transition-colors duration-300"
+        >
+          <ClientsTable />
         </section>
 
         {/* Contact Section */}
