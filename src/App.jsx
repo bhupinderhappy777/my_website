@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './AuthContext';
+import AgentLogin from './components/AgentLogin';
+import ClientsTable from './components/ClientsTable';
+import FormGenerator from './components/FormGenerator';
 
-function App() {
+// Main website component (existing content)
+function MainWebsite() {
   const [darkMode, setDarkMode] = useState(() => {
     // Check for user's preference or system preference
     const storedPref = localStorage.getItem('darkMode');
@@ -505,6 +511,23 @@ function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+// App component with routing
+function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainWebsite />} />
+          <Route path="/agent" element={<AgentLogin />} />
+          <Route path="/agent/login" element={<AgentLogin />} />
+          <Route path="/agent/clients" element={<ClientsTable />} />
+          <Route path="/agent/forms/:clientId" element={<FormGenerator />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
