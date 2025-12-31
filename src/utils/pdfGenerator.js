@@ -1,7 +1,22 @@
 import { PDFDocument } from 'pdf-lib';
 
 export async function fillPDF(templateUrl, formData) {
-  const existingPdfBytes = await fetch(templateUrl).then((r) => r.arrayBuffer());
+  let response;
+  try {
+    response = await fetch(templateUrl);
+  } catch (networkError) {
+    throw new Error(
+      `Failed to fetch PDF template: Network error - ${networkError.message}`
+    );
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch PDF template: HTTP ${response.status} ${response.statusText}`
+    );
+  }
+
+  const existingPdfBytes = await response.arrayBuffer();
   const pdfDoc = await PDFDocument.load(existingPdfBytes);
   const form = pdfDoc.getForm();
 
