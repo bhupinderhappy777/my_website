@@ -1,29 +1,22 @@
 import { useEffect } from 'react';
+import { useWatch } from 'react-hook-form';
 
-/**
- * Comprehensive KYC Form Component for EN KYC 3057 template
- * Collects all required KYC information across 5 main sections
- */
 export default function KYCForm({ register, setValue, client }) {
-  // Prefill form with existing client data when component mounts or client changes
+  // 🔥 LIVE WATCHING IN KYCForm
+  const formValues = useWatch({ control: null });
+  
+  useEffect(() => {
+    if (formValues) {
+      console.log('🎯 KYC FORM LIVE:', formValues);
+    }
+  }, [formValues]);
+
+  // 👇 YOUR EXISTING useEffect for prefill
   useEffect(() => {
     if (!client) return;
-
-    // Prefill all available client fields
-    const fields = [
-      'title', 'first_name', 'last_name', 'sin', 'dob',
-      'address', 'city', 'province', 'postal_code',
-      'phone_residence', 'phone_business', 'email',
-      'employer', 'employer_address', 'occupation',
-      'annual_income', 'net_worth', 'liquid_assets', 'fixed_assets', 'liabilities',
-      'investment_knowledge', 'risk_tolerance', 'investment_objective',
-      'language_preference', 'tax_resident_canada', 'tax_resident_us', 'tax_resident_other',
-      'third_party_interest', 'pep_status', 'privacy_consent',
-      'account_type', 'plan_status', 'plan_id', 'plan_type',
-      'time_horizon', 'investment_purpose'
-    ];
-
-    fields.forEach((field) => {
+    
+    const fields = ['first_name', 'last_name', 'sin', 'dob', 'email', 'net_worth'];
+    fields.forEach(field => {
       if (client[field] !== undefined && client[field] !== null) {
         setValue(field, String(client[field]));
       }
