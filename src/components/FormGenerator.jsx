@@ -121,12 +121,7 @@ export default function FormGenerator() {
 
 const handleTemplateChange = (e) => {
   const templateId = e.target.value;
-  console.log('🔍 Template ID selected:', templateId);
-  console.log('🔍 All templates:', templates);
-  
-  const template = templates.find((t) => t.id === parseInt(templateId, 10));
-  console.log('🔍 Found template:', template);
-  
+  const template = templates.find((t) => t.id === templateId);
   setSelectedTemplate(template || null);
   reset();
 };
