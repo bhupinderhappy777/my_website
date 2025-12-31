@@ -66,12 +66,37 @@ export default function FormGenerator() {
 
     const fieldMappings = selectedTemplate.field_mappings || {};
 
-    // Map client data to form fields based on template mappings
-    Object.entries(fieldMappings).forEach(([pdfField, clientField]) => {
-      if (client[clientField] !== undefined && client[clientField] !== null) {
-        setValue(pdfField, String(client[clientField]));
-      }
-    });
+// COMPLETE DEBUG VERSION - Replace your mapping function
+console.group('🎯 FORM AUTO-FILL DEBUG');
+console.log('👤 Client data:', client);
+console.log('📋 Field mappings:', fieldMappings);
+console.log('📄 Available PDF fields:', Object.keys(fieldMappings));
+console.groupEnd();
+
+Object.entries(fieldMappings).forEach(([pdfField, clientField], index) => {
+  const value = client[clientField];
+  
+  console.groupCollapsed(`Field ${index + 1}/${Object.keys(fieldMappings).length}: "${pdfField}"`);
+  console.log(`   PDF Field → "${pdfField}"`);
+  console.log(`   Client Field → "${clientField}"`);
+  console.log(`   Raw Value →`, value);
+  console.log(`   Type →`, typeof value);
+  console.log(`   Exists? →`, value !== undefined && value !== null && value !== '');
+  
+  if (value !== undefined && value !== null && value !== '') {
+    const displayValue = String(value);
+    setValue(pdfField, displayValue);
+    console.log(`   ✅ SUCCESS: SET "${pdfField}" = "${displayValue}"`);
+  } else {
+    console.log(`   ❌ SKIPPED: empty/null/undefined`);
+  }
+  
+  console.groupEnd();
+});
+
+console.log('🎉 AUTO-FILL COMPLETE');
+console.log(`📊 SUCCESS: ${Object.values(fieldMappings).filter(field => client[field] !== undefined && client[field] !== null).length}/${Object.keys(fieldMappings).length} fields filled`);
+
 
     // Also set common fields directly if no mapping exists
     const directFields = [
