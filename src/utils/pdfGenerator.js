@@ -17,8 +17,18 @@ export async function fillPDF(templateUrl, formData) {
   }
 
   const existingPdfBytes = await response.arrayBuffer();
-const pdfDoc = await PDFDocument.load(existingPdfBytes, { ignoreEncryption: true });
+  const pdfDoc = await PDFDocument.load(existingPdfBytes, { ignoreEncryption: true });
   const form = pdfDoc.getForm();
+
+
+// Debug: Check what fields exist
+const fields = form.getFields();
+console.log('🔍 PDF has', fields.length, 'form fields');
+fields.forEach(field => {
+  console.log('Field name:', field.getName(), 'Type:', field.constructor.name);
+});
+
+Object.entries(formData).forEach(([key, value]) => {
 
   Object.entries(formData).forEach(([key, value]) => {
     try {
