@@ -1,5 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabaseClient';
+
+// Initial form state - used for both initialization and reset
+const INITIAL_FORM_STATE = {
+  first_name: '',
+  last_name: '',
+  email: '',
+  dob: '',
+  sin: '',
+  phone_residence: '',
+  phone_business: '',
+  address: '',
+  city: '',
+  province: '',
+  postal_code: '',
+  employer: '',
+  occupation: '',
+  annual_income: '',
+  net_worth: '',
+  liquid_assets: '',
+  investment_knowledge: '',
+  risk_tolerance: '',
+  investment_objective: '',
+};
 
 function ClientsTable() {
   const [clients, setClients] = useState([]);
@@ -9,27 +32,8 @@ function ClientsTable() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingClient, setEditingClient] = useState(null);
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    dob: '',
-    sin: '',
-    phone_residence: '',
-    phone_business: '',
-    address: '',
-    city: '',
-    province: '',
-    postal_code: '',
-    employer: '',
-    occupation: '',
-    annual_income: '',
-    net_worth: '',
-    liquid_assets: '',
-    investment_knowledge: '',
-    risk_tolerance: '',
-    investment_objective: '',
-  });
+  const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+  const successTimeoutRef = useRef(null);
 
   // Fetch clients from Supabase
   const fetchClients = async () => {
@@ -52,31 +56,18 @@ function ClientsTable() {
 
   useEffect(() => {
     fetchClients();
+    
+    // Cleanup function to clear timeout on unmount
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+    };
   }, []);
 
   // Reset form
   const resetForm = () => {
-    setFormData({
-      first_name: '',
-      last_name: '',
-      email: '',
-      dob: '',
-      sin: '',
-      phone_residence: '',
-      phone_business: '',
-      address: '',
-      city: '',
-      province: '',
-      postal_code: '',
-      employer: '',
-      occupation: '',
-      annual_income: '',
-      net_worth: '',
-      liquid_assets: '',
-      investment_knowledge: '',
-      risk_tolerance: '',
-      investment_objective: '',
-    });
+    setFormData({ ...INITIAL_FORM_STATE });
   };
 
   // Handle form field changes
@@ -106,7 +97,10 @@ function ClientsTable() {
       await fetchClients();
 
       // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(null), 3000);
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+      successTimeoutRef.current = setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(`Failed to add client: ${err.message}`);
     } finally {
@@ -163,7 +157,10 @@ function ClientsTable() {
       await fetchClients();
 
       // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(null), 3000);
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+      successTimeoutRef.current = setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(`Failed to update client: ${err.message}`);
     } finally {
@@ -199,7 +196,10 @@ function ClientsTable() {
       await fetchClients();
 
       // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(null), 3000);
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+      successTimeoutRef.current = setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(`Failed to delete client: ${err.message}`);
     } finally {
