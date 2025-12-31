@@ -11,6 +11,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { fillPDF, downloadPDF } from '../utils/pdfGenerator';
+import KYCForm from './KYCForm';
 
 export default function FormGenerator() {
   const { clientId } = useParams();
@@ -320,6 +321,10 @@ const handleTemplateChange = (e) => {
                   {selectedTemplate.name}
                 </h2>
 
+                {/* Check if this is a KYC form template */}
+                {selectedTemplate.name && selectedTemplate.name.toLowerCase().includes('kyc') ? (
+                  <KYCForm register={register} setValue={setValue} client={client} />
+                ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Personal Information */}
                   <div className="md:col-span-2">
@@ -558,6 +563,7 @@ const handleTemplateChange = (e) => {
                     </select>
                   </div>
                 </div>
+                )}
 
                 {/* Generate Button */}
                 <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">

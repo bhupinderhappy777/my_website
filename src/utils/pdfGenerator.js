@@ -38,7 +38,7 @@ export async function fillPDF(templateUrl, formData) {
 
   try {
     pdfDoc.flatten();
-  } catch (e) {
+  } catch {
     console.log('Could not flatten PDF (likely encrypted), skipping flatten');
   }
   return await pdfDoc.save();
