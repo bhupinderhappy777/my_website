@@ -29,7 +29,11 @@ const pdfDoc = await PDFDocument.load(existingPdfBytes, { ignoreEncryption: true
     }
   });
 
-  pdfDoc.flatten();
+  try {
+    pdfDoc.flatten();
+  } catch (e) {
+    console.log('Could not flatten PDF (likely encrypted), skipping flatten');
+  }
   return await pdfDoc.save();
 }
 
