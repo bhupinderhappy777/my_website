@@ -17,7 +17,7 @@ export async function fillPDF(templateUrl, formData) {
   }
 
   const existingPdfBytes = await response.arrayBuffer();
-  const pdfDoc = await PDFDocument.load(existingPdfBytes);
+const pdfDoc = await PDFDocument.load(existingPdfBytes, { ignoreEncryption: true });
   const form = pdfDoc.getForm();
 
   Object.entries(formData).forEach(([key, value]) => {
