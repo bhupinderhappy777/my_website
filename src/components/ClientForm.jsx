@@ -30,6 +30,14 @@ export default function ClientForm() {
   const [otherInvestmentInput, setOtherInvestmentInput] = useState('');
   const [approvalOtherText, setApprovalOtherText] = useState('');
   const [theme, setTheme] = useState(() => (typeof window !== 'undefined' && window.localStorage && localStorage.getItem('theme')) || 'light');
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = [
+    { title: 'Personal & Tax', description: 'Basic info and residency' },
+    { title: 'Address & Employment', description: 'Location and work details' },
+    { title: 'Financial & Investments', description: 'Assets and investment preferences' },
+    { title: 'Banking & Approval', description: 'Optional banking and documentation' },
+  ];
 
   useEffect(() => {
     try {
@@ -41,6 +49,9 @@ export default function ClientForm() {
   }, [theme]);
 
   const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
+
+  const nextStep = () => setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
+  const prevStep = () => setCurrentStep((s) => Math.max(s - 1, 0));
 
   useEffect(() => {
     if (!id) return;
@@ -224,352 +235,396 @@ export default function ClientForm() {
             </div>
           </div>
 
+          {/* Progress Indicator */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-2">
+              {steps.map((step, index) => (
+                <div key={index} className="flex items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                    index <= currentStep ? 'bg-indigo-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                  }`}>
+                    {index + 1}
+                  </div>
+                  {index < steps.length - 1 && (
+                    <div className={`w-12 h-1 mx-2 ${
+                      index < currentStep ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-700'
+                    }`} />
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="text-center">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{steps[currentStep].title}</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{steps[currentStep].description}</p>
+            </div>
+          </div>
+
           <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Reuse same fields as modal; keep layout clear and grouped */}
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Title</span>
-              <select {...register('title')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
-                <option value="">Select Title</option>
-                <option value="Mr.">Mr.</option>
-                <option value="Mrs.">Mrs.</option>
-                <option value="Miss">Miss</option>
-                <option value="Ms.">Ms.</option>
-                <option value="Dr.">Dr.</option>
-                <option value="Other">Other</option>
-              </select>
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">First Name</span>
-              <input {...register('first_name', { required: true })} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Last Name</span>
-              <input {...register('last_name', { required: true })} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</span>
-              <input type="email" {...register('email')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Preferred Language</span>
-              <select {...register('language_preference')} defaultValue="English" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
-                <option value="English">English</option>
-                <option value="French">French</option>
-              </select>
-            </label>
-
-            <div className="md:col-span-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tax Residency</span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" value="Canada" {...register('tax_residency')} className="rounded" />
-                  <span className="text-sm">Canada</span>
-                </label>
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" value="USA" {...register('tax_residency')} className="rounded" />
-                  <span className="text-sm">USA</span>
-                </label>
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" value="Other" {...register('tax_residency')} className="rounded" />
-                  <span className="text-sm">Other</span>
-                </label>
-              </div>
-
-              {((watch('tax_residency') || [])).includes('Other') && (
-                <div className="mt-3">
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Other Countries</span>
-                  <div className="flex gap-2 mt-2 items-center">
-                    <input value={otherInput} onChange={(e) => setOtherInput(e.target.value)} placeholder="Type country and press Add" className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-                    <button type="button" onClick={addOtherCountry} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">Add</button>
+            {/* Step 0: Personal & Contact, Tax Residency */}
+            {currentStep === 0 && (
+              <>
+                {/* Personal / Contact */}
+                <div className="md:col-span-2 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Personal & Contact</h2>
                   </div>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {otherCountries.map(c => (
-                      <span key={c} className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1 text-sm">
-                        {c}
-                        <button type="button" onClick={() => removeOtherCountry(c)} className="text-xs text-gray-500 hover:text-gray-700">×</button>
-                      </span>
-                    ))}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Title</span>
+                      <select {...register('title')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
+                        <option value="">Select Title</option>
+                        <option value="Mr.">Mr.</option>
+                        <option value="Mrs.">Mrs.</option>
+                        <option value="Miss">Miss</option>
+                        <option value="Ms.">Ms.</option>
+                        <option value="Dr.">Dr.</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">First Name</span>
+                      <input {...register('first_name', { required: true })} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Last Name</span>
+                      <input {...register('last_name', { required: true })} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block md:col-span-2">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</span>
+                      <input type="email" {...register('email')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Preferred Language</span>
+                      <select {...register('language_preference')} defaultValue="English" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
+                        <option value="English">English</option>
+                        <option value="French">French</option>
+                      </select>
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Date of Birth</span>
+                      <input type="date" {...register('dob')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">SIN</span>
+                      <input {...register('sin')} placeholder="XXX-XXX-XXX" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Residence Phone</span>
+                      <input {...register('phone_residence')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Business Phone</span>
+                      <input {...register('phone_business')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
                   </div>
                 </div>
-              )}
-            </div>
 
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Date of Birth</span>
-              <input type="date" {...register('dob')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">SIN</span>
-              <input {...register('sin')} placeholder="XXX-XXX-XXX" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Residence Phone</span>
-              <input {...register('phone_residence')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Business Phone</span>
-              <input {...register('phone_business')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <div className="md:col-span-2">
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Address</h3>
-            </div>
-
-            <label className="block md:col-span-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Street Address</span>
-              <input {...register('address')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">City</span>
-              <input {...register('city')} className="w-full mt-1 px-3 py-2" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Province</span>
-              <select {...register('province')} className="w-full mt-1 px-3 py-2">
-                <option value="">Select Province</option>
-                <option value="AB">Alberta</option>
-                <option value="BC">British Columbia</option>
-                <option value="MB">Manitoba</option>
-                <option value="NB">New Brunswick</option>
-                <option value="NL">Newfoundland and Labrador</option>
-                <option value="NS">Nova Scotia</option>
-                <option value="NT">Northwest Territories</option>
-                <option value="NU">Nunavut</option>
-                <option value="ON">Ontario</option>
-                <option value="PE">Prince Edward Island</option>
-                <option value="QC">Quebec</option>
-                <option value="SK">Saskatchewan</option>
-                <option value="YT">Yukon</option>
-              </select>
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Postal Code</span>
-              <input {...register('postal_code')} placeholder="A1A 1A1" className="w-full mt-1 px-3 py-2" />
-            </label>
-
-            <div className="md:col-span-2 mt-4">
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Employment</h3>
-            </div>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Employer</span>
-              <input {...register('employer')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Employer Address</span>
-              <input {...register('employer_address')} placeholder="Employer full address" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Occupation</span>
-              <input {...register('occupation')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <div className="md:col-span-2 mt-4">
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Financial Information</h3>
-            </div>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Annual Income</span>
-              <input type="number" {...register('annual_income')} placeholder="75000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Fixed Assets</span>
-              <input type="number" {...register('fixed_assets')} placeholder="100000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Net Worth</span>
-              <input type="number" {...register('net_worth')} readOnly placeholder="Calculated from assets/liabilities" className="w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-lg" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Liquid Assets</span>
-              <input type="number" {...register('liquid_assets')} placeholder="50000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Liabilities</span>
-              <input type="number" {...register('liabilities')} placeholder="20000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Investment Knowledge</span>
-              <select {...register('investment_knowledge')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
-                <option value="">Select Level</option>
-                <option value="None">None</option>
-                <option value="Limited">Limited</option>
-                <option value="Good">Good</option>
-                <option value="Expert">Expert</option>
-              </select>
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Risk Tolerance</span>
-              <select {...register('risk_tolerance')} className="w-full mt-1 px-3 py-2">
-                <option value="">Select Level</option>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </select>
-            </label>
-
-            <label className="block">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Investment Objective</span>
-              <select {...register('investment_objective')} className="w-full mt-1 px-3 py-2">
-                <option value="">Select Objective</option>
-                <option value="Safety">Safety</option>
-                <option value="Income">Income</option>
-                <option value="Growth">Growth</option>
-                <option value="Aggressive Growth">Aggressive Growth</option>
-              </select>
-            </label>
-
-            <div className="md:col-span-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Other Investments</span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" value="Bonds" {...register('investments')} className="rounded" />
-                  <span className="text-sm">Bonds</span>
-                </label>
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" value="Segregated Funds" {...register('investments')} className="rounded" />
-                  <span className="text-sm">Segregated Funds</span>
-                </label>
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" value="Stocks" {...register('investments')} className="rounded" />
-                  <span className="text-sm">Stocks</span>
-                </label>
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" value="Mutual Funds" {...register('investments')} className="rounded" />
-                  <span className="text-sm">Mutual Funds</span>
-                </label>
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" value="Term Deposits/GIC" {...register('investments')} className="rounded" />
-                  <span className="text-sm">Term Deposits/GIC</span>
-                </label>
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" value="Real Estate & Mortgages" {...register('investments')} className="rounded" />
-                  <span className="text-sm">Real Estate & Mortgages</span>
-                </label>
-                <label className="inline-flex items-center gap-2">
-                  <input type="checkbox" value="Other" {...register('investments')} className="rounded" />
-                  <span className="text-sm">Other</span>
-                </label>
-              </div>
-
-              {((watch('investments') || [])).includes('Other') && (
-                <div className="mt-3">
-                  <div className="flex gap-2 items-center">
-                    <input value={otherInvestmentInput} onChange={(e) => setOtherInvestmentInput(e.target.value)} placeholder="Type investment and press Add" className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-                    <button type="button" onClick={addOtherInvestment} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">Add</button>
+                {/* Tax Residency */}
+                <div className="md:col-span-2 bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Tax Residency</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" value="Canada" {...register('tax_residency')} className="rounded" />
+                      <span className="text-sm">Canada</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" value="USA" {...register('tax_residency')} className="rounded" />
+                      <span className="text-sm">USA</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" value="Other" {...register('tax_residency')} className="rounded" />
+                      <span className="text-sm">Other</span>
+                    </label>
                   </div>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {otherInvestments.map(i => (
-                      <span key={i} className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1 text-sm">
-                        {i}
-                        <button type="button" onClick={() => removeOtherInvestment(i)} className="text-xs text-gray-500 hover:text-gray-700">×</button>
-                      </span>
-                    ))}
+
+                  {((watch('tax_residency') || [])).includes('Other') && (
+                    <div className="mt-3">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Other Countries</span>
+                      <div className="flex gap-2 mt-2 items-center">
+                        <input value={otherInput} onChange={(e) => setOtherInput(e.target.value)} placeholder="Type country and press Add" className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                        <button type="button" onClick={addOtherCountry} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">Add</button>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {otherCountries.map(c => (
+                          <span key={c} className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1 text-sm">
+                            {c}
+                            <button type="button" onClick={() => removeOtherCountry(c)} className="text-xs text-gray-500 hover:text-gray-700">×</button>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {/* Step 1: Address, Employment */}
+            {currentStep === 1 && (
+              <>
+                {/* Address */}
+                <div className="md:col-span-2 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Address</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label className="block md:col-span-2">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Street Address</span>
+                      <input {...register('address')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">City</span>
+                      <input {...register('city')} className="w-full mt-1 px-3 py-2" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Province</span>
+                      <select {...register('province')} className="w-full mt-1 px-3 py-2">
+                        <option value="">Select Province</option>
+                        <option value="AB">Alberta</option>
+                        <option value="BC">British Columbia</option>
+                        <option value="MB">Manitoba</option>
+                        <option value="NB">New Brunswick</option>
+                        <option value="NL">Newfoundland and Labrador</option>
+                        <option value="NS">Nova Scotia</option>
+                        <option value="NT">Northwest Territories</option>
+                        <option value="NU">Nunavut</option>
+                        <option value="ON">Ontario</option>
+                        <option value="PE">Prince Edward Island</option>
+                        <option value="QC">Quebec</option>
+                        <option value="SK">Saskatchewan</option>
+                        <option value="YT">Yukon</option>
+                      </select>
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Postal Code</span>
+                      <input {...register('postal_code')} placeholder="A1A 1A1" className="w-full mt-1 px-3 py-2" />
+                    </label>
                   </div>
                 </div>
-              )}
 
-              <div className="md:col-span-2 mt-4">
-                <details className="bg-white dark:bg-gray-800 p-0 rounded-lg border border-gray-100 dark:border-gray-700" open>
-                  <summary className="px-4 py-3 cursor-pointer flex items-center justify-between">
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Banking Details</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Optional — used for transfers and verification.</p>
-                    </div>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">Toggle</span>
-                  </summary>
-                  <div className="px-4 pb-4 pt-2">
-                    <div className="space-y-3">
-                      <label className="block">
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Financial Institution Name</span>
-                        <input {...register('bank_name')} className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-                      </label>
+                {/* Employment */}
+                <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Employment</h3>
+                  <div className="grid grid-cols-1 gap-4">
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Employer</span>
+                      <input {...register('employer')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
-                        <label className="block">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Transit</span>
-                          <input {...register('bank_transit')} className="w-full mt-1 px-2 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-                        </label>
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Employer Address</span>
+                      <input {...register('employer_address')} placeholder="Employer full address" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
 
-                        <label className="block">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Institution</span>
-                          <input {...register('bank_institution')} className="w-full mt-1 px-2 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-                        </label>
-
-                        <label className="block">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Account</span>
-                          <input {...register('bank_account')} className="w-full mt-1 px-2 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-                        </label>
-                      </div>
-
-                      <label className="block md:col-span-2 mt-3">
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Address</span>
-                        <input {...register('bank_address')} className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-                      </label>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
-                        <label className="block">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">City</span>
-                          <input {...register('bank_city')} className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-                        </label>
-
-                        <label className="block">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Province</span>
-                          <select {...register('bank_province')} className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
-                            <option value="">Select Province</option>
-                            <option value="AB">Alberta</option>
-                            <option value="BC">British Columbia</option>
-                            <option value="MB">Manitoba</option>
-                            <option value="NB">New Brunswick</option>
-                            <option value="NL">Newfoundland and Labrador</option>
-                            <option value="NS">Nova Scotia</option>
-                            <option value="NT">Northwest Territories</option>
-                            <option value="NU">Nunavut</option>
-                            <option value="ON">Ontario</option>
-                            <option value="PE">Prince Edward Island</option>
-                            <option value="QC">Quebec</option>
-                            <option value="SK">Saskatchewan</option>
-                            <option value="YT">Yukon</option>
-                          </select>
-                        </label>
-
-                        <label className="block">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Postal Code</span>
-                          <input {...register('bank_postal_code')} placeholder="A1A 1A1" className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-                        </label>
-                      </div>
-                    </div>
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Occupation</span>
+                      <input {...register('occupation')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
                   </div>
-                </details>
-              </div>
-            
-            <div className="md:col-span-2 mt-6">
-              <details className="bg-gray-50 dark:bg-gray-900 p-0 rounded-lg border border-gray-100 dark:border-gray-700">
-                <summary className="px-4 py-3 cursor-pointer flex items-center justify-between">
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Client Approval Documentation</h3>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Records verifying identity and citizenship.</p>
+                </div>
+              </>
+            )}
+
+            {/* Step 2: Financial, Investments */}
+            {currentStep === 2 && (
+              <>
+                {/* Financial */}
+                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Financial Information</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Annual Income</span>
+                      <input type="number" {...register('annual_income')} placeholder="75000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Fixed Assets</span>
+                      <input type="number" {...register('fixed_assets')} placeholder="100000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Liquid Assets</span>
+                      <input type="number" {...register('liquid_assets')} placeholder="50000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Liabilities</span>
+                      <input type="number" {...register('liabilities')} placeholder="20000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block sm:col-span-2">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Net Worth</span>
+                      <input type="number" {...register('net_worth')} readOnly placeholder="Calculated from assets/liabilities" className="w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-lg" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Investment Knowledge</span>
+                      <select {...register('investment_knowledge')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
+                        <option value="">Select Level</option>
+                        <option value="None">None</option>
+                        <option value="Limited">Limited</option>
+                        <option value="Good">Good</option>
+                        <option value="Expert">Expert</option>
+                      </select>
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Risk Tolerance</span>
+                      <select {...register('risk_tolerance')} className="w-full mt-1 px-3 py-2">
+                        <option value="">Select Level</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                      </select>
+                    </label>
+
+                    <label className="block sm:col-span-2">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Investment Objective</span>
+                      <select {...register('investment_objective')} className="w-full mt-1 px-3 py-2">
+                        <option value="">Select Objective</option>
+                        <option value="Safety">Safety</option>
+                        <option value="Income">Income</option>
+                        <option value="Growth">Growth</option>
+                        <option value="Aggressive Growth">Aggressive Growth</option>
+                      </select>
+                    </label>
                   </div>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">Toggle</span>
-                </summary>
-                <div className="px-4 pb-4 pt-2">
+                </div>
+
+                {/* Investments */}
+                <div className="md:col-span-2 bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Investments</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" value="Bonds" {...register('investments')} className="rounded" />
+                      <span className="text-sm">Bonds</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" value="Segregated Funds" {...register('investments')} className="rounded" />
+                      <span className="text-sm">Segregated Funds</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" value="Stocks" {...register('investments')} className="rounded" />
+                      <span className="text-sm">Stocks</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" value="Mutual Funds" {...register('investments')} className="rounded" />
+                      <span className="text-sm">Mutual Funds</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" value="Term Deposits/GIC" {...register('investments')} className="rounded" />
+                      <span className="text-sm">Term Deposits/GIC</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" value="Real Estate & Mortgages" {...register('investments')} className="rounded" />
+                      <span className="text-sm">Real Estate & Mortgages</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2">
+                      <input type="checkbox" value="Other" {...register('investments')} className="rounded" />
+                      <span className="text-sm">Other</span>
+                    </label>
+                  </div>
+
+                  {((watch('investments') || [])).includes('Other') && (
+                    <div className="mt-3">
+                      <div className="flex gap-2 items-center">
+                        <input value={otherInvestmentInput} onChange={(e) => setOtherInvestmentInput(e.target.value)} placeholder="Type investment and press Add" className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                        <button type="button" onClick={addOtherInvestment} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">Add</button>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {otherInvestments.map(i => (
+                          <span key={i} className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1 text-sm">
+                            {i}
+                            <button type="button" onClick={() => removeOtherInvestment(i)} className="text-xs text-gray-500 hover:text-gray-700">×</button>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {/* Step 3: Banking, Approval */}
+            {currentStep === 3 && (
+              <>
+                {/* Banking */}
+                <div className="md:col-span-2 bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Banking Details</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Optional — used for transfers and verification.</p>
+                  <label className="block">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Financial Institution Name</span>
+                    <input {...register('bank_name')} className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                  </label>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Transit</span>
+                      <input {...register('bank_transit')} className="w-full mt-1 px-2 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Institution</span>
+                      <input {...register('bank_institution')} className="w-full mt-1 px-2 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Account</span>
+                      <input {...register('bank_account')} className="w-full mt-1 px-2 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+                  </div>
+
+                  <label className="block md:col-span-2 mt-3">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Address</span>
+                    <input {...register('bank_address')} className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                  </label>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">City</span>
+                      <input {...register('bank_city')} className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Province</span>
+                      <select {...register('bank_province')} className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
+                        <option value="">Select Province</option>
+                        <option value="AB">Alberta</option>
+                        <option value="BC">British Columbia</option>
+                        <option value="MB">Manitoba</option>
+                        <option value="NB">New Brunswick</option>
+                        <option value="NL">Newfoundland and Labrador</option>
+                        <option value="NS">Nova Scotia</option>
+                        <option value="NT">Northwest Territories</option>
+                        <option value="NU">Nunavut</option>
+                        <option value="ON">Ontario</option>
+                        <option value="PE">Prince Edward Island</option>
+                        <option value="QC">Quebec</option>
+                        <option value="SK">Saskatchewan</option>
+                        <option value="YT">Yukon</option>
+                      </select>
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Postal Code</span>
+                      <input {...register('bank_postal_code')} placeholder="A1A 1A1" className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Client Approval Documentation */}
+                <div className="md:col-span-2 bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Client Approval Documentation</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Records verifying identity and citizenship.</p>
+
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
                     <label className="inline-flex items-center gap-2">
                       <input type="checkbox" value="Driver's License" {...register('approval_documents')} className="rounded" />
@@ -643,15 +698,23 @@ export default function ClientForm() {
                     <span className="text-sm">Met Client in Person — I.D. verified physically by Agent</span>
                   </label>
                 </div>
-              </details>
-            </div>
-            </div>
+              </>
+            )}
 
-            <div className="md:col-span-2 flex justify-end gap-3 mt-6">
-              <button type="button" onClick={() => navigate('/agent/clients')} className="px-6 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">Cancel</button>
-              <button type="submit" disabled={isSubmitting} className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md flex items-center gap-2">
-                {id ? 'Save Changes' : 'Add Client'}
+            {/* Actions */}
+            <div className="md:col-span-2 flex justify-between gap-3 mt-6">
+              <button type="button" onClick={prevStep} disabled={currentStep === 0} className="px-6 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                Previous
               </button>
+              {currentStep < steps.length - 1 ? (
+                <button type="button" onClick={nextStep} className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md">
+                  Next
+                </button>
+              ) : (
+                <button type="submit" disabled={isSubmitting} className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md flex items-center gap-2">
+                  {id ? 'Save Changes' : 'Add Client'}
+                </button>
+              )}
             </div>
           </form>
         </div>
