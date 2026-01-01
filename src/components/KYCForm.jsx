@@ -49,10 +49,63 @@ export default function KYCForm() {
   }, [theme]);
 
   useEffect(() => {
-    if (id && supabase) {
-      fetchClient();
-    }
-  }, [id, supabase]);
+    if (!id) return;
+    let mounted = true;
+    (async () => {
+      const { data, error } = await supabase.from('clients').select('*').eq('id', id).single();
+      if (error) {
+        console.error('Error loading client:', error);
+        return;
+      }
+      if (mounted && data) {
+        // Reset form with basic data first
+        reset(data);
+
+        // Handle tax_residency: set checkboxes and other countries
+        if (data.tax_residency) {
+          const arr = Array.isArray(data.tax_residency) ? data.tax_residency : (typeof data.tax_residency === 'string' ? [data.tax_residency] : []);
+          const hasCanada = arr.includes('Canada');
+          const hasUSA = arr.includes('USA');
+          const others = arr.filter(x => x !== 'Canada' && x !== 'USA');
+          const checked = [];
+          if (hasCanada) checked.push('Canada');
+          if (hasUSA) checked.push('USA');
+          if (others.length) checked.push('Other');
+          setValue('tax_residency', checked);
+          setOtherCountries(others);
+        }
+
+        // Handle investments: set checkboxes and other investments
+        if (data.investments) {
+          const iarr = Array.isArray(data.investments) ? data.investments : (typeof data.investments === 'string' ? [data.investments] : []);
+          const standardInvestments = ['Bonds','Segregated Funds','Stocks','Mutual Funds','Term Deposits/GIC','Real Estate & Mortgages'];
+          const std = iarr.filter(i => standardInvestments.includes(i));
+          const othersInv = iarr.filter(i => !standardInvestments.includes(i));
+          setValue('investments', std.concat(othersInv.length ? ['Other'] : []));
+          setOtherInvestments(othersInv);
+        }
+
+        // Handle approval_documents: set checkboxes and other text
+        if (data.approval_documents) {
+          const darr = Array.isArray(data.approval_documents) ? data.approval_documents : (typeof data.approval_documents === 'string' ? [data.approval_documents] : []);
+          const standardDocs = ["Driver's License","Birth Certificate","Passport"];
+          const stdDocs = darr.filter(d => standardDocs.includes(d));
+          const otherDocs = darr.filter(d => !standardDocs.includes(d));
+          setValue('approval_documents', stdDocs.concat(otherDocs.length ? ['Other'] : []));
+          setApprovalOtherText(otherDocs.join('; '));
+        }
+
+        // Set other fields explicitly if needed
+        if (data.document_number) setValue('document_number', data.document_number);
+        if (data.document_jurisdiction) setValue('document_jurisdiction', data.document_jurisdiction);
+        if (data.document_expiry) setValue('document_expiry', data.document_expiry);
+        if (data.citizenship) setValue('citizenship', data.citizenship);
+        if (data.citizenship_other) setValue('citizenship_other', data.citizenship_other);
+        if (data.id_verified_physical !== undefined) setValue('id_verified_physical', data.id_verified_physical);
+      }
+    })();
+    return () => { mounted = false; };
+  }, [id, reset, setValue, supabase]);
 
   // default tax residency for new forms
   useEffect(() => {
@@ -68,45 +121,6 @@ export default function KYCForm() {
     const computed = fixed + liquid - liabilities;
     if (Number.isFinite(computed)) setValue('net_worth', Math.round(computed));
   }, [watch('fixed_assets'), watch('liquid_assets'), watch('liabilities'), setValue]);
-
-  const fetchClient = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('clients')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (error) throw error;
-
-      if (data) {
-        // Prefill form with client data
-        Object.keys(data).forEach(key => {
-          if (data[key] !== null && data[key] !== undefined) {
-            if (Array.isArray(data[key])) {
-              // Handle array fields like tax_residency, investments, approval_documents
-              setValue(key, data[key]);
-            } else {
-              setValue(key, data[key]);
-            }
-          }
-        });
-
-        // Handle array fields
-        if (data.tax_residency) {
-          setValue('tax_residency', data.tax_residency);
-        }
-        if (data.investments) {
-          setValue('investments', data.investments);
-        }
-        if (data.approval_documents) {
-          setValue('approval_documents', data.approval_documents);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching client:', error);
-    }
-  };
 
   const onSubmit = async (data) => {
     try {
