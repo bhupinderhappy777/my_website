@@ -26,8 +26,21 @@ export default function ClientsTable() {
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  // Auto-calculate net worth = fixed_assets + liquid_assets - liabilities
+  useEffect(() => {
+    const fixed = parseFloat(watch('fixed_assets')) || 0;
+    const liquid = parseFloat(watch('liquid_assets')) || 0;
+    const liabilities = parseFloat(watch('liabilities')) || 0;
+    const computed = fixed + liquid - liabilities;
+    if (Number.isFinite(computed)) {
+      setValue('net_worth', Math.round(computed));
+    }
+  }, [watch('fixed_assets'), watch('liquid_assets'), watch('liabilities'), setValue]);
 
   const fetchClients = useCallback(async () => {
     setLoading(true);
@@ -281,6 +294,24 @@ export default function ClientsTable() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Title
+                    </label>
+                    <select
+                      {...register('title')}
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+                    >
+                      <option value="">Select Title</option>
+                      <option value="Mr.">Mr.</option>
+                      <option value="Mrs.">Mrs.</option>
+                      <option value="Miss">Miss</option>
+                      <option value="Ms.">Ms.</option>
+                      <option value="Dr.">Dr.</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       First Name *
                     </label>
                     <input
@@ -322,6 +353,20 @@ export default function ClientsTable() {
                       {...register('email')}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Preferred Language
+                    </label>
+                    <select
+                      {...register('language_preference')}
+                      defaultValue="English"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+                    >
+                      <option value="English">English</option>
+                      <option value="French">French</option>
+                    </select>
                   </div>
 
                   <div>
@@ -448,6 +493,17 @@ export default function ClientsTable() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Employer Address
+                    </label>
+                    <input
+                      {...register('employer_address')}
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+                      placeholder="Employer full address"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Occupation
                     </label>
                     <input
@@ -477,13 +533,13 @@ export default function ClientsTable() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Net Worth
+                      Fixed Assets
                     </label>
                     <input
                       type="number"
-                      {...register('net_worth')}
+                      {...register('fixed_assets')}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                      placeholder="250000"
+                      placeholder="100000"
                     />
                   </div>
 
@@ -496,6 +552,31 @@ export default function ClientsTable() {
                       {...register('liquid_assets')}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
                       placeholder="50000"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Liabilities
+                    </label>
+                    <input
+                      type="number"
+                      {...register('liabilities')}
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+                      placeholder="20000"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Net Worth
+                    </label>
+                    <input
+                      type="number"
+                      {...register('net_worth')}
+                      readOnly
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+                      placeholder="Calculated from assets/liabilities"
                     />
                   </div>
 

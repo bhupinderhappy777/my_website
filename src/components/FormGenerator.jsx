@@ -11,6 +11,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { fillPDF, downloadPDF } from '../utils/pdfGenerator';
+import logger from '../utils/logger';
 import KYCForm from './KYCForm';
 import kycFieldMappings from '../data/kyc_field_mappings.json';
 import pdfFields from '../data/kyc_pdf_fields.json';
@@ -66,6 +67,8 @@ export default function FormGenerator() {
         return copy;
       });
       setTemplates(list);
+      logger.info('Loaded templates', { count: list.length });
+      logger.debug('Templates list', list);
     }
 
     setLoading(false);
@@ -124,6 +127,7 @@ export default function FormGenerator() {
 
   useEffect(() => {
     if (client && selectedTemplate) {
+      logger.debug('Prefilling form with client and template', { clientId: client?.id, templateId: selectedTemplate?.id });
       prefillForm();
     }
   }, [client, selectedTemplate, prefillForm]);
@@ -138,7 +142,35 @@ const handleTemplateChange = (e) => {
   const template = templates.find((t) => String(t.id) === String(templateId));
   setSelectedTemplate(template || null);
   reset();
+    if (template && template.field_mappings) {
+      validateFieldMappings(template.field_mappings, template);
+    }
 };
+
+  function validateFieldMappings(fieldMappings = {}, template = {}) {
+    try {
+      const missing = [];
+      Object.entries(fieldMappings).forEach(([logical, mapping]) => {
+        if (!mapping || !mapping.pdf_field) return;
+        const exists = pdfFields.find((f) => f.name === mapping.pdf_field);
+        if (!exists) missing.push({ logical, pdf_field: mapping.pdf_field });
+      });
+
+      if (missing.length > 0) {
+        logger.warn('PDF field mappings contain unknown PDF field names', {
+          templateId: template.id,
+          missingCount: missing.length,
+          missing,
+        });
+      } else {
+        logger.info('All field_mappings validated against PDF fields', { templateId: template.id, mappingCount: Object.keys(fieldMappings).length });
+      }
+      return missing;
+    } catch (e) {
+      logger.error('Mapping validation error', { message: e && e.message, stack: e && e.stack });
+      return null;
+    }
+  }
 
   const onSubmit = async (data) => {
     if (!selectedTemplate?.pdf_url) {
@@ -150,6 +182,7 @@ const handleTemplateChange = (e) => {
     setError(null);
 
     try {
+      logger.info('PDF generation requested', { templateId: selectedTemplate?.id, clientId: client?.id });
       // Build pdfData mapping form `data` into PDF field names.
       const fieldMappings = selectedTemplate.field_mappings || {};
       const pdfData = {};
@@ -185,11 +218,13 @@ const handleTemplateChange = (e) => {
         }
       });
 
+      logger.debug('Final pdfData prepared', pdfData);
+
       const pdfBytes = await fillPDF(selectedTemplate.pdf_url, pdfData);
       const filename = `${selectedTemplate.name}_${client.first_name}_${client.last_name}.pdf`;
       downloadPDF(pdfBytes, filename);
     } catch (err) {
-      console.error('PDF generation error:', err);
+      logger.error('PDF generation error', { message: err && err.message, stack: err && err.stack });
       setError('Failed to generate PDF. Please try again.');
     } finally {
       setGenerating(false);
@@ -334,8 +369,7 @@ const handleTemplateChange = (e) => {
                 ))}
               </select>
 
-              {console.log('🔍 Current selectedTemplate state:', selectedTemplate)}
-              {selectedTemplate && console.log('🔍 Template IS selected, form should show')}
+              {/* selectedTemplate state is logged via logger for clarity (debug-level) */}
 
               {selectedTemplate && (
                 <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">

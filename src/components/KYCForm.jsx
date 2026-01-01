@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import pdfFields from '../data/kyc_pdf_fields.json';
+import logger from '../utils/logger';
 
 /**
  * Comprehensive KYC Form Component for EN KYC 3057 template
@@ -7,9 +8,14 @@ import pdfFields from '../data/kyc_pdf_fields.json';
  */
 export default function KYCForm({ register, setValue, client }) {
   const [showPdfFields, setShowPdfFields] = useState(false);
+  useEffect(() => {
+    logger.info('KYCForm mounted');
+  }, []);
   // Prefill form with existing client data when component mounts or client changes
   useEffect(() => {
     if (!client) return;
+
+    logger.debug('KYCForm prefill triggered', { clientId: client?.id });
 
     // Prefill all available client fields
     const fields = [
@@ -24,12 +30,15 @@ export default function KYCForm({ register, setValue, client }) {
       'account_type', 'plan_status', 'plan_id', 'plan_type',
       'time_horizon', 'investment_purpose'
     ];
+    const prefilledCount = fields.reduce((c, f) => c + ((client[f] !== undefined && client[f] !== null) ? 1 : 0), 0);
 
     fields.forEach((field) => {
       if (client[field] !== undefined && client[field] !== null) {
         setValue(field, String(client[field]));
       }
     });
+
+    logger.debug('KYCForm prefill completed', { prefilledCount });
   }, [client, setValue]);
 
   return (

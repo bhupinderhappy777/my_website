@@ -1,4 +1,5 @@
 import { PDFDocument } from 'pdf-lib';
+import logger from './logger';
 
 export async function fillPDF(templateUrl, formData) {
   let response;
@@ -22,9 +23,13 @@ export async function fillPDF(templateUrl, formData) {
   
   // Debug: Check what fields exist
   const fields = form.getFields();
-  console.log('🔍 PDF has', fields.length, 'form fields');
-  fields.forEach(field => {
-    console.log('Field name:', field.getName(), 'Type:', field.constructor.name);
+  logger.info('PDF template loaded', { templateUrl, fieldCount: fields.length });
+  fields.forEach((field) => {
+    try {
+      logger.debug('PDF field', { name: field.getName(), type: field.constructor.name });
+    } catch (e) {
+      logger.debug('PDF field (unreadable)', { err: e && e.message });
+    }
   });
 
   Object.entries(formData).forEach(([key, value]) => {
@@ -61,25 +66,31 @@ export async function fillPDF(templateUrl, formData) {
       // not a radio group
     }
 
-    console.log(`Field ${key} not set (no matching field type)`);
+    logger.debug(`Field not set`, { field: key, value });
   });
 
   try {
     pdfDoc.flatten();
-  } catch {
-    console.log('Could not flatten PDF (likely encrypted), skipping flatten');
+  } catch (e) {
+    logger.warn('Could not flatten PDF (possible encryption)', { message: e && e.message });
   }
   return await pdfDoc.save();
 }
 
 export function downloadPDF(pdfBytes, filename) {
+  logger.info('Initiating PDF download', { filename });
   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
   link.download = filename;
   document.body.appendChild(link);
-  link.click();
+  try {
+    link.click();
+    logger.info('Download triggered', { filename });
+  } catch (e) {
+    logger.error('Download failed to trigger', { filename, message: e && e.message });
+  }
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
