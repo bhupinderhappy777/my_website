@@ -24,6 +24,8 @@ export default function ClientForm() {
 
   const [otherCountries, setOtherCountries] = useState([]);
   const [otherInput, setOtherInput] = useState('');
+  const [otherInvestments, setOtherInvestments] = useState([]);
+  const [otherInvestmentInput, setOtherInvestmentInput] = useState('');
 
   useEffect(() => {
     if (!id) return;
@@ -35,14 +37,33 @@ export default function ClientForm() {
         // If tax_residency stored as array, split into standard and other countries
         if (data && data.tax_residency) {
           const arr = Array.isArray(data.tax_residency) ? data.tax_residency : (typeof data.tax_residency === 'string' ? [data.tax_residency] : []);
-          const std = arr.filter(x => x === 'Canada' || x === 'USA');
+          const hasCanada = arr.includes('Canada');
+          const hasUSA = arr.includes('USA');
           const others = arr.filter(x => x !== 'Canada' && x !== 'USA');
-          if (std.length || others.length) {
-            // set form field to include standard values (keep 'Other' out of select values)
-            reset({ ...data, tax_residency: std.concat(others.length ? ['Other'] : []) });
+          // Prefer Canada, then USA, then Other
+          if (hasCanada) {
+            reset({ ...data, tax_residency: 'Canada' });
+            setOtherCountries(others);
+          } else if (hasUSA) {
+            reset({ ...data, tax_residency: 'USA' });
+            setOtherCountries(others);
+          } else if (others.length) {
+            reset({ ...data, tax_residency: 'Other' });
             setOtherCountries(others);
           } else {
             reset(data);
+          }
+        }
+
+        // If investments stored as array, load selected standard investments and other investments
+        if (data && data.investments) {
+          const iarr = Array.isArray(data.investments) ? data.investments : (typeof data.investments === 'string' ? [data.investments] : []);
+          const standardInvestments = ['Bonds','Segregated Funds','Stocks','Mutual Funds','Term Deposits/GIC','Real Estate & Mortgages'];
+          const std = iarr.filter(i => standardInvestments.includes(i));
+          const othersInv = iarr.filter(i => !standardInvestments.includes(i));
+          if (std.length || othersInv.length) {
+            setValue('investments', std.concat(othersInv.length ? ['Other'] : []));
+            setOtherInvestments(othersInv);
           }
         } else {
           reset(data);
@@ -66,16 +87,24 @@ export default function ClientForm() {
   const onSubmit = async (formData) => {
     try {
       // normalize tax_residency into an array of strings for Supabase
-      const rawResidency = formData.tax_residency || [];
+      const rawResidency = formData.tax_residency ?? 'Canada';
       const residencyArray = Array.isArray(rawResidency)
         ? rawResidency.slice()
         : (typeof rawResidency === 'string' && rawResidency ? [rawResidency] : []);
       // Replace any 'Other' token with actual otherCountries entries
-      const finalTaxResidency = residencyArray.flatMap(item => item === 'Other' ? otherCountries : item);
+      const finalTaxResidency = residencyArray.flatMap(item => item === 'Other' ? otherCountries : item === 'Canada' || item === 'USA' ? item : item);
+
+      // investments normalization: form has checkboxes `investments` and extra otherInvestments
+      const rawInvestments = formData.investments || [];
+      const investmentsArray = Array.isArray(rawInvestments)
+        ? rawInvestments.slice()
+        : (typeof rawInvestments === 'string' && rawInvestments ? [rawInvestments] : []);
+      const finalInvestments = investmentsArray.flatMap(item => item === 'Other' ? otherInvestments : item);
 
       const payload = {
         ...formData,
         tax_residency: finalTaxResidency,
+        investments: finalInvestments,
         annual_income: formData.annual_income ? parseFloat(formData.annual_income) : null,
         net_worth: formData.net_worth ? parseFloat(formData.net_worth) : null,
         liquid_assets: formData.liquid_assets ? parseFloat(formData.liquid_assets) : null,
@@ -104,8 +133,8 @@ export default function ClientForm() {
       if (prev.includes(v)) return prev;
       const next = [...prev, v];
       // ensure 'Other' is selected in the multi-select
-      const current = watch('tax_residency') || [];
-      if (!Array.isArray(current) || !current.includes('Other')) setValue('tax_residency', Array.isArray(current) ? [...current, 'Other'] : ['Other']);
+      // set single-select to 'Other' so the other input area shows
+      setValue('tax_residency', 'Other');
       return next;
     });
     setOtherInput('');
@@ -113,6 +142,23 @@ export default function ClientForm() {
 
   const removeOtherCountry = (country) => {
     setOtherCountries(prev => prev.filter(c => c !== country));
+  };
+
+  const addOtherInvestment = () => {
+    const v = otherInvestmentInput.trim();
+    if (!v) return;
+    setOtherInvestments(prev => {
+      if (prev.includes(v)) return prev;
+      const next = [...prev, v];
+      // ensure the investments checkbox group shows Other
+      setValue('investments', 'Other');
+      return next;
+    });
+    setOtherInvestmentInput('');
+  };
+
+  const removeOtherInvestment = (item) => {
+    setOtherInvestments(prev => prev.filter(p => p !== item));
   };
 
   return (
@@ -329,6 +375,57 @@ export default function ClientForm() {
                 <option value="Aggressive Growth">Aggressive Growth</option>
               </select>
             </label>
+
+            <div className="md:col-span-2">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Other Investments</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Bonds" {...register('investments')} className="rounded" />
+                  <span className="text-sm">Bonds</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Segregated Funds" {...register('investments')} className="rounded" />
+                  <span className="text-sm">Segregated Funds</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Stocks" {...register('investments')} className="rounded" />
+                  <span className="text-sm">Stocks</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Mutual Funds" {...register('investments')} className="rounded" />
+                  <span className="text-sm">Mutual Funds</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Term Deposits/GIC" {...register('investments')} className="rounded" />
+                  <span className="text-sm">Term Deposits/GIC</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Real Estate & Mortgages" {...register('investments')} className="rounded" />
+                  <span className="text-sm">Real Estate & Mortgages</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Other" {...register('investments')} className="rounded" />
+                  <span className="text-sm">Other</span>
+                </label>
+              </div>
+
+              {((watch('investments') || [])).includes('Other') && (
+                <div className="mt-3">
+                  <div className="flex gap-2 items-center">
+                    <input value={otherInvestmentInput} onChange={(e) => setOtherInvestmentInput(e.target.value)} placeholder="Type investment and press Add" className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    <button type="button" onClick={addOtherInvestment} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">Add</button>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {otherInvestments.map(i => (
+                      <span key={i} className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1 text-sm">
+                        {i}
+                        <button type="button" onClick={() => removeOtherInvestment(i)} className="text-xs text-gray-500 hover:text-gray-700">×</button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             <div className="md:col-span-2 flex justify-end gap-3 mt-6">
               <button type="button" onClick={() => navigate('/agent/clients')} className="px-6 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">Cancel</button>
