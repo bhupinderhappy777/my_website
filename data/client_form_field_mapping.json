@@ -1,0 +1,337 @@
+{
+  "client_form_fields": {
+    "personal_contact": {
+      "title": {
+        "field_name": "title",
+        "supabase_column": "title",
+        "type": "select",
+        "required": false,
+        "description": "Client's title (Mr., Mrs., etc.)"
+      },
+      "first_name": {
+        "field_name": "first_name",
+        "supabase_column": "first_name",
+        "type": "text",
+        "required": true,
+        "description": "Client's first name"
+      },
+      "last_name": {
+        "field_name": "last_name",
+        "supabase_column": "last_name",
+        "type": "text",
+        "required": true,
+        "description": "Client's last name"
+      },
+      "email": {
+        "field_name": "email",
+        "supabase_column": "email",
+        "type": "email",
+        "required": false,
+        "description": "Client's email address"
+      },
+      "language_preference": {
+        "field_name": "language_preference",
+        "supabase_column": "language_preference",
+        "type": "select",
+        "required": false,
+        "description": "Preferred language (English/French)"
+      },
+      "dob": {
+        "field_name": "dob",
+        "supabase_column": "dob",
+        "type": "date",
+        "required": false,
+        "description": "Date of birth"
+      },
+      "sin": {
+        "field_name": "sin",
+        "supabase_column": "sin",
+        "type": "text",
+        "required": false,
+        "description": "Social Insurance Number"
+      },
+      "phone_residence": {
+        "field_name": "phone_residence",
+        "supabase_column": "phone_residence",
+        "type": "text",
+        "required": false,
+        "description": "Residence phone number"
+      },
+      "phone_business": {
+        "field_name": "phone_business",
+        "supabase_column": "phone_business",
+        "type": "text",
+        "required": false,
+        "description": "Business phone number"
+      }
+    },
+    "tax_residency": {
+      "tax_residency": {
+        "field_name": "tax_residency",
+        "supabase_column": "tax_residency",
+        "type": "checkbox_array",
+        "required": false,
+        "description": "Tax residency countries (array of strings)",
+        "options": ["Canada", "USA", "Other"],
+        "notes": "Other countries stored as additional array elements"
+      }
+    },
+    "address": {
+      "address": {
+        "field_name": "address",
+        "supabase_column": "address",
+        "type": "text",
+        "required": false,
+        "description": "Street address"
+      },
+      "city": {
+        "field_name": "city",
+        "supabase_column": "city",
+        "type": "text",
+        "required": false,
+        "description": "City"
+      },
+      "province": {
+        "field_name": "province",
+        "supabase_column": "province",
+        "type": "select",
+        "required": false,
+        "description": "Province/Territory"
+      },
+      "postal_code": {
+        "field_name": "postal_code",
+        "supabase_column": "postal_code",
+        "type": "text",
+        "required": false,
+        "description": "Postal code"
+      }
+    },
+    "employment": {
+      "employer": {
+        "field_name": "employer",
+        "supabase_column": "employer",
+        "type": "text",
+        "required": false,
+        "description": "Employer name"
+      },
+      "employer_address": {
+        "field_name": "employer_address",
+        "supabase_column": "employer_address",
+        "type": "text",
+        "required": false,
+        "description": "Employer address"
+      },
+      "occupation": {
+        "field_name": "occupation",
+        "supabase_column": "occupation",
+        "type": "text",
+        "required": false,
+        "description": "Job occupation/title"
+      }
+    },
+    "financial": {
+      "annual_income": {
+        "field_name": "annual_income",
+        "supabase_column": "annual_income",
+        "type": "number",
+        "required": false,
+        "description": "Annual income (stored as float)",
+        "conversion": "parseFloat"
+      },
+      "fixed_assets": {
+        "field_name": "fixed_assets",
+        "supabase_column": "fixed_assets",
+        "type": "number",
+        "required": false,
+        "description": "Fixed assets value (stored as float)",
+        "conversion": "parseFloat"
+      },
+      "liquid_assets": {
+        "field_name": "liquid_assets",
+        "supabase_column": "liquid_assets",
+        "type": "number",
+        "required": false,
+        "description": "Liquid assets value (stored as float)",
+        "conversion": "parseFloat"
+      },
+      "liabilities": {
+        "field_name": "liabilities",
+        "supabase_column": "liabilities",
+        "type": "number",
+        "required": false,
+        "description": "Liabilities value (stored as float)",
+        "conversion": "parseFloat"
+      },
+      "net_worth": {
+        "field_name": "net_worth",
+        "supabase_column": "net_worth",
+        "type": "number",
+        "required": false,
+        "description": "Net worth (calculated: fixed_assets + liquid_assets - liabilities, stored as float)",
+        "conversion": "parseFloat",
+        "calculated": true
+      },
+      "investment_knowledge": {
+        "field_name": "investment_knowledge",
+        "supabase_column": "investment_knowledge",
+        "type": "select",
+        "required": false,
+        "description": "Investment knowledge level",
+        "options": ["None", "Limited", "Good", "Expert"]
+      },
+      "risk_tolerance": {
+        "field_name": "risk_tolerance",
+        "supabase_column": "risk_tolerance",
+        "type": "select",
+        "required": false,
+        "description": "Risk tolerance level",
+        "options": ["Low", "Medium", "High"]
+      },
+      "investment_objective": {
+        "field_name": "investment_objective",
+        "supabase_column": "investment_objective",
+        "type": "select",
+        "required": false,
+        "description": "Investment objective",
+        "options": ["Safety", "Income", "Growth", "Aggressive Growth"]
+      }
+    },
+    "investments": {
+      "investments": {
+        "field_name": "investments",
+        "supabase_column": "investments",
+        "type": "checkbox_array",
+        "required": false,
+        "description": "Investment types (array of strings)",
+        "options": ["Bonds", "Segregated Funds", "Stocks", "Mutual Funds", "Term Deposits/GIC", "Real Estate & Mortgages", "Other"],
+        "notes": "Other investments stored as additional array elements"
+      }
+    },
+    "banking": {
+      "bank_name": {
+        "field_name": "bank_name",
+        "supabase_column": "bank_name",
+        "type": "text",
+        "required": false,
+        "description": "Financial institution name"
+      },
+      "bank_transit": {
+        "field_name": "bank_transit",
+        "supabase_column": "bank_transit",
+        "type": "text",
+        "required": false,
+        "description": "Bank transit number"
+      },
+      "bank_institution": {
+        "field_name": "bank_institution",
+        "supabase_column": "bank_institution",
+        "type": "text",
+        "required": false,
+        "description": "Bank institution number"
+      },
+      "bank_account": {
+        "field_name": "bank_account",
+        "supabase_column": "bank_account",
+        "type": "text",
+        "required": false,
+        "description": "Bank account number"
+      },
+      "bank_address": {
+        "field_name": "bank_address",
+        "supabase_column": "bank_address",
+        "type": "text",
+        "required": false,
+        "description": "Bank branch address"
+      },
+      "bank_city": {
+        "field_name": "bank_city",
+        "supabase_column": "bank_city",
+        "type": "text",
+        "required": false,
+        "description": "Bank city"
+      },
+      "bank_province": {
+        "field_name": "bank_province",
+        "supabase_column": "bank_province",
+        "type": "select",
+        "required": false,
+        "description": "Bank province"
+      },
+      "bank_postal_code": {
+        "field_name": "bank_postal_code",
+        "supabase_column": "bank_postal_code",
+        "type": "text",
+        "required": false,
+        "description": "Bank postal code"
+      }
+    },
+    "approval_documents": {
+      "approval_documents": {
+        "field_name": "approval_documents",
+        "supabase_column": "approval_documents",
+        "type": "checkbox_array",
+        "required": false,
+        "description": "Approval documents (array of strings)",
+        "options": ["Driver's License", "Birth Certificate", "Passport", "Other"],
+        "notes": "Other documents stored as semicolon-separated values in array"
+      },
+      "document_number": {
+        "field_name": "document_number",
+        "supabase_column": "document_number",
+        "type": "text",
+        "required": false,
+        "description": "Document identification number"
+      },
+      "document_jurisdiction": {
+        "field_name": "document_jurisdiction",
+        "supabase_column": "document_jurisdiction",
+        "type": "text",
+        "required": false,
+        "description": "Document issuing jurisdiction"
+      },
+      "document_expiry": {
+        "field_name": "document_expiry",
+        "supabase_column": "document_expiry",
+        "type": "date",
+        "required": false,
+        "description": "Document expiry date"
+      },
+      "citizenship": {
+        "field_name": "citizenship",
+        "supabase_column": "citizenship",
+        "type": "radio",
+        "required": false,
+        "description": "Citizenship status",
+        "options": ["Canadian", "U.S.", "Other"]
+      },
+      "citizenship_other": {
+        "field_name": "citizenship_other",
+        "supabase_column": "citizenship_other",
+        "type": "text",
+        "required": false,
+        "description": "Other citizenship specification"
+      },
+      "id_verified_physical": {
+        "field_name": "id_verified_physical",
+        "supabase_column": "id_verified_physical",
+        "type": "checkbox",
+        "required": false,
+        "description": "Physical ID verification by agent"
+      }
+    }
+  },
+  "metadata": {
+    "total_fields": 35,
+    "array_fields": ["tax_residency", "investments", "approval_documents"],
+    "numeric_fields": ["annual_income", "fixed_assets", "liquid_assets", "liabilities", "net_worth"],
+    "date_fields": ["dob", "document_expiry"],
+    "required_fields": ["first_name", "last_name"],
+    "optional_sections": ["banking", "approval_documents"],
+    "form_steps": [
+      "Personal & Tax",
+      "Address & Employment", 
+      "Financial & Investments",
+      "Banking & Approval"
+    ]
+  }
+}
