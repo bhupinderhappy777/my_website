@@ -10,6 +10,7 @@ import {
   LogOut,
   ChevronRight,
   AlertCircle,
+  Edit,
 } from 'lucide-react';
 
 export default function ClientsTable() {
@@ -20,6 +21,7 @@ export default function ClientsTable() {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [editingClient, setEditingClient] = useState(null);
   const [error, setError] = useState(null);
 
   const {
@@ -85,25 +87,57 @@ export default function ClientsTable() {
 
   const onSubmit = async (formData) => {
     setError(null);
-    const { error: insertError } = await supabase.from('clients').insert([
-      {
-        ...formData,
-        annual_income: formData.annual_income
-          ? parseFloat(formData.annual_income)
-          : null,
-        net_worth: formData.net_worth ? parseFloat(formData.net_worth) : null,
-        liquid_assets: formData.liquid_assets
-          ? parseFloat(formData.liquid_assets)
-          : null,
-      },
-    ]);
+    try {
+      if (editingClient && editingClient.id) {
+        const { error: updateError } = await supabase
+          .from('clients')
+          .update({
+            ...formData,
+            annual_income: formData.annual_income
+              ? parseFloat(formData.annual_income)
+              : null,
+            net_worth: formData.net_worth ? parseFloat(formData.net_worth) : null,
+            liquid_assets: formData.liquid_assets
+              ? parseFloat(formData.liquid_assets)
+              : null,
+            fixed_assets: formData.fixed_assets ? parseFloat(formData.fixed_assets) : null,
+            liabilities: formData.liabilities ? parseFloat(formData.liabilities) : null,
+          })
+          .eq('id', editingClient.id);
 
-    if (insertError) {
-      setError(insertError.message);
-    } else {
+        if (updateError) {
+          setError(updateError.message);
+          return;
+        }
+
+        setEditingClient(null);
+      } else {
+        const { error: insertError } = await supabase.from('clients').insert([
+          {
+            ...formData,
+            annual_income: formData.annual_income
+              ? parseFloat(formData.annual_income)
+              : null,
+            net_worth: formData.net_worth ? parseFloat(formData.net_worth) : null,
+            liquid_assets: formData.liquid_assets
+              ? parseFloat(formData.liquid_assets)
+              : null,
+            fixed_assets: formData.fixed_assets ? parseFloat(formData.fixed_assets) : null,
+            liabilities: formData.liabilities ? parseFloat(formData.liabilities) : null,
+          },
+        ]);
+
+        if (insertError) {
+          setError(insertError.message);
+          return;
+        }
+      }
+
       setShowModal(false);
       reset();
       fetchClients();
+    } catch (e) {
+      setError(e.message || String(e));
     }
   };
 
@@ -158,7 +192,11 @@ export default function ClientsTable() {
             />
           </div>
           <button
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              setEditingClient(null);
+              reset();
+              setShowModal(true);
+            }}
             className="flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
           >
             <Plus className="w-5 h-5" />
@@ -250,9 +288,20 @@ export default function ClientsTable() {
                           {client.risk_tolerance || 'Not Set'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right">
-                        <ChevronRight className="w-5 h-5 text-gray-400 inline-block" />
-                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right flex items-center justify-end gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingClient(client);
+                              reset(client);
+                              setShowModal(true);
+                            }}
+                            className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-sm rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-150"
+                          >
+                            <Edit className="w-4 h-4 mr-1 inline-block" /> Edit
+                          </button>
+                          <ChevronRight className="w-5 h-5 text-gray-400 inline-block" />
+                        </td>
                     </tr>
                   ))}
                 </tbody>
