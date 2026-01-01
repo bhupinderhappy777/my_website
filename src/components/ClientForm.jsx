@@ -47,65 +47,59 @@ export default function ClientForm() {
     let mounted = true;
     (async () => {
       const { data, error } = await supabase.from('clients').select('*').eq('id', id).single();
-      if (error) return;
-      if (mounted) {
-        // If tax_residency stored as array, split into standard and other countries
-        if (data && data.tax_residency) {
+      if (error) {
+        console.error('Error loading client:', error);
+        return;
+      }
+      if (mounted && data) {
+        // Reset form with basic data first
+        reset(data);
+
+        // Handle tax_residency: set checkboxes and other countries
+        if (data.tax_residency) {
           const arr = Array.isArray(data.tax_residency) ? data.tax_residency : (typeof data.tax_residency === 'string' ? [data.tax_residency] : []);
           const hasCanada = arr.includes('Canada');
           const hasUSA = arr.includes('USA');
           const others = arr.filter(x => x !== 'Canada' && x !== 'USA');
-          // Prefer Canada, then USA, then Other
-          if (hasCanada) {
-            reset({ ...data, tax_residency: 'Canada' });
-            setOtherCountries(others);
-          } else if (hasUSA) {
-            reset({ ...data, tax_residency: 'USA' });
-            setOtherCountries(others);
-          } else if (others.length) {
-            reset({ ...data, tax_residency: 'Other' });
-            setOtherCountries(others);
-          } else {
-            reset(data);
-          }
+          const checked = [];
+          if (hasCanada) checked.push('Canada');
+          if (hasUSA) checked.push('USA');
+          if (others.length) checked.push('Other');
+          setValue('tax_residency', checked);
+          setOtherCountries(others);
         }
 
-        // If investments stored as array, load selected standard investments and other investments
-        if (data && data.investments) {
+        // Handle investments: set checkboxes and other investments
+        if (data.investments) {
           const iarr = Array.isArray(data.investments) ? data.investments : (typeof data.investments === 'string' ? [data.investments] : []);
           const standardInvestments = ['Bonds','Segregated Funds','Stocks','Mutual Funds','Term Deposits/GIC','Real Estate & Mortgages'];
           const std = iarr.filter(i => standardInvestments.includes(i));
           const othersInv = iarr.filter(i => !standardInvestments.includes(i));
-          if (std.length || othersInv.length) {
-            setValue('investments', std.concat(othersInv.length ? ['Other'] : []));
-            setOtherInvestments(othersInv);
-          }
+          setValue('investments', std.concat(othersInv.length ? ['Other'] : []));
+          setOtherInvestments(othersInv);
         }
 
-        // If approval_documents stored as array, load standard docs and any 'other' values
-        if (data && data.approval_documents) {
+        // Handle approval_documents: set checkboxes and other text
+        if (data.approval_documents) {
           const darr = Array.isArray(data.approval_documents) ? data.approval_documents : (typeof data.approval_documents === 'string' ? [data.approval_documents] : []);
           const standardDocs = ["Driver's License","Birth Certificate","Passport"];
           const stdDocs = darr.filter(d => standardDocs.includes(d));
           const otherDocs = darr.filter(d => !standardDocs.includes(d));
-          if (stdDocs.length || otherDocs.length) {
-            setValue('approval_documents', stdDocs.concat(otherDocs.length ? ['Other'] : []));
-            setApprovalOtherText(otherDocs.join('; '));
-            // also populate supporting fields if present on record
-            if (data.document_number) setValue('document_number', data.document_number);
-            if (data.document_jurisdiction) setValue('document_jurisdiction', data.document_jurisdiction);
-            if (data.document_expiry) setValue('document_expiry', data.document_expiry);
-            if (data.citizenship) setValue('citizenship', data.citizenship);
-            if (data.citizenship_other) setValue('citizenship_other', data.citizenship_other);
-            if (data.id_verified_physical !== undefined) setValue('id_verified_physical', data.id_verified_physical);
-          }
-        } else {
-          reset(data);
+          setValue('approval_documents', stdDocs.concat(otherDocs.length ? ['Other'] : []));
+          setApprovalOtherText(otherDocs.join('; '));
         }
+
+        // Set other fields explicitly if needed
+        if (data.document_number) setValue('document_number', data.document_number);
+        if (data.document_jurisdiction) setValue('document_jurisdiction', data.document_jurisdiction);
+        if (data.document_expiry) setValue('document_expiry', data.document_expiry);
+        if (data.citizenship) setValue('citizenship', data.citizenship);
+        if (data.citizenship_other) setValue('citizenship_other', data.citizenship_other);
+        if (data.id_verified_physical !== undefined) setValue('id_verified_physical', data.id_verified_physical);
       }
     })();
     return () => { mounted = false; };
-  }, [id, reset, supabase]);
+  }, [id, reset, setValue, supabase]);
 
   // default tax residency for new forms
   useEffect(() => {
@@ -125,9 +119,10 @@ export default function ClientForm() {
   if (!session) return <Navigate to="/agent/login" replace />;
 
   const onSubmit = async (formData) => {
+    console.log('Submitting form data:', formData);
     try {
       // normalize tax_residency into an array of strings for Supabase
-      const rawResidency = formData.tax_residency ?? 'Canada';
+      const rawResidency = formData.tax_residency ?? ['Canada'];
       const residencyArray = Array.isArray(rawResidency)
         ? rawResidency.slice()
         : (typeof rawResidency === 'string' && rawResidency ? [rawResidency] : []);
@@ -153,16 +148,19 @@ export default function ClientForm() {
         fixed_assets: formData.fixed_assets ? parseFloat(formData.fixed_assets) : null,
         liabilities: formData.liabilities ? parseFloat(formData.liabilities) : null,
       };
+      console.log('Payload to save:', payload);
 
       if (id) {
-        await supabase.from('clients').update(payload).eq('id', id);
+        const { error } = await supabase.from('clients').update(payload).eq('id', id);
+        if (error) throw error;
       } else {
-        await supabase.from('clients').insert([payload]);
+        const { error } = await supabase.from('clients').insert([payload]);
+        if (error) throw error;
       }
       navigate('/agent/clients');
     } catch (e) {
       console.error('Error saving client:', e);
-      alert('Failed to save client. Check console for details.');
+      alert('Failed to save client. Check console for details. Error: ' + e.message);
     }
   };
 
