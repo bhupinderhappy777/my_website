@@ -135,7 +135,7 @@ export default function FormGenerator() {
 
 const handleTemplateChange = (e) => {
   const templateId = e.target.value;
-  const template = templates.find((t) => t.id === templateId);
+  const template = templates.find((t) => String(t.id) === String(templateId));
   setSelectedTemplate(template || null);
   reset();
 };
@@ -370,7 +370,7 @@ const handleTemplateChange = (e) => {
                 </h2>
 
                 {/* Check if this is a KYC form template */}
-                {selectedTemplate.name && selectedTemplate.name.toLowerCase().includes('kyc') ? (
+                {selectedTemplate.field_mappings && Object.keys(selectedTemplate.field_mappings).length > 0 ? (
                   <KYCForm register={register} setValue={setValue} client={client} />
                 ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
