@@ -7,6 +7,14 @@ import {
   Plus,
   Sun,
   Moon,
+  User,
+  MapPin,
+  Briefcase,
+  DollarSign,
+  TrendingUp,
+  Building,
+  FileText,
+  Globe,
 } from 'lucide-react';
 
 export default function ClientForm() {
@@ -30,14 +38,6 @@ export default function ClientForm() {
   const [otherInvestmentInput, setOtherInvestmentInput] = useState('');
   const [approvalOtherText, setApprovalOtherText] = useState('');
   const [theme, setTheme] = useState(() => (typeof window !== 'undefined' && window.localStorage && localStorage.getItem('theme')) || 'light');
-  const [currentStep, setCurrentStep] = useState(0);
-
-  const steps = [
-    { title: 'Personal & Tax', description: 'Basic info and residency' },
-    { title: 'Address & Employment', description: 'Location and work details' },
-    { title: 'Financial & Investments', description: 'Assets and investment preferences' },
-    { title: 'Banking & Approval', description: 'Optional banking and documentation' },
-  ];
 
   useEffect(() => {
     try {
@@ -49,9 +49,6 @@ export default function ClientForm() {
   }, [theme]);
 
   const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
-
-  const nextStep = () => setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
-  const prevStep = () => setCurrentStep((s) => Math.max(s - 1, 0));
 
   useEffect(() => {
     if (!id) return;
@@ -235,39 +232,13 @@ export default function ClientForm() {
             </div>
           </div>
 
-          {/* Progress Indicator */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-2">
-              {steps.map((step, index) => (
-                <div key={index} className="flex items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                    index < currentStep ? 'bg-green-600 text-white' : 
-                    index === currentStep ? 'bg-indigo-600 text-white' : 
-                    'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
-                  }`}>
-                    {index < currentStep ? '✓' : index + 1}
-                  </div>
-                  {index < steps.length - 1 && (
-                    <div className={`w-16 h-1 mx-2 transition-colors ${
-                      index < currentStep ? 'bg-green-600' : 'bg-gray-200 dark:bg-gray-700'
-                    }`} />
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="text-center">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{steps[currentStep].title}</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{steps[currentStep].description}</p>
-            </div>
-          </div>
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Step 0: Personal & Contact, Tax Residency */}
-            {currentStep === 0 && (
-              <div className="space-y-6">
-                {/* Personal / Contact */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Personal Information</h3>
+            {/* Personal & Contact */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Personal Information</h3>
+              </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
@@ -329,7 +300,10 @@ export default function ClientForm() {
 
                 {/* Tax Residency */}
                 <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tax Residency</h3>
+                  <div className="flex items-center gap-3 mb-4">
+                    <Globe className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Tax Residency</h3>
+                  </div>
                   <div className="space-y-4">
                     <div>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Select all countries where you are a tax resident:</p>
@@ -387,15 +361,13 @@ export default function ClientForm() {
                     )}
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* Step 1: Address, Employment */}
-            {currentStep === 1 && (
-              <div className="space-y-6">
                 {/* Address */}
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Address Information</h3>
+                  <div className="flex items-center gap-3 mb-4">
+                    <MapPin className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Address Information</h3>
+                  </div>
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Street Address</label>
@@ -438,7 +410,10 @@ export default function ClientForm() {
 
                 {/* Employment */}
                 <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Employment Information</h3>
+                  <div className="flex items-center gap-3 mb-4">
+                    <Briefcase className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Employment Information</h3>
+                  </div>
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Employer</label>
@@ -456,15 +431,13 @@ export default function ClientForm() {
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* Step 2: Financial, Investments */}
-            {currentStep === 2 && (
-              <div className="space-y-6">
                 {/* Financial */}
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Financial Information</h3>
+                  <div className="flex items-center gap-3 mb-4">
+                    <DollarSign className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Financial Information</h3>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Annual Income</label>
@@ -527,7 +500,10 @@ export default function ClientForm() {
 
                 {/* Investments */}
                 <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Investment Types</h3>
+                  <div className="flex items-center gap-3 mb-4">
+                    <TrendingUp className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Investment Types</h3>
+                  </div>
                   <div className="space-y-4">
                     <div>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Select all investment types you're interested in:</p>
@@ -601,15 +577,13 @@ export default function ClientForm() {
                     )}
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* Step 3: Banking, Approval */}
-            {currentStep === 3 && (
-              <div className="space-y-6">
                 {/* Banking */}
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Banking Details</h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Building className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Banking Details</h3>
+                  </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Optional — used for transfers and verification.</p>
                   
                   <div className="space-y-4">
@@ -675,7 +649,10 @@ export default function ClientForm() {
 
                 {/* Client Approval Documentation */}
                 <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Client Approval Documentation</h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Client Approval Documentation</h3>
+                  </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Records verifying identity and citizenship.</p>
 
                   <div className="space-y-6">
@@ -759,44 +736,18 @@ export default function ClientForm() {
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </form>
 
-          {/* Actions - Outside the form */}
-          <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <button 
-              type="button" 
-              onClick={prevStep} 
-              disabled={currentStep === 0} 
-              className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent transition"
-            >
-              ← Previous
-            </button>
-            
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              Step {currentStep + 1} of {steps.length}
-            </div>
-            
-            {currentStep < steps.length - 1 ? (
-              <button 
-                type="button" 
-                onClick={nextStep} 
-                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transition"
-              >
-                Next →
-              </button>
-            ) : (
-              <button 
-                type="button" 
-                onClick={handleSubmit(onSubmit)} 
-                disabled={isSubmitting} 
-                className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center gap-2"
-              >
-                {isSubmitting ? 'Saving...' : (id ? 'Save Changes' : 'Create Client')}
-              </button>
-            )}
-          </div>
+              {/* Submit Button */}
+              <div className="flex justify-center pt-6">
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting} 
+                  className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center gap-2 text-lg font-medium"
+                >
+                  {isSubmitting ? 'Saving...' : (id ? 'Save Changes' : 'Create Client')}
+                </button>
+              </div>
+            </form>
         </div>
       </div>
     </div>
