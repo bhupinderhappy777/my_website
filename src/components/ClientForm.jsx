@@ -26,6 +26,7 @@ export default function ClientForm() {
   const [otherInput, setOtherInput] = useState('');
   const [otherInvestments, setOtherInvestments] = useState([]);
   const [otherInvestmentInput, setOtherInvestmentInput] = useState('');
+  const [approvalOtherText, setApprovalOtherText] = useState('');
 
   useEffect(() => {
     if (!id) return;
@@ -65,6 +66,25 @@ export default function ClientForm() {
             setValue('investments', std.concat(othersInv.length ? ['Other'] : []));
             setOtherInvestments(othersInv);
           }
+        }
+
+        // If approval_documents stored as array, load standard docs and any 'other' values
+        if (data && data.approval_documents) {
+          const darr = Array.isArray(data.approval_documents) ? data.approval_documents : (typeof data.approval_documents === 'string' ? [data.approval_documents] : []);
+          const standardDocs = ["Driver's License","Birth Certificate","Passport"];
+          const stdDocs = darr.filter(d => standardDocs.includes(d));
+          const otherDocs = darr.filter(d => !standardDocs.includes(d));
+          if (stdDocs.length || otherDocs.length) {
+            setValue('approval_documents', stdDocs.concat(otherDocs.length ? ['Other'] : []));
+            setApprovalOtherText(otherDocs.join('; '));
+            // also populate supporting fields if present on record
+            if (data.document_number) setValue('document_number', data.document_number);
+            if (data.document_jurisdiction) setValue('document_jurisdiction', data.document_jurisdiction);
+            if (data.document_expiry) setValue('document_expiry', data.document_expiry);
+            if (data.citizenship) setValue('citizenship', data.citizenship);
+            if (data.citizenship_other) setValue('citizenship_other', data.citizenship_other);
+            if (data.id_verified_physical !== undefined) setValue('id_verified_physical', data.id_verified_physical);
+          }
         } else {
           reset(data);
         }
@@ -72,6 +92,12 @@ export default function ClientForm() {
     })();
     return () => { mounted = false; };
   }, [id, reset, supabase]);
+
+  // default tax residency for new forms
+  useEffect(() => {
+    if (id) return;
+    setValue('tax_residency', ['Canada']);
+  }, [id, setValue]);
 
   // Auto-calc net worth
   useEffect(() => {
@@ -105,6 +131,8 @@ export default function ClientForm() {
         ...formData,
         tax_residency: finalTaxResidency,
         investments: finalInvestments,
+        // approval_documents normalization: expand 'Other' into provided text (split if multiple)
+        approval_documents: (Array.isArray(formData.approval_documents) ? formData.approval_documents.slice() : (typeof formData.approval_documents === 'string' && formData.approval_documents ? [formData.approval_documents] : [])).flatMap(item => item === 'Other' ? (approvalOtherText ? approvalOtherText.split(';').map(s => s.trim()).filter(Boolean) : []) : item),
         annual_income: formData.annual_income ? parseFloat(formData.annual_income) : null,
         net_worth: formData.net_worth ? parseFloat(formData.net_worth) : null,
         liquid_assets: formData.liquid_assets ? parseFloat(formData.liquid_assets) : null,
@@ -161,6 +189,11 @@ export default function ClientForm() {
     setOtherInvestments(prev => prev.filter(p => p !== item));
   };
 
+  const onApprovalOtherChange = (v) => {
+    setApprovalOtherText(v);
+    setValue('approval_documents_other', v);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -209,33 +242,41 @@ export default function ClientForm() {
               </select>
             </label>
 
-            <label className="block">
+            <div className="md:col-span-2">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tax Residency</span>
-              <select {...register('tax_residency')} multiple className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition h-28">
-                <option value="Canada">Canada</option>
-                <option value="USA">USA</option>
-                <option value="Other">Other</option>
-              </select>
-              <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd (or use checkboxes) to multi-select. Select "Other" to add custom countries.</p>
-            </label>
-
-            {((watch('tax_residency') || [])).includes('Other') && (
-              <div className="md:col-span-2">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Other Countries</span>
-                <div className="flex gap-2 mt-2 items-center">
-                  <input value={otherInput} onChange={(e) => setOtherInput(e.target.value)} placeholder="Type country and press Add" className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
-                  <button type="button" onClick={addOtherCountry} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">Add</button>
-                </div>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {otherCountries.map(c => (
-                    <span key={c} className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1 text-sm">
-                      {c}
-                      <button type="button" onClick={() => removeOtherCountry(c)} className="text-xs text-gray-500 hover:text-gray-700">×</button>
-                    </span>
-                  ))}
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Canada" {...register('tax_residency')} className="rounded" />
+                  <span className="text-sm">Canada</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="USA" {...register('tax_residency')} className="rounded" />
+                  <span className="text-sm">USA</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Other" {...register('tax_residency')} className="rounded" />
+                  <span className="text-sm">Other</span>
+                </label>
               </div>
-            )}
+
+              {((watch('tax_residency') || [])).includes('Other') && (
+                <div className="mt-3">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Other Countries</span>
+                  <div className="flex gap-2 mt-2 items-center">
+                    <input value={otherInput} onChange={(e) => setOtherInput(e.target.value)} placeholder="Type country and press Add" className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                    <button type="button" onClick={addOtherCountry} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">Add</button>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {otherCountries.map(c => (
+                      <span key={c} className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1 text-sm">
+                        {c}
+                        <button type="button" onClick={() => removeOtherCountry(c)} className="text-xs text-gray-500 hover:text-gray-700">×</button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Date of Birth</span>
@@ -425,6 +466,146 @@ export default function ClientForm() {
                   </div>
                 </div>
               )}
+
+              <div className="md:col-span-2 mt-4">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Banking Details</h3>
+
+                <label className="block">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Financial Institution Name</span>
+                  <input {...register('bank_name')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
+                  <label className="block">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Transit Number</span>
+                    <input {...register('bank_transit')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                  </label>
+
+                  <label className="block">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Institution Number</span>
+                    <input {...register('bank_institution')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                  </label>
+
+                  <label className="block">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Account Number</span>
+                    <input {...register('bank_account')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                  </label>
+                </div>
+
+                <label className="block md:col-span-2 mt-3">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Address</span>
+                  <input {...register('bank_address')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
+                  <label className="block">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">City</span>
+                    <input {...register('bank_city')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                  </label>
+
+                  <label className="block">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Province</span>
+                    <select {...register('bank_province')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
+                      <option value="">Select Province</option>
+                      <option value="AB">Alberta</option>
+                      <option value="BC">British Columbia</option>
+                      <option value="MB">Manitoba</option>
+                      <option value="NB">New Brunswick</option>
+                      <option value="NL">Newfoundland and Labrador</option>
+                      <option value="NS">Nova Scotia</option>
+                      <option value="NT">Northwest Territories</option>
+                      <option value="NU">Nunavut</option>
+                      <option value="ON">Ontario</option>
+                      <option value="PE">Prince Edward Island</option>
+                      <option value="QC">Quebec</option>
+                      <option value="SK">Saskatchewan</option>
+                      <option value="YT">Yukon</option>
+                    </select>
+                  </label>
+
+                  <label className="block">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Postal Code</span>
+                    <input {...register('bank_postal_code')} placeholder="A1A 1A1" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                  </label>
+                </div>
+              </div>
+            
+            <div className="md:col-span-2 mt-6">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Client Approval Documentation</h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Driver's License" {...register('approval_documents')} className="rounded" />
+                  <span className="text-sm">Driver's License</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Birth Certificate" {...register('approval_documents')} className="rounded" />
+                  <span className="text-sm">Birth Certificate</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Passport" {...register('approval_documents')} className="rounded" />
+                  <span className="text-sm">Passport</span>
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="checkbox" value="Other" {...register('approval_documents')} className="rounded" />
+                  <span className="text-sm">Other (Specify)</span>
+                </label>
+              </div>
+
+              {((watch('approval_documents') || [])).includes('Other') && (
+                <div className="mt-3">
+                  <label className="block">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Other Document(s) (semicolon separated)</span>
+                    <input value={approvalOtherText} onChange={(e) => onApprovalOtherChange(e.target.value)} placeholder="e.g. National ID; Local Permit" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                  </label>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-3">
+                <label className="block">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Document Number</span>
+                  <input {...register('document_number')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Jurisdiction</span>
+                  <input {...register('document_jurisdiction')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Expiry</span>
+                  <input type="date" {...register('document_expiry')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                </label>
+              </div>
+
+              <div className="mt-3">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Citizenship</span>
+                <div className="flex gap-4 mt-2 items-center">
+                  <label className="inline-flex items-center gap-2">
+                    <input type="radio" value="Canadian" {...register('citizenship')} className="rounded" />
+                    <span className="text-sm">Canadian</span>
+                  </label>
+                  <label className="inline-flex items-center gap-2">
+                    <input type="radio" value="U.S." {...register('citizenship')} className="rounded" />
+                    <span className="text-sm">U.S.</span>
+                  </label>
+                  <label className="inline-flex items-center gap-2">
+                    <input type="radio" value="Other" {...register('citizenship')} className="rounded" />
+                    <span className="text-sm">Other (Specify)</span>
+                  </label>
+                </div>
+                {watch('citizenship') === 'Other' && (
+                  <div className="mt-2">
+                    <input {...register('citizenship_other')} placeholder="Specify citizenship" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                  </div>
+                )}
+              </div>
+
+              <label className="inline-flex items-center gap-2 mt-4">
+                <input type="checkbox" {...register('id_verified_physical')} />
+                <span className="text-sm">Met Client in Person — I.D. verified physically by Agent</span>
+              </label>
+            </div>
             </div>
 
             <div className="md:col-span-2 flex justify-end gap-3 mt-6">
