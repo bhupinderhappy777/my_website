@@ -4,6 +4,7 @@ import { AuthProvider } from './AuthContext';
 import AgentLogin from './components/AgentLogin';
 import ClientsTable from './components/ClientsTable';
 import FormGenerator from './components/FormGenerator';
+import ClientForm from './components/ClientForm';
 
 // Main website component (existing content)
 function MainWebsite() {
@@ -524,6 +525,8 @@ function App() {
           <Route path="/agent" element={<AgentLogin />} />
           <Route path="/agent/login" element={<AgentLogin />} />
           <Route path="/agent/clients" element={<ClientsTable />} />
+          <Route path="/agent/clients/new" element={<ClientForm />} />
+          <Route path="/agent/clients/:id/edit" element={<ClientForm />} />
           <Route path="/agent/forms/:clientId" element={<FormGenerator />} />
         </Routes>
       </BrowserRouter>

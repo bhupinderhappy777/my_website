@@ -193,9 +193,7 @@ export default function ClientsTable() {
           </div>
           <button
             onClick={() => {
-              setEditingClient(null);
-              reset();
-              setShowModal(true);
+              navigate('/agent/clients/new');
             }}
             className="flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
           >
@@ -292,9 +290,7 @@ export default function ClientsTable() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              setEditingClient(client);
-                              reset(client);
-                              setShowModal(true);
+                              navigate(`/agent/clients/${client.id}/edit`);
                             }}
                             className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-sm rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-150"
                           >
