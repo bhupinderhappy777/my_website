@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Navigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useSupabaseClient, useSession } from '../AuthContext';
@@ -22,13 +22,32 @@ export default function ClientForm() {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const [otherCountries, setOtherCountries] = useState([]);
+  const [otherInput, setOtherInput] = useState('');
+
   useEffect(() => {
     if (!id) return;
     let mounted = true;
     (async () => {
       const { data, error } = await supabase.from('clients').select('*').eq('id', id).single();
       if (error) return;
-      if (mounted) reset(data);
+      if (mounted) {
+        // If tax_residency stored as array, split into standard and other countries
+        if (data && data.tax_residency) {
+          const arr = Array.isArray(data.tax_residency) ? data.tax_residency : (typeof data.tax_residency === 'string' ? [data.tax_residency] : []);
+          const std = arr.filter(x => x === 'Canada' || x === 'USA');
+          const others = arr.filter(x => x !== 'Canada' && x !== 'USA');
+          if (std.length || others.length) {
+            // set form field to include standard values (keep 'Other' out of select values)
+            reset({ ...data, tax_residency: std.concat(others.length ? ['Other'] : []) });
+            setOtherCountries(others);
+          } else {
+            reset(data);
+          }
+        } else {
+          reset(data);
+        }
+      }
     })();
     return () => { mounted = false; };
   }, [id, reset, supabase]);
@@ -46,24 +65,28 @@ export default function ClientForm() {
 
   const onSubmit = async (formData) => {
     try {
+      // normalize tax_residency into an array of strings for Supabase
+      const rawResidency = formData.tax_residency || [];
+      const residencyArray = Array.isArray(rawResidency)
+        ? rawResidency.slice()
+        : (typeof rawResidency === 'string' && rawResidency ? [rawResidency] : []);
+      // Replace any 'Other' token with actual otherCountries entries
+      const finalTaxResidency = residencyArray.flatMap(item => item === 'Other' ? otherCountries : item);
+
+      const payload = {
+        ...formData,
+        tax_residency: finalTaxResidency,
+        annual_income: formData.annual_income ? parseFloat(formData.annual_income) : null,
+        net_worth: formData.net_worth ? parseFloat(formData.net_worth) : null,
+        liquid_assets: formData.liquid_assets ? parseFloat(formData.liquid_assets) : null,
+        fixed_assets: formData.fixed_assets ? parseFloat(formData.fixed_assets) : null,
+        liabilities: formData.liabilities ? parseFloat(formData.liabilities) : null,
+      };
+
       if (id) {
-        await supabase.from('clients').update({
-          ...formData,
-          annual_income: formData.annual_income ? parseFloat(formData.annual_income) : null,
-          net_worth: formData.net_worth ? parseFloat(formData.net_worth) : null,
-          liquid_assets: formData.liquid_assets ? parseFloat(formData.liquid_assets) : null,
-          fixed_assets: formData.fixed_assets ? parseFloat(formData.fixed_assets) : null,
-          liabilities: formData.liabilities ? parseFloat(formData.liabilities) : null,
-        }).eq('id', id);
+        await supabase.from('clients').update(payload).eq('id', id);
       } else {
-        await supabase.from('clients').insert([{
-          ...formData,
-          annual_income: formData.annual_income ? parseFloat(formData.annual_income) : null,
-          net_worth: formData.net_worth ? parseFloat(formData.net_worth) : null,
-          liquid_assets: formData.liquid_assets ? parseFloat(formData.liquid_assets) : null,
-          fixed_assets: formData.fixed_assets ? parseFloat(formData.fixed_assets) : null,
-          liabilities: formData.liabilities ? parseFloat(formData.liabilities) : null,
-        }]);
+        await supabase.from('clients').insert([payload]);
       }
       navigate('/agent/clients');
     } catch (e) {
@@ -71,6 +94,25 @@ export default function ClientForm() {
       // in UI could show an alert
       // console.error(e);
     }
+  };
+
+  const addOtherCountry = () => {
+    const v = otherInput.trim();
+    if (!v) return;
+    // avoid duplicates
+    setOtherCountries(prev => {
+      if (prev.includes(v)) return prev;
+      const next = [...prev, v];
+      // ensure 'Other' is selected in the multi-select
+      const current = watch('tax_residency') || [];
+      if (!Array.isArray(current) || !current.includes('Other')) setValue('tax_residency', Array.isArray(current) ? [...current, 'Other'] : ['Other']);
+      return next;
+    });
+    setOtherInput('');
+  };
+
+  const removeOtherCountry = (country) => {
+    setOtherCountries(prev => prev.filter(c => c !== country));
   };
 
   return (
@@ -120,6 +162,34 @@ export default function ClientForm() {
                 <option value="French">French</option>
               </select>
             </label>
+
+            <label className="block">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tax Residency</span>
+              <select {...register('tax_residency')} multiple className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition h-28">
+                <option value="Canada">Canada</option>
+                <option value="USA">USA</option>
+                <option value="Other">Other</option>
+              </select>
+              <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd (or use checkboxes) to multi-select. Select "Other" to add custom countries.</p>
+            </label>
+
+            {((watch('tax_residency') || [])).includes('Other') && (
+              <div className="md:col-span-2">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Other Countries</span>
+                <div className="flex gap-2 mt-2 items-center">
+                  <input value={otherInput} onChange={(e) => setOtherInput(e.target.value)} placeholder="Type country and press Add" className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+                  <button type="button" onClick={addOtherCountry} className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">Add</button>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {otherCountries.map(c => (
+                    <span key={c} className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full px-3 py-1 text-sm">
+                      {c}
+                      <button type="button" onClick={() => removeOtherCountry(c)} className="text-xs text-gray-500 hover:text-gray-700">×</button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Date of Birth</span>
