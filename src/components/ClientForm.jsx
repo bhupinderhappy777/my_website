@@ -74,21 +74,21 @@ export default function ClientForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 ring-1 ring-gray-100 dark:ring-0">
           <div className="flex items-center gap-4 mb-6">
             <button onClick={() => navigate('/agent/clients')} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
               <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             </button>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{id ? 'Edit Client' : 'Add Client'}</h1>
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{id ? 'Edit Client' : 'Add Client'}</h1>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Reuse same fields as modal; keep layout clear and grouped */}
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Title</span>
-              <select {...register('title')} className="w-full mt-1">
+              <select {...register('title')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
                 <option value="">Select Title</option>
                 <option value="Mr.">Mr.</option>
                 <option value="Mrs.">Mrs.</option>
@@ -98,25 +98,24 @@ export default function ClientForm() {
                 <option value="Other">Other</option>
               </select>
             </label>
-
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">First Name</span>
-              <input {...register('first_name', { required: true })} className="w-full mt-1 px-3 py-2" />
+              <input {...register('first_name', { required: true })} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Last Name</span>
-              <input {...register('last_name', { required: true })} className="w-full mt-1 px-3 py-2" />
+              <input {...register('last_name', { required: true })} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</span>
-              <input type="email" {...register('email')} className="w-full mt-1 px-3 py-2" />
+              <input type="email" {...register('email')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Preferred Language</span>
-              <select {...register('language_preference')} defaultValue="English" className="w-full mt-1 px-3 py-2">
+              <select {...register('language_preference')} defaultValue="English" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
                 <option value="English">English</option>
                 <option value="French">French</option>
               </select>
@@ -124,22 +123,22 @@ export default function ClientForm() {
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Date of Birth</span>
-              <input type="date" {...register('dob')} className="w-full mt-1 px-3 py-2" />
+              <input type="date" {...register('dob')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">SIN</span>
-              <input {...register('sin')} placeholder="XXX-XXX-XXX" className="w-full mt-1 px-3 py-2" />
+              <input {...register('sin')} placeholder="XXX-XXX-XXX" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Residence Phone</span>
-              <input {...register('phone_residence')} className="w-full mt-1 px-3 py-2" />
+              <input {...register('phone_residence')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Business Phone</span>
-              <input {...register('phone_business')} className="w-full mt-1 px-3 py-2" />
+              <input {...register('phone_business')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <div className="md:col-span-2">
@@ -148,7 +147,7 @@ export default function ClientForm() {
 
             <label className="block md:col-span-2">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Street Address</span>
-              <input {...register('address')} className="w-full mt-1 px-3 py-2" />
+              <input {...register('address')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
@@ -187,17 +186,17 @@ export default function ClientForm() {
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Employer</span>
-              <input {...register('employer')} className="w-full mt-1 px-3 py-2" />
+              <input {...register('employer')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Employer Address</span>
-              <input {...register('employer_address')} placeholder="Employer full address" className="w-full mt-1 px-3 py-2" />
+              <input {...register('employer_address')} placeholder="Employer full address" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Occupation</span>
-              <input {...register('occupation')} className="w-full mt-1 px-3 py-2" />
+              <input {...register('occupation')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <div className="md:col-span-2 mt-4">
@@ -206,32 +205,32 @@ export default function ClientForm() {
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Annual Income</span>
-              <input type="number" {...register('annual_income')} placeholder="75000" className="w-full mt-1 px-3 py-2" />
+              <input type="number" {...register('annual_income')} placeholder="75000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Fixed Assets</span>
-              <input type="number" {...register('fixed_assets')} placeholder="100000" className="w-full mt-1 px-3 py-2" />
+              <input type="number" {...register('fixed_assets')} placeholder="100000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Net Worth</span>
-              <input type="number" {...register('net_worth')} readOnly placeholder="Calculated from assets/liabilities" className="w-full mt-1 px-3 py-2 bg-gray-50" />
+              <input type="number" {...register('net_worth')} readOnly placeholder="Calculated from assets/liabilities" className="w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-lg" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Liquid Assets</span>
-              <input type="number" {...register('liquid_assets')} placeholder="50000" className="w-full mt-1 px-3 py-2" />
+              <input type="number" {...register('liquid_assets')} placeholder="50000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Liabilities</span>
-              <input type="number" {...register('liabilities')} placeholder="20000" className="w-full mt-1 px-3 py-2" />
+              <input type="number" {...register('liabilities')} placeholder="20000" className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
             </label>
 
             <label className="block">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Investment Knowledge</span>
-              <select {...register('investment_knowledge')} className="w-full mt-1 px-3 py-2">
+              <select {...register('investment_knowledge')} className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
                 <option value="">Select Level</option>
                 <option value="None">None</option>
                 <option value="Limited">Limited</option>
@@ -261,9 +260,9 @@ export default function ClientForm() {
               </select>
             </label>
 
-            <div className="md:col-span-2 flex justify-end gap-3 mt-4">
-              <button type="button" onClick={() => navigate('/agent/clients')} className="px-6 py-2 border rounded-xl">Cancel</button>
-              <button type="submit" disabled={isSubmitting} className="px-6 py-2 bg-primary-600 text-white rounded-xl">
+            <div className="md:col-span-2 flex justify-end gap-3 mt-6">
+              <button type="button" onClick={() => navigate('/agent/clients')} className="px-6 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">Cancel</button>
+              <button type="submit" disabled={isSubmitting} className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md flex items-center gap-2">
                 {id ? 'Save Changes' : 'Add Client'}
               </button>
             </div>
