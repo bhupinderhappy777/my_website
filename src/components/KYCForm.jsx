@@ -1,1135 +1,285 @@
 import { useEffect, useState } from 'react';
-import pdfFields from '../data/kyc_pdf_fields.json';
+import { useNavigate, useParams, Navigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useSupabaseClient, useSession } from '../AuthContext';
 import {
+  ArrowLeft,
+  Plus,
+  Sun,
+  Moon,
   User,
-  Globe,
   MapPin,
   Briefcase,
   DollarSign,
   TrendingUp,
   Building,
   FileText,
-  Shield,
-  Target,
-  CheckCircle,
+  Globe,
 } from 'lucide-react';
 
-/**
- * Comprehensive KYC Form Component for EN KYC 3057 template
- * Collects all required KYC information across 5 main sections
- */
-export default function KYCForm(props) {
-  const { register, setValue, client } = props;
-  const [showPdfFields, setShowPdfFields] = useState(false);
+export default function KYCForm() {
+  const supabase = useSupabaseClient();
+  const session = useSession();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const [otherCountries, setOtherCountries] = useState([]);
+  const [otherInput, setOtherInput] = useState('');
+  const [otherInvestments, setOtherInvestments] = useState([]);
+  const [otherInvestmentInput, setOtherInvestmentInput] = useState('');
+  const [approvalOtherText, setApprovalOtherText] = useState('');
+  const [theme, setTheme] = useState(() => (typeof window !== 'undefined' && window.localStorage && localStorage.getItem('theme')) || 'light');
+
   useEffect(() => {
-    // logger.info('KYCForm mounted');
-  }, []);
-  // Prefill form with existing client data when component mounts or client changes
+    try {
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      localStorage.setItem('theme', theme);
+    } catch (e) {
+      // ignore (localStorage not available)
+    }
+  }, [theme]);
+
   useEffect(() => {
-    if (!client) return;
+    if (id && supabase) {
+      fetchClient();
+    }
+  }, [id, supabase]);
 
-    // logger.debug('KYCForm prefill triggered', { clientId: client?.id });
+  const fetchClient = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('clients')
+        .select('*')
+        .eq('id', id)
+        .single();
 
-    // Prefill basic fields
-    const basicFields = [
-      'title', 'first_name', 'last_name', 'email', 'dob', 'sin',
-      'phone_residence', 'phone_business', 'language_preference',
-      'address', 'city', 'province', 'postal_code',
-      'employer', 'employer_address', 'occupation',
-      'annual_income', 'net_worth', 'liquid_assets', 'fixed_assets', 'liabilities',
-      'investment_knowledge', 'risk_tolerance', 'investment_objective',
-      'bank_name', 'bank_transit', 'bank_institution', 'bank_account', 'bank_address', 'bank_city', 'bank_province', 'bank_postal_code',
-      'document_number', 'document_jurisdiction', 'document_expiry', 'citizenship', 'citizenship_other', 'id_verified_physical'
-    ];
+      if (error) throw error;
 
-    basicFields.forEach((field) => {
-      if (client[field] !== undefined && client[field] !== null) {
-        setValue(field, client[field]);
+      if (data) {
+        // Prefill form with client data
+        Object.keys(data).forEach(key => {
+          if (data[key] !== null && data[key] !== undefined) {
+            if (Array.isArray(data[key])) {
+              // Handle array fields like tax_residency, investments, approval_documents
+              setValue(key, data[key]);
+            } else {
+              setValue(key, data[key]);
+            }
+          }
+        });
+
+        // Handle array fields
+        if (data.tax_residency) {
+          setValue('tax_residency', data.tax_residency);
+        }
+        if (data.investments) {
+          setValue('investments', data.investments);
+        }
+        if (data.approval_documents) {
+          setValue('approval_documents', data.approval_documents);
+        }
       }
-    });
-
-    // Handle tax_residency array
-    if (client.tax_residency && Array.isArray(client.tax_residency)) {
-      setValue('tax_residency', client.tax_residency);
+    } catch (error) {
+      console.error('Error fetching client:', error);
     }
+  };
 
-    // Handle investments array
-    if (client.investments && Array.isArray(client.investments)) {
-      setValue('investments', client.investments);
+  const onSubmit = async (data) => {
+    try {
+      // Handle form submission - this will be implemented when adding PDF generation
+      console.log('KYC Form data:', data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
     }
+  };
 
-    // Handle approval_documents array
-    if (client.approval_documents && Array.isArray(client.approval_documents)) {
-      setValue('approval_documents', client.approval_documents);
-    }
-
-    // logger.debug('KYCForm prefill completed');
-  }, [client, setValue]);
+  if (!session) {
+    return <Navigate to="/agent-login" replace />;
+  }
 
   return (
-    <div className="space-y-6">
-      {/* Client Personal Information */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
-        <div className="flex items-center gap-3 mb-4">
-          <User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Client Personal Information</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Title
-            </label>
-            <select
-              {...register('title')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('/clients')}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
             >
-              <option value="">Select Title</option>
-              <option value="Mr.">Mr.</option>
-              <option value="Mrs.">Mrs.</option>
-              <option value="Miss">Miss</option>
-              <option value="Ms.">Ms.</option>
-              <option value="Dr.">Dr.</option>
-              <option value="Other">Other</option>
-            </select>
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">KYC Form</h1>
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              First Name *
-            </label>
-            <input
-              {...register('first_name')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Last Name *
-            </label>
-            <input
-              {...register('last_name')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Social Insurance Number (SIN)
-            </label>
-            <input
-              {...register('sin')}
-              placeholder="XXX-XXX-XXX"
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Date of Birth
-            </label>
-            <input
-              type="date"
-              {...register('dob')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Home Address
-            </label>
-            <input
-              {...register('address')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              City
-            </label>
-            <input
-              {...register('city')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Province
-            </label>
-            <select
-              {...register('province')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            >
-              <option value="">Select Province</option>
-              <option value="AB">Alberta</option>
-              <option value="BC">British Columbia</option>
-              <option value="MB">Manitoba</option>
-              <option value="NB">New Brunswick</option>
-              <option value="NL">Newfoundland and Labrador</option>
-              <option value="NS">Nova Scotia</option>
-              <option value="NT">Northwest Territories</option>
-              <option value="NU">Nunavut</option>
-              <option value="ON">Ontario</option>
-              <option value="PE">Prince Edward Island</option>
-              <option value="QC">Quebec</option>
-              <option value="SK">Saskatchewan</option>
-              <option value="YT">Yukon</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Postal Code
-            </label>
-            <input
-              {...register('postal_code')}
-              placeholder="A1A 1A1"
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Residence Phone
-            </label>
-            <input
-              type="tel"
-              {...register('phone_residence')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Business Phone
-            </label>
-            <input
-              type="tel"
-              {...register('phone_business')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Email Address
-            </label>
-            <input
-              type="email"
-              {...register('email')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-        </div>
-
-        {/* Employment */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Employer Name
-            </label>
-            <input
-              {...register('employer')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Occupation / Nature of Business
-            </label>
-            <input
-              {...register('occupation')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Employer Address
-            </label>
-            <input
-              {...register('employer_address')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-        </div>
-
-{/* Joint Applicant */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Full Name
-            </label>
-            <input
-              {...register('joint_applicant_name')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              SIN
-            </label>
-            <input
-              {...register('joint_applicant_sin')}
-              placeholder="XXX-XXX-XXX"
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Date of Birth
-            </label>
-            <input
-              type="date"
-              {...register('joint_applicant_dob')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Contact Phone
-            </label>
-            <input
-              type="tel"
-              {...register('joint_applicant_phone')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Address
-            </label>
-            <input
-              {...register('joint_applicant_address')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Employer
-            </label>
-            <input
-              {...register('joint_applicant_employer')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Occupation
-            </label>
-            <input
-              {...register('joint_applicant_occupation')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-        </div>
-
-        {/* Language Preference */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Preferred Language
-            </label>
-            <select
-              {...register('language_preference')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            >
-              <option value="">Select Language</option>
-              <option value="English">English</option>
-              <option value="French">French</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Regulatory & Tax Declarations */}
-      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
-        <div className="flex items-center gap-3 mb-4">
-          <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Regulatory & Tax Declarations</h3>
-        </div>
-
-        <div className="space-y-4">
-          {/* Tax Residency */}
-          <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Select all countries where you are a tax resident:</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" value="Canada" {...register('tax_residency')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Canada</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" value="USA" {...register('tax_residency')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                <span className="text-sm text-gray-700 dark:text-gray-300">USA</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" value="Other" {...register('tax_residency')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Other</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Third-Party Interest */}
-          <div>
-            <label className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                {...register('third_party_interest')}
-                className="w-5 h-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-indigo-500"
-              />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Does anyone else have a financial interest in or trading authorization for this account?
-              </span>
-            </label>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              If yes, provide details
-            </label>
-            <textarea
-              {...register('third_party_details')}
-              rows="2"
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          {/* PEP/HIO Status */}
-          <div>
-            <label className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                {...register('pep_status')}
-                className="w-5 h-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-indigo-500"
-              />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Are you, a family member, or a close associate a Politically Exposed Person (PEP) or Head of an International Organization (HIO)?
-              </span>
-            </label>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              If yes, provide details
-            </label>
-            <textarea
-              {...register('pep_details')}
-              rows="2"
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            />
-          </div>
-
-          {/* Privacy Consent */}
-          <div>
-            <label className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                {...register('privacy_consent')}
-                className="w-5 h-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-indigo-500"
-              />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                I agree to receive marketing communications
-              </span>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      {/* Know Your Client (KYC) Data */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
-        <div className="flex items-center gap-3 mb-4">
-          <Target className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Know Your Client (KYC) Data</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Annual Income */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Annual Income (Primary Applicant)
-            </label>
-            <select
-              {...register('annual_income')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            >
-              <option value="">Select Income Bracket</option>
-              <option value="Under $25,000">Under $25,000</option>
-              <option value="$25,000 - $49,999">$25,000 - $49,999</option>
-              <option value="$50,000 - $74,999">$50,000 - $74,999</option>
-              <option value="$75,000 - $99,999">$75,000 - $99,999</option>
-              <option value="$100,000 - $124,999">$100,000 - $124,999</option>
-              <option value="$125,000 - $199,999">$125,000 - $199,999</option>
-              <option value="$200,000 - $999,999">$200,000 - $999,999</option>
-              <option value="$1,000,000+">$1,000,000+</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Annual Income (Joint Applicant)
-            </label>
-            <select
-              {...register('joint_applicant_annual_income')}
-              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
-            >
-              <option value="">Select Income Bracket</option>
-              <option value="Under $25,000">Under $25,000</option>
-              <option value="$25,000 - $49,999">$25,000 - $49,999</option>
-              <option value="$50,000 - $74,999">$50,000 - $74,999</option>
-              <option value="$75,000 - $99,999">$75,000 - $99,999</option>
-              <option value="$100,000 - $124,999">$100,000 - $124,999</option>
-              <option value="$125,000 - $199,999">$125,000 - $199,999</option>
-              <option value="$200,000 - $999,999">$200,000 - $999,999</option>
-              <option value="$1,000,000+">$1,000,000+</option>
-            </select>
-          </div>
-
-          {/* Net Worth (Numeric) */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              Net Worth (Primary Applicant)
-            </h4>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Liquid Assets
-            </label>
-            <input
-              type="number"
-              {...register('liquid_assets')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Fixed Assets
-            </label>
-            <input
-              type="number"
-              {...register('fixed_assets')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Liabilities
-            </label>
-            <input
-              type="number"
-              {...register('liabilities')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Total Net Worth (Calculated)
-            </label>
-            <input
-              type="number"
-              {...register('net_worth')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          {/* Net Worth (Joint Applicant) */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              Net Worth (Joint Applicant)
-            </h4>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Liquid Assets
-            </label>
-            <input
-              type="number"
-              {...register('joint_liquid_assets')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Fixed Assets
-            </label>
-            <input
-              type="number"
-              {...register('joint_fixed_assets')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Liabilities
-            </label>
-            <input
-              type="number"
-              {...register('joint_liabilities')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Total Net Worth (Calculated)
-            </label>
-            <input
-              type="number"
-              {...register('joint_net_worth')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          {/* Investment Knowledge */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              Investment Knowledge & Experience
-            </h4>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Investment Knowledge (Primary)
-            </label>
-            <select
-              {...register('investment_knowledge')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            >
-              <option value="">Select Level</option>
-              <option value="Novice">Novice</option>
-              <option value="Fair">Fair</option>
-              <option value="Good">Good</option>
-              <option value="Sophisticated">Sophisticated</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Investment Knowledge (Joint)
-            </label>
-            <select
-              {...register('joint_investment_knowledge')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            >
-              <option value="">Select Level</option>
-              <option value="Novice">Novice</option>
-              <option value="Fair">Fair</option>
-              <option value="Good">Good</option>
-              <option value="Sophisticated">Sophisticated</option>
-            </select>
-          </div>
-
-          {/* Existing Holdings */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              Existing Holdings (Select all that apply)
-            </h4>
-          </div>
-
-          <div className="md:col-span-2">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  {...register('holdings_bonds')}
-                  className="w-4 h-4 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Bonds</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  {...register('holdings_stocks')}
-                  className="w-4 h-4 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Stocks</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  {...register('holdings_mutual_funds')}
-                  className="w-4 h-4 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Mutual Funds</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  {...register('holdings_etfs')}
-                  className="w-4 h-4 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">ETFs</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  {...register('holdings_gics')}
-                  className="w-4 h-4 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">GICs</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  {...register('holdings_real_estate')}
-                  className="w-4 h-4 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Real Estate</span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Investment Instructions */}
-      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
-        <div className="flex items-center gap-3 mb-4">
-          <TrendingUp className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Investment Instructions</h3>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {/* Account Setup */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-              Account Setup
-            </h4>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Account Type
-            </label>
-            <select
-              {...register('account_type')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            >
-              <option value="">Select Type</option>
-              <option value="Individual">Individual</option>
-              <option value="Joint">Joint</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Plan Status
-            </label>
-            <select
-              {...register('plan_status')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            >
-              <option value="">Select Status</option>
-              <option value="New">New</option>
-              <option value="Updated">Updated</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Plan ID
-            </label>
-            <input
-              {...register('plan_id')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Plan Type
-            </label>
-            <select
-              {...register('plan_type')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            >
-              <option value="">Select Plan Type</option>
-              <option value="Non-Registered">Non-Registered</option>
-              <option value="RRSP">RRSP</option>
-              <option value="RESP">RESP</option>
-              <option value="RRIF">RRIF</option>
-              <option value="LIRA">LIRA</option>
-              <option value="TFSA">TFSA</option>
-              <option value="SRSP">SRSP</option>
-              <option value="RDSP">RDSP</option>
-              <option value="LIF">LIF</option>
-            </select>
-          </div>
-
-          {/* Investment Objectives (Totaling 100%) */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              Investment Objectives (Must total 100%)
-            </h4>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Safety (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              {...register('objective_safety')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Income (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              {...register('objective_income')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Growth (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              {...register('objective_growth')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Speculative (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              {...register('objective_speculative')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          {/* Risk Tolerance (Totaling 100%) */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              Risk Tolerance (Must total 100%)
-            </h4>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Low (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              {...register('risk_low')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Low/Medium (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              {...register('risk_low_medium')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Medium (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              {...register('risk_medium')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Medium/High (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              {...register('risk_medium_high')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              High (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              {...register('risk_high')}
-              placeholder="0"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          {/* Time Horizon */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              Investment Time Horizon & Purpose
-            </h4>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Time Horizon
-            </label>
-            <select
-              {...register('time_horizon')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            >
-              <option value="">Select Time Horizon</option>
-              <option value="<1 year">Less than 1 year</option>
-              <option value="1-3 years">1-3 years</option>
-              <option value="4-6 years">4-6 years</option>
-              <option value="7-9 years">7-9 years</option>
-              <option value="10+ years">10+ years</option>
-              <option value="20+ years">20+ years</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Investment Purpose
-            </label>
-            <select
-              {...register('investment_purpose')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            >
-              <option value="">Select Purpose</option>
-              <option value="Retirement Planning">Retirement Planning</option>
-              <option value="Estate Planning">Estate Planning</option>
-              <option value="Child Education">Child Education</option>
-              <option value="Wealth Accumulation">Wealth Accumulation</option>
-              <option value="Tax Planning">Tax Planning</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Identity Verification */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
-        <div className="flex items-center gap-3 mb-4">
-          <CheckCircle className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Identity Verification (For Agent Use)</h3>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {/* ID Type and Details */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-              Identification Document
-            </h4>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              ID Type
-            </label>
-            <select
-              {...register('id_type')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            >
-              <option value="">Select ID Type</option>
-              <option value="Driver's License">Driver's License</option>
-              <option value="Birth Certificate">Birth Certificate</option>
-              <option value="Passport">Passport</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Document Number
-            </label>
-            <input
-              {...register('id_number')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Jurisdiction of Issue
-            </label>
-            <input
-              {...register('id_jurisdiction')}
-              placeholder="e.g., British Columbia"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Expiry Date
-            </label>
-            <input
-              type="date"
-              {...register('id_expiry')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Citizenship
-            </label>
-            <input
-              {...register('citizenship')}
-              placeholder="e.g., Canada"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          {/* Banking Information */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              Banking Information
-            </h4>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Institution Name
-            </label>
-            <input
-              {...register('bank_name')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Transit Number
-            </label>
-            <input
-              {...register('bank_transit')}
-              placeholder="00000"
-              maxLength="5"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Institution Number
-            </label>
-            <input
-              {...register('bank_institution')}
-              placeholder="000"
-              maxLength="3"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Account Number
-            </label>
-            <input
-              {...register('bank_account')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Advanced: raw PDF fields */}
-      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700 mt-6">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white">Advanced PDF Fields</h3>
           <button
-            type="button"
-            onClick={() => setShowPdfFields((s) => !s)}
-            className="text-sm text-primary-600 hover:underline"
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
           >
-            {showPdfFields ? 'Hide' : 'Show'} PDF fields
+            {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
           </button>
         </div>
 
-        {showPdfFields && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {pdfFields.map((f) => (
-              <div key={f.name} className="flex items-center gap-3">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 w-64">
-                  {f.name}
-                </label>
-                <div className="flex-1">
-                  {f.type === 'Tx' ? (
-                    <input
-                      {...register(f.name)}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    />
-                  ) : (
-                    <input
-                      type="checkbox"
-                      {...register(f.name)}
-                      className="w-5 h-5"
-                    />
-                  )}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Personal Information */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Personal Information</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Placeholder fields - will be replaced with actual KYC fields */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field 1</label>
+                <input {...register('field1')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field 2</label>
+                <input {...register('field2')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+              </div>
+            </div>
+          </div>
+
+          {/* Tax Residency */}
+          <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center gap-3 mb-4">
+              <Globe className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Tax Residency</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Select all countries where you are a tax resident:</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" value="Canada" {...register('tax_residency')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Canada</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" value="USA" {...register('tax_residency')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">USA</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" value="Other" {...register('tax_residency')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Other</span>
+                  </label>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
-        )}
+
+          {/* Employment Information */}
+          <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center gap-3 mb-4">
+              <Briefcase className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Employment Information</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field 3</label>
+                <input {...register('field3')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field 4</label>
+                <input {...register('field4')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+              </div>
+            </div>
+          </div>
+
+          {/* Financial Information */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <DollarSign className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Financial Information</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field 5</label>
+                <input {...register('field5')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field 6</label>
+                <input {...register('field6')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+              </div>
+            </div>
+          </div>
+
+          {/* Investment Types */}
+          <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center gap-3 mb-4">
+              <TrendingUp className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Investment Types</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Select all investment types:</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" value="Bonds" {...register('investments')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Bonds</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" value="Stocks" {...register('investments')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Stocks</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Banking Information */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <Building className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Banking Information</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field 7</label>
+                <input {...register('field7')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field 8</label>
+                <input {...register('field8')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+              </div>
+            </div>
+          </div>
+
+          {/* Client Approval Documentation */}
+          <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center gap-3 mb-4">
+              <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Client Approval Documentation</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field 9</label>
+                <input {...register('field9')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Field 10</label>
+                <input {...register('field10')} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition" />
+              </div>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-center pt-6">
+            <button
+              type="submit"
+              className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-md hover:shadow-lg transition flex items-center gap-2 text-lg font-medium"
+            >
+              Generate PDF
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
