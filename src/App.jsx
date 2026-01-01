@@ -5,6 +5,7 @@ import AgentLogin from './components/AgentLogin';
 import ClientsTable from './components/ClientsTable';
 import FormGenerator from './components/FormGenerator';
 import ClientForm from './components/ClientForm';
+import KYCForm from './components/KYCForm';
 
 // Main website component (existing content)
 function MainWebsite() {
@@ -527,6 +528,7 @@ function App() {
           <Route path="/agent/clients" element={<ClientsTable />} />
           <Route path="/agent/clients/new" element={<ClientForm />} />
           <Route path="/agent/clients/:id/edit" element={<ClientForm />} />
+          <Route path="/agent/kyc/:id" element={<KYCForm />} />
           <Route path="/agent/forms/:clientId" element={<FormGenerator />} />
         </Routes>
       </BrowserRouter>

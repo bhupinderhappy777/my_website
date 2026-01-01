@@ -11,6 +11,7 @@ import {
   ChevronRight,
   AlertCircle,
   Edit,
+  FileText,
 } from 'lucide-react';
 
 export default function ClientsTable() {
@@ -287,6 +288,15 @@ export default function ClientsTable() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right flex items-center justify-end gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/agent/kyc/${client.id}`);
+                            }}
+                            className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-sm rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors duration-150"
+                          >
+                            <FileText className="w-4 h-4 mr-1 inline-block" /> KYC
+                          </button>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
