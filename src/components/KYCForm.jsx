@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useWatch } from 'react-hook-form';
 
-export default function KYCForm({ register, setValue, client }) {
+export default function KYCForm({ register, setValue, client, control }) {
   // 🔥 LIVE WATCHING IN KYCForm
-  const formValues = useWatch({ control: null });
+  const formValues = useWatch({ control });
   
   useEffect(() => {
     if (formValues) {

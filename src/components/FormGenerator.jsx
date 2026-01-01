@@ -26,7 +26,7 @@ export default function FormGenerator() {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState(null);
 
-  const { register, handleSubmit, reset, setValue, watch, getValues } = useForm();
+  const { register, handleSubmit, reset, setValue, watch, control } = useForm();
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -298,7 +298,7 @@ export default function FormGenerator() {
                         </div>
                       </div>
                     </div>
-                    <KYCForm register={register} setValue={setValue} client={client} />
+                    <KYCForm register={register} setValue={setValue} client={client} control={control} />
                   </>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
