@@ -423,32 +423,108 @@ export default function KYCForm({ register, setValue, client }) {
           {/* PEP/HIO Status */}
           <div className="md:col-span-2">
             <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              PEP/HIO Status
+              Politically Exposed Person (PEP) Declaration
             </h4>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+              A PEP is an individual who holds or has held a prominent public position. Select all that apply:
+            </p>
           </div>
 
-          <div className="md:col-span-2">
-            <label className="flex items-center space-x-3">
+          <div className="md:col-span-2 bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border border-purple-200 dark:border-purple-800 space-y-3">
+            <label className="flex items-start space-x-3">
               <input
                 type="checkbox"
-                {...register('pep_status')}
-                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
+                {...register('pep_domestic')}
+                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 mt-0.5"
               />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Are you, a family member, or a close associate a Politically Exposed Person (PEP) or Head of an International Organization (HIO)?
-              </span>
+              <div>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  Domestic PEP (Canada)
+                </span>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Head of state/government, member of parliament, judge, military general, senior government official, etc.
+                </p>
+              </div>
+            </label>
+            
+            <label className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                {...register('pep_foreign')}
+                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 mt-0.5"
+              />
+              <div>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  Foreign PEP
+                </span>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Individual who holds/held prominent public function in a foreign country
+                </p>
+              </div>
+            </label>
+            
+            <label className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                {...register('pep_international_org')}
+                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 mt-0.5"
+              />
+              <div>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  Head of International Organization (HIO)
+                </span>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Director, president, or similar position in international organization (UN, IMF, World Bank, etc.)
+                </p>
+              </div>
+            </label>
+            
+            <label className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                {...register('pep_family_member')}
+                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 mt-0.5"
+              />
+              <div>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  Family Member of PEP
+                </span>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Spouse, common-law partner, child, parent, sibling, or in-law of a PEP
+                </p>
+              </div>
+            </label>
+            
+            <label className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                {...register('pep_close_associate')}
+                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 mt-0.5"
+              />
+              <div>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  Close Associate of PEP
+                </span>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Business associate or close personal/professional relationship with a PEP
+                </p>
+              </div>
             </label>
           </div>
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              If yes, provide details
+              If any PEP category selected, provide details/position *
             </label>
             <textarea
               {...register('pep_details')}
-              rows="2"
+              rows="3"
+              placeholder="Describe the PEP relationship, position held, organization, dates, etc."
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Required if any PEP category is selected above
+            </p>
           </div>
 
           {/* Privacy Consent */}
@@ -1112,6 +1188,178 @@ export default function KYCForm({ register, setValue, client }) {
               {...register('bank_account')}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
             />
+          </div>
+          
+          {/* Agent Verification Attestations */}
+          <div className="md:col-span-2">
+            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
+              Agent Verification Attestations
+            </h4>
+            <div className="space-y-3 bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-xl border border-yellow-200 dark:border-yellow-800">
+              <label className="flex items-center space-x-3">
+                <input
+                  type="checkbox"
+                  {...register('agent_met_in_person')}
+                  className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
+                />
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  I confirm that I met the client in person *
+                </span>
+              </label>
+              
+              <label className="flex items-center space-x-3">
+                <input
+                  type="checkbox"
+                  {...register('agent_id_verified')}
+                  className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
+                />
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  I confirm that I physically verified the client's identification document *
+                </span>
+              </label>
+              <p className="text-xs text-yellow-800 dark:text-yellow-200 mt-2">
+                * Agent verification is required for compliance
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Section 6: Compliance Acknowledgements & Signatures */}
+      <section>
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 pb-2 border-b-2 border-primary-500">
+          6. Compliance Acknowledgements & Signatures
+        </h3>
+        
+        <div className="space-y-6">
+          {/* Regulatory Disclosures */}
+          <div>
+            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+              Mandatory Acknowledgements
+            </h4>
+            
+            <div className="space-y-3 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
+              <label className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  {...register('received_info_folder')}
+                  className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 mt-0.5"
+                />
+                <span className="text-sm text-gray-900 dark:text-white">
+                  I acknowledge receipt of the <strong>Information Folder</strong> containing fund facts, prospectus, and investment details *
+                </span>
+              </label>
+              
+              <label className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  {...register('received_leveraging_disclosure')}
+                  className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 mt-0.5"
+                />
+                <span className="text-sm text-gray-900 dark:text-white">
+                  I acknowledge receipt of the <strong>Leveraging Disclosure</strong> and understand the risks *
+                </span>
+              </label>
+              
+              <label className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  {...register('received_complaint_info')}
+                  className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500 mt-0.5"
+                />
+                <span className="text-sm text-gray-900 dark:text-white">
+                  I acknowledge receipt of <strong>Client Complaint Information</strong> and dispute resolution procedures *
+                </span>
+              </label>
+            </div>
+          </div>
+          
+          {/* Leveraging Warning */}
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+            <h4 className="text-sm font-bold text-red-800 dark:text-red-200 mb-3 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              Warning: Borrowing to Invest
+            </h4>
+            
+            <div className="space-y-3">
+              <label className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  {...register('understand_leveraging_risk')}
+                  className="w-5 h-5 text-red-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-red-500 mt-0.5"
+                />
+                <span className="text-sm text-red-900 dark:text-red-100">
+                  <strong>I understand</strong> that borrowing money to finance the purchase of securities involves greater risk than purchasing securities with cash *
+                </span>
+              </label>
+              
+              <label className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  {...register('understand_tax_deductible')}
+                  className="w-5 h-5 text-red-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-red-500 mt-0.5"
+                />
+                <span className="text-sm text-red-900 dark:text-red-100">
+                  I understand that interest on the loan may be tax deductible subject to applicable tax rules
+                </span>
+              </label>
+              
+              <div className="mt-3">
+                <label className="block text-sm font-medium text-red-900 dark:text-red-100 mb-1">
+                  Borrowing Amount (if applicable)
+                </label>
+                <input
+                  type="number"
+                  {...register('borrowing_amount')}
+                  placeholder="0"
+                  className="w-full px-4 py-2 border border-red-300 dark:border-red-700 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                />
+                <p className="text-xs text-red-700 dark:text-red-300 mt-1">
+                  ⚠️ Borrowing must not exceed 30% of Net Worth OR 50% of Net Liquid Assets
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Signatures */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Client Signature *
+              </label>
+              <input
+                {...register('client_signature')}
+                placeholder="Type full name to sign"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                By typing your name, you electronically sign this application
+              </p>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Signature Date *
+              </label>
+              <input
+                type="date"
+                {...register('signature_date')}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+              />
+            </div>
+            
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Joint Applicant Signature (if applicable)
+              </label>
+              <input
+                {...register('joint_signature')}
+                placeholder="Type full name to sign"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+              />
+            </div>
           </div>
         </div>
       </section>
