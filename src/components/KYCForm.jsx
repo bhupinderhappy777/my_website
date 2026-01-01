@@ -23,6 +23,8 @@ export default function KYCForm() {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  console.log('KYCForm rendered with id:', id);
+
   const {
     register,
     handleSubmit,
@@ -50,6 +52,7 @@ export default function KYCForm() {
 
   useEffect(() => {
     if (!id) return;
+    console.log('KYCForm: Starting prefill for id:', id);
     let mounted = true;
     (async () => {
       const { data, error } = await supabase.from('clients').select('*').eq('id', id).single();
@@ -58,6 +61,7 @@ export default function KYCForm() {
         return;
       }
       if (mounted && data) {
+        console.log('KYCForm: Prefilling with data:', data);
         // Reset form with basic data first
         reset(data);
 
