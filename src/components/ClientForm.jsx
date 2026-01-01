@@ -5,6 +5,8 @@ import { useSupabaseClient, useSession } from '../AuthContext';
 import {
   ArrowLeft,
   Plus,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 export default function ClientForm() {
@@ -27,6 +29,18 @@ export default function ClientForm() {
   const [otherInvestments, setOtherInvestments] = useState([]);
   const [otherInvestmentInput, setOtherInvestmentInput] = useState('');
   const [approvalOtherText, setApprovalOtherText] = useState('');
+  const [theme, setTheme] = useState(() => (typeof window !== 'undefined' && window.localStorage && localStorage.getItem('theme')) || 'light');
+
+  useEffect(() => {
+    try {
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      localStorage.setItem('theme', theme);
+    } catch (e) {
+      // ignore (localStorage not available)
+    }
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
 
   useEffect(() => {
     if (!id) return;
@@ -198,11 +212,19 @@ export default function ClientForm() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 ring-1 ring-gray-100 dark:ring-0">
-          <div className="flex items-center gap-4 mb-6">
-            <button onClick={() => navigate('/agent/clients')} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
-              <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-            </button>
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{id ? 'Edit Client' : 'Add Client'}</h1>
+          <div className="flex items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-4">
+              <button onClick={() => navigate('/agent/clients')} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+              </button>
+              <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{id ? 'Edit Client' : 'Add Client'}</h1>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button type="button" onClick={toggleTheme} aria-label="Toggle theme" className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600">
+                {theme === 'dark' ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-600" />}
+              </button>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
