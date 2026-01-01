@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import { fillPDF, downloadPDF } from '../utils/pdfGenerator';
 import KYCForm from './KYCForm';
+import kycFieldMappings from '../data/kyc_field_mappings.json';
+import pdfFields from '../data/kyc_pdf_fields.json';
 
 export default function FormGenerator() {
   const { clientId } = useParams();
@@ -55,7 +57,15 @@ export default function FormGenerator() {
     if (templateError) {
       setError('Failed to load form templates');
     } else {
-      setTemplates(templateData || []);
+      // Use templates from Supabase but inject local KYC mapping when appropriate
+      const list = (templateData || []).map((t) => {
+        const copy = { ...t };
+        if (copy.name && copy.name.toLowerCase().includes('kyc')) {
+          copy.field_mappings = kycFieldMappings;
+        }
+        return copy;
+      });
+      setTemplates(list);
     }
 
     setLoading(false);
@@ -63,17 +73,20 @@ export default function FormGenerator() {
 
   const prefillForm = useCallback(() => {
     if (!client || !selectedTemplate) return;
-
     const fieldMappings = selectedTemplate.field_mappings || {};
 
-    // Map client data to form fields based on template mappings
-    Object.entries(fieldMappings).forEach(([pdfField, clientField]) => {
-      if (client[clientField] !== undefined && client[clientField] !== null) {
-        setValue(pdfField, String(client[clientField]));
-      }
+    // New mapping shape: logicalField -> { pdf_field, type, ... }
+    Object.entries(fieldMappings).forEach(([logicalField, mapping]) => {
+      if (!mapping || typeof mapping !== 'object' || !mapping.pdf_field) return;
+      const pdfName = mapping.pdf_field;
+      const val = client[logicalField];
+      if (val === undefined || val === null) return;
+      // Set both logical form field (for visible inputs) and raw PDF field (for advanced inputs)
+      try { setValue(logicalField, String(val)); } catch {}
+      try { setValue(pdfName, String(val)); } catch {}
     });
 
-    // Also set common fields directly if no mapping exists
+    // Also set common fields directly so form inputs using logical names are prefilled
     const directFields = [
       'first_name',
       'last_name',
@@ -137,7 +150,42 @@ const handleTemplateChange = (e) => {
     setError(null);
 
     try {
-      const pdfBytes = await fillPDF(selectedTemplate.pdf_url, data);
+      // Build pdfData mapping form `data` into PDF field names.
+      const fieldMappings = selectedTemplate.field_mappings || {};
+      const pdfData = {};
+
+      // Map logical fields to PDF fields robustly.
+      Object.entries(fieldMappings).forEach(([logicalField, mapping]) => {
+        if (!mapping || typeof mapping !== 'object' || !mapping.pdf_field) return;
+        const pdfName = mapping.pdf_field;
+        const val = data[logicalField];
+        if (val === undefined) return;
+
+        if (mapping.type === 'checkbox') {
+          pdfData[pdfName] = val ? (mapping.checked_value || 'On') : (mapping.unchecked_value || 'Off');
+        } else if (mapping.type === 'radio_group' && mapping.value_map) {
+          const mapped = mapping.value_map[String(val)] || String(val);
+          // If mapped value matches a Btn PDF field, set that Btn to On
+          const isBtn = pdfFields.find((f) => f.name === mapped && f.type === 'Btn');
+          if (isBtn) {
+            pdfData[mapped] = mapping.checked_value || 'On';
+          } else {
+            // Otherwise set the radio group field name to the mapped value
+            pdfData[pdfName] = mapped;
+          }
+        } else {
+          pdfData[pdfName] = val;
+        }
+      });
+
+      // Include any raw PDF-named fields submitted directly by the form (advanced view)
+      Object.entries(data).forEach(([k, v]) => {
+        if (pdfData[k] === undefined) {
+          pdfData[k] = v;
+        }
+      });
+
+      const pdfBytes = await fillPDF(selectedTemplate.pdf_url, pdfData);
       const filename = `${selectedTemplate.name}_${client.first_name}_${client.last_name}.pdf`;
       downloadPDF(pdfBytes, filename);
     } catch (err) {

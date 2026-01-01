@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import pdfFields from '../data/kyc_pdf_fields.json';
 
 /**
  * Comprehensive KYC Form Component for EN KYC 3057 template
  * Collects all required KYC information across 5 main sections
  */
 export default function KYCForm({ register, setValue, client }) {
+  const [showPdfFields, setShowPdfFields] = useState(false);
   // Prefill form with existing client data when component mounts or client changes
   useEffect(() => {
     if (!client) return;
@@ -1122,6 +1124,47 @@ export default function KYCForm({ register, setValue, client }) {
           </div>
         </div>
       </section>
+
+      {/* Advanced: raw PDF fields (can be used to fill any field present in the PDF) */}
+      <section className="mt-6">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">Advanced PDF Fields</h3>
+          <button
+            type="button"
+            onClick={() => setShowPdfFields((s) => !s)}
+            className="text-sm text-primary-600 hover:underline"
+          >
+            {showPdfFields ? 'Hide' : 'Show'} PDF fields
+          </button>
+        </div>
+
+        {showPdfFields && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {pdfFields.map((f) => (
+              <div key={f.name} className="flex items-center gap-3">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 w-64">
+                  {f.name}
+                </label>
+                <div className="flex-1">
+                  {f.type === 'Tx' ? (
+                    <input
+                      {...register(f.name)}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                  ) : (
+                    <input
+                      type="checkbox"
+                      {...register(f.name)}
+                      className="w-5 h-5"
+                    />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
     </div>
   );
 }

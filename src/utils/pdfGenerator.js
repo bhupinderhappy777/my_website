@@ -28,12 +28,40 @@ export async function fillPDF(templateUrl, formData) {
   });
 
   Object.entries(formData).forEach(([key, value]) => {
+    // Try text field
     try {
-      const field = form.getTextField(key);
-      field.setText(String(value || ''));
-    } catch {
-      console.log(`Field ${key} not found in PDF template`);
+      const textField = form.getTextField(key);
+      textField.setText(String(value || ''));
+      return;
+    } catch (e) {
+      // not a text field
     }
+
+    // Try checkbox/radio button
+    try {
+      const checkBox = form.getCheckBox(key);
+      if (value === true || value === 'On' || value === 'Yes' || value === '1') {
+        checkBox.check();
+      } else {
+        try { checkBox.uncheck(); } catch {}
+      }
+      return;
+    } catch (e) {
+      // not a checkbox
+    }
+
+    // Try radio group
+    try {
+      const radioGroup = form.getRadioGroup(key);
+      if (value) {
+        try { radioGroup.select(String(value)); } catch {}
+      }
+      return;
+    } catch (e) {
+      // not a radio group
+    }
+
+    console.log(`Field ${key} not set (no matching field type)`);
   });
 
   try {
