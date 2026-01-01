@@ -1,425 +1,393 @@
 import { useEffect, useState } from 'react';
 import pdfFields from '../data/kyc_pdf_fields.json';
-import logger from '../utils/logger';
+import {
+  User,
+  Globe,
+  MapPin,
+  Briefcase,
+  DollarSign,
+  TrendingUp,
+  Building,
+  FileText,
+  Shield,
+  Target,
+  CheckCircle,
+} from 'lucide-react';
 
 /**
  * Comprehensive KYC Form Component for EN KYC 3057 template
  * Collects all required KYC information across 5 main sections
  */
-export default function KYCForm({ register, setValue, client }) {
+export default function KYCForm(props) {
+  const { register, setValue, client } = props;
   const [showPdfFields, setShowPdfFields] = useState(false);
   useEffect(() => {
-    logger.info('KYCForm mounted');
+    // logger.info('KYCForm mounted');
   }, []);
   // Prefill form with existing client data when component mounts or client changes
   useEffect(() => {
     if (!client) return;
 
-    logger.debug('KYCForm prefill triggered', { clientId: client?.id });
+    // logger.debug('KYCForm prefill triggered', { clientId: client?.id });
 
-    // Prefill all available client fields
-    const fields = [
-      'title', 'first_name', 'last_name', 'sin', 'dob',
+    // Prefill basic fields
+    const basicFields = [
+      'title', 'first_name', 'last_name', 'email', 'dob', 'sin',
+      'phone_residence', 'phone_business', 'language_preference',
       'address', 'city', 'province', 'postal_code',
-      'phone_residence', 'phone_business', 'email',
       'employer', 'employer_address', 'occupation',
       'annual_income', 'net_worth', 'liquid_assets', 'fixed_assets', 'liabilities',
       'investment_knowledge', 'risk_tolerance', 'investment_objective',
-      'language_preference', 'tax_resident_canada', 'tax_resident_us', 'tax_resident_other',
-      'third_party_interest', 'pep_status', 'privacy_consent',
-      'account_type', 'plan_status', 'plan_id', 'plan_type',
-      'time_horizon', 'investment_purpose'
+      'bank_name', 'bank_transit', 'bank_institution', 'bank_account', 'bank_address', 'bank_city', 'bank_province', 'bank_postal_code',
+      'document_number', 'document_jurisdiction', 'document_expiry', 'citizenship', 'citizenship_other', 'id_verified_physical'
     ];
-    const prefilledCount = fields.reduce((c, f) => c + ((client[f] !== undefined && client[f] !== null) ? 1 : 0), 0);
 
-    fields.forEach((field) => {
+    basicFields.forEach((field) => {
       if (client[field] !== undefined && client[field] !== null) {
-        setValue(field, String(client[field]));
+        setValue(field, client[field]);
       }
     });
 
-    logger.debug('KYCForm prefill completed', { prefilledCount });
+    // Handle tax_residency array
+    if (client.tax_residency && Array.isArray(client.tax_residency)) {
+      setValue('tax_residency', client.tax_residency);
+    }
+
+    // Handle investments array
+    if (client.investments && Array.isArray(client.investments)) {
+      setValue('investments', client.investments);
+    }
+
+    // Handle approval_documents array
+    if (client.approval_documents && Array.isArray(client.approval_documents)) {
+      setValue('approval_documents', client.approval_documents);
+    }
+
+    // logger.debug('KYCForm prefill completed');
   }, [client, setValue]);
 
   return (
-    <div className="space-y-8">
-      {/* Section 1: Client Personal Information */}
-      <section>
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 pb-2 border-b-2 border-primary-500">
-          1. Client Personal Information
-        </h3>
+    <div className="space-y-6">
+      {/* Client Personal Information */}
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="flex items-center gap-3 mb-4">
+          <User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Client Personal Information</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Title
+            </label>
+            <select
+              {...register('title')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            >
+              <option value="">Select Title</option>
+              <option value="Mr.">Mr.</option>
+              <option value="Mrs.">Mrs.</option>
+              <option value="Miss">Miss</option>
+              <option value="Ms.">Ms.</option>
+              <option value="Dr.">Dr.</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
-        {/* Identity */}
-        <div className="mb-6">
-          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-            Identity
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Title
-              </label>
-              <select
-                {...register('title')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              >
-                <option value="">Select Title</option>
-                <option value="Mr.">Mr.</option>
-                <option value="Mrs.">Mrs.</option>
-                <option value="Miss">Miss</option>
-                <option value="Ms.">Ms.</option>
-                <option value="Dr.">Dr.</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              First Name *
+            </label>
+            <input
+              {...register('first_name')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                First Name *
-              </label>
-              <input
-                {...register('first_name')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Last Name *
+            </label>
+            <input
+              {...register('last_name')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Last Name *
-              </label>
-              <input
-                {...register('last_name')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Social Insurance Number (SIN)
+            </label>
+            <input
+              {...register('sin')}
+              placeholder="XXX-XXX-XXX"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Social Insurance Number (SIN)
-              </label>
-              <input
-                {...register('sin')}
-                placeholder="XXX-XXX-XXX"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Date of Birth
-              </label>
-              <input
-                type="date"
-                {...register('dob')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              {...register('dob')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
           </div>
         </div>
 
-        {/* Contact */}
-        <div className="mb-6">
-          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-            Contact Information
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Home Address
-              </label>
-              <input
-                {...register('address')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                City
-              </label>
-              <input
-                {...register('city')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Province
-              </label>
-              <select
-                {...register('province')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              >
-                <option value="">Select Province</option>
-                <option value="AB">Alberta</option>
-                <option value="BC">British Columbia</option>
-                <option value="MB">Manitoba</option>
-                <option value="NB">New Brunswick</option>
-                <option value="NL">Newfoundland and Labrador</option>
-                <option value="NS">Nova Scotia</option>
-                <option value="NT">Northwest Territories</option>
-                <option value="NU">Nunavut</option>
-                <option value="ON">Ontario</option>
-                <option value="PE">Prince Edward Island</option>
-                <option value="QC">Quebec</option>
-                <option value="SK">Saskatchewan</option>
-                <option value="YT">Yukon</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Postal Code
-              </label>
-              <input
-                {...register('postal_code')}
-                placeholder="A1A 1A1"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Residence Phone
-              </label>
-              <input
-                type="tel"
-                {...register('phone_residence')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Business Phone
-              </label>
-              <input
-                type="tel"
-                {...register('phone_business')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Email Address
-              </label>
-              <input
-                type="email"
-                {...register('email')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Employment */}
-        <div className="mb-6">
-          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-            Employment Information
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Employer Name
-              </label>
-              <input
-                {...register('employer')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Occupation / Nature of Business
-              </label>
-              <input
-                {...register('occupation')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Employer Address
-              </label>
-              <input
-                {...register('employer_address')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Joint Applicant (if applicable) */}
-        <div className="mb-6">
-          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-            Joint Applicant (if applicable)
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Full Name
-              </label>
-              <input
-                {...register('joint_applicant_name')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                SIN
-              </label>
-              <input
-                {...register('joint_applicant_sin')}
-                placeholder="XXX-XXX-XXX"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Date of Birth
-              </label>
-              <input
-                type="date"
-                {...register('joint_applicant_dob')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Contact Phone
-              </label>
-              <input
-                type="tel"
-                {...register('joint_applicant_phone')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Address
-              </label>
-              <input
-                {...register('joint_applicant_address')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Employer
-              </label>
-              <input
-                {...register('joint_applicant_employer')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Occupation
-              </label>
-              <input
-                {...register('joint_applicant_occupation')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Language Preference */}
-        <div className="mb-6">
-          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-            Language Preference
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Preferred Language
-              </label>
-              <select
-                {...register('language_preference')}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-              >
-                <option value="">Select Language</option>
-                <option value="English">English</option>
-                <option value="French">French</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 2: Regulatory & Tax Declarations */}
-      <section>
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 pb-2 border-b-2 border-primary-500">
-          2. Regulatory & Tax Declarations
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {/* Tax Residency */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-              Tax Residency
-            </h4>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Home Address
+            </label>
+            <input
+              {...register('address')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
           </div>
 
           <div>
-            <label className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                {...register('tax_resident_canada')}
-                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
-              />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Tax Resident of Canada
-              </span>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              City
             </label>
+            <input
+              {...register('city')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
           </div>
 
           <div>
-            <label className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                {...register('tax_resident_us')}
-                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
-              />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Tax Resident of U.S.
-              </span>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Province
             </label>
+            <select
+              {...register('province')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            >
+              <option value="">Select Province</option>
+              <option value="AB">Alberta</option>
+              <option value="BC">British Columbia</option>
+              <option value="MB">Manitoba</option>
+              <option value="NB">New Brunswick</option>
+              <option value="NL">Newfoundland and Labrador</option>
+              <option value="NS">Nova Scotia</option>
+              <option value="NT">Northwest Territories</option>
+              <option value="NU">Nunavut</option>
+              <option value="ON">Ontario</option>
+              <option value="PE">Prince Edward Island</option>
+              <option value="QC">Quebec</option>
+              <option value="SK">Saskatchewan</option>
+              <option value="YT">Yukon</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Postal Code
+            </label>
+            <input
+              {...register('postal_code')}
+              placeholder="A1A 1A1"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Residence Phone
+            </label>
+            <input
+              type="tel"
+              {...register('phone_residence')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Business Phone
+            </label>
+            <input
+              type="tel"
+              {...register('phone_business')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
           </div>
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Tax Resident of Other Jurisdiction (specify)
+              Email Address
             </label>
             <input
-              {...register('tax_resident_other')}
-              placeholder="Enter jurisdiction if applicable"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+              type="email"
+              {...register('email')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
+        </div>
+
+        {/* Employment */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Employer Name
+            </label>
+            <input
+              {...register('employer')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             />
           </div>
 
-          {/* Third-Party Interest */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              Third-Party Interest
-            </h4>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Occupation / Nature of Business
+            </label>
+            <input
+              {...register('occupation')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
           </div>
 
           <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Employer Address
+            </label>
+            <input
+              {...register('employer_address')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
+        </div>
+
+{/* Joint Applicant */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Full Name
+            </label>
+            <input
+              {...register('joint_applicant_name')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              SIN
+            </label>
+            <input
+              {...register('joint_applicant_sin')}
+              placeholder="XXX-XXX-XXX"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              {...register('joint_applicant_dob')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Contact Phone
+            </label>
+            <input
+              type="tel"
+              {...register('joint_applicant_phone')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Address
+            </label>
+            <input
+              {...register('joint_applicant_address')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Employer
+            </label>
+            <input
+              {...register('joint_applicant_employer')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Occupation
+            </label>
+            <input
+              {...register('joint_applicant_occupation')}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+            />
+          </div>
+        </div>
+
+        {/* Language Preference */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Preferred Language
+            </label>
+            <select
+              {...register('language_preference')}
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+            >
+              <option value="">Select Language</option>
+              <option value="English">English</option>
+              <option value="French">French</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Regulatory & Tax Declarations */}
+      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
+        <div className="flex items-center gap-3 mb-4">
+          <Shield className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Regulatory & Tax Declarations</h3>
+        </div>
+
+        <div className="space-y-4">
+          {/* Tax Residency */}
+          <div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Select all countries where you are a tax resident:</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" value="Canada" {...register('tax_residency')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Canada</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" value="USA" {...register('tax_residency')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                <span className="text-sm text-gray-700 dark:text-gray-300">USA</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" value="Other" {...register('tax_residency')} className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Other</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Third-Party Interest */}
+          <div>
             <label className="flex items-center space-x-3">
               <input
                 type="checkbox"
                 {...register('third_party_interest')}
-                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
+                className="w-5 h-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-indigo-500"
               />
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Does anyone else have a financial interest in or trading authorization for this account?
@@ -427,30 +395,24 @@ export default function KYCForm({ register, setValue, client }) {
             </label>
           </div>
 
-          <div className="md:col-span-2">
+          <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               If yes, provide details
             </label>
             <textarea
               {...register('third_party_details')}
               rows="2"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             />
           </div>
 
           {/* PEP/HIO Status */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              PEP/HIO Status
-            </h4>
-          </div>
-
-          <div className="md:col-span-2">
+          <div>
             <label className="flex items-center space-x-3">
               <input
                 type="checkbox"
                 {...register('pep_status')}
-                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
+                className="w-5 h-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-indigo-500"
               />
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Are you, a family member, or a close associate a Politically Exposed Person (PEP) or Head of an International Organization (HIO)?
@@ -458,30 +420,24 @@ export default function KYCForm({ register, setValue, client }) {
             </label>
           </div>
 
-          <div className="md:col-span-2">
+          <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               If yes, provide details
             </label>
             <textarea
               {...register('pep_details')}
               rows="2"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             />
           </div>
 
           {/* Privacy Consent */}
-          <div className="md:col-span-2">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 mt-4">
-              Privacy Consent
-            </h4>
-          </div>
-
-          <div className="md:col-span-2">
+          <div>
             <label className="flex items-center space-x-3">
               <input
                 type="checkbox"
                 {...register('privacy_consent')}
-                className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
+                className="w-5 h-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-indigo-500"
               />
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 I agree to receive marketing communications
@@ -489,15 +445,15 @@ export default function KYCForm({ register, setValue, client }) {
             </label>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Section 3: Know Your Client (KYC) Data */}
-      <section>
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 pb-2 border-b-2 border-primary-500">
-          3. Know Your Client (KYC) Data
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      {/* Know Your Client (KYC) Data */}
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="flex items-center gap-3 mb-4">
+          <Target className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Know Your Client (KYC) Data</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Annual Income */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -505,7 +461,7 @@ export default function KYCForm({ register, setValue, client }) {
             </label>
             <select
               {...register('annual_income')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             >
               <option value="">Select Income Bracket</option>
               <option value="Under $25,000">Under $25,000</option>
@@ -525,7 +481,7 @@ export default function KYCForm({ register, setValue, client }) {
             </label>
             <select
               {...register('joint_applicant_annual_income')}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
             >
               <option value="">Select Income Bracket</option>
               <option value="Under $25,000">Under $25,000</option>
@@ -748,13 +704,14 @@ export default function KYCForm({ register, setValue, client }) {
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Section 4: Investment Instructions */}
-      <section>
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 pb-2 border-b-2 border-primary-500">
-          4. Investment Instructions
-        </h3>
+      {/* Investment Instructions */}
+      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
+        <div className="flex items-center gap-3 mb-4">
+          <TrendingUp className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Investment Instructions</h3>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {/* Account Setup */}
@@ -1006,13 +963,14 @@ export default function KYCForm({ register, setValue, client }) {
             </select>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Section 5: Identity Verification */}
-      <section>
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 pb-2 border-b-2 border-primary-500">
-          5. Identity Verification (For Agent Use)
-        </h3>
+      {/* Identity Verification */}
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm">
+        <div className="flex items-center gap-3 mb-4">
+          <CheckCircle className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Identity Verification (For Agent Use)</h3>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {/* ID Type and Details */}
@@ -1132,10 +1090,10 @@ export default function KYCForm({ register, setValue, client }) {
             />
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Advanced: raw PDF fields (can be used to fill any field present in the PDF) */}
-      <section className="mt-6">
+      {/* Advanced: raw PDF fields */}
+      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border border-gray-100 dark:border-gray-700 mt-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-bold text-gray-900 dark:text-white">Advanced PDF Fields</h3>
           <button
@@ -1172,8 +1130,7 @@ export default function KYCForm({ register, setValue, client }) {
             ))}
           </div>
         )}
-      </section>
-
+      </div>
     </div>
   );
 }
