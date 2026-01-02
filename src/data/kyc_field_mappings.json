@@ -11,19 +11,22 @@
   "phone_residence": { "type": "text", "pdf_field": "Telephone Number Residence" },
   "phone_business": { "type": "text", "pdf_field": "Telephone Number Business" },
   "email": { "type": "text", "pdf_field": "Email Address" },
-  "address": { "type": "text", "pdf_field": "Address" },
-  "address_2": { "type": "text", "pdf_field": "Address_2" },
+  "address": { "type": "text", "pdf_field": "Address Contact Name and Position" },
   "city": { "type": "text", "pdf_field": "City" },
   "province": { "type": "text", "pdf_field": "Province" },
   "postal_code": { "type": "text", "pdf_field": "Postal Code" },
   "employer": { "type": "text", "pdf_field": "Employer Name" },
-  "employer_address": { "type": "text", "pdf_field": "Address_2" },
-  "occupation": { "type": "text", "pdf_field": "Occupation" },
+  "employer_address": { "type": "text", "pdf_field": "Address" },
+  "occupation": { "type": "text", "pdf_field": "Occupation  Nature of Business  Type of Legal Entityfor Corporate Accounts" },
   "joint_applicant_name": { "type": "text", "pdf_field": "Spouse's Name" },
   "joint_applicant_sin": { "type": "text", "pdf_field": "Social Insurance Number_2" },
   "joint_applicant_dob": { "type": "text", "pdf_field": "Date of Birth_2" },
   "joint_applicant_phone": { "type": "text", "pdf_field": "Telephone Number Residence_2" },
-  "joint_applicant_address": { "type": "text", "pdf_field": "Address_3" },
+  "joint_applicant_email": { "type": "text", "pdf_field": "Email Address_2" },
+  "joint_applicant_address": { "type": "text", "pdf_field": "Address_2" },
+  "joint_applicant_city": { "type": "text", "pdf_field": "City_2" },
+  "joint_applicant_province": { "type": "text", "pdf_field": "Province_2" },
+  "joint_applicant_postal_code": { "type": "text", "pdf_field": "Postal Code_2" },
   "joint_applicant_employer": { "type": "text", "pdf_field": "Employer Name_2" },
   "joint_applicant_occupation": { "type": "text", "pdf_field": "Occupation" },
   "language_preference": {
@@ -33,60 +36,249 @@
   },
   "tax_resident_canada": { "type": "checkbox", "pdf_field": "Tax Resident Canada", "checked_value": "On" },
   "tax_resident_us": { "type": "checkbox", "pdf_field": "Tax Resident US", "checked_value": "On" },
-  "tax_resident_other": { "type": "text", "pdf_field": "If Yes provide particulars" },
+  "joint_tax_resident_canada": { "type": "checkbox", "pdf_field": "Joint Tax Resident Canada", "checked_value": "On" },
+  "joint_tax_resident_us": { "type": "checkbox", "pdf_field": "Joint Tax Resident US", "checked_value": "On" },
   "third_party_interest": { "type": "checkbox", "pdf_field": "Yes", "checked_value": "On" },
   "third_party_details": { "type": "text", "pdf_field": "If Yes provide particulars" },
+  "joint_third_party_interest": { "type": "checkbox", "pdf_field": "Yes_2", "checked_value": "On" },
+  "joint_third_party_details": { "type": "text", "pdf_field": "If Yes provide particulars_2" },
   "pep_status": { "type": "checkbox", "pdf_field": "Yes_3", "checked_value": "On" },
   "pep_details": { "type": "text", "pdf_field": "If yes please provide detailsposition" },
   "privacy_consent": { "type": "checkbox", "pdf_field": "your personal information to be used for this optional purpose", "checked_value": "On" },
-  "annual_income": { "type": "text", "pdf_field": "Under 25000" },
-  "joint_applicant_annual_income": { "type": "text", "pdf_field": "Under 25000_2" },
-  "liquid_assets": { "type": "text", "pdf_field": "Fixed Assets" },
+  "annual_income": {
+    "type": "radio_group",
+    "pdf_field": "Under 25,000",
+    "value_map": {
+      "<$25,000": "Under 25,000",
+      "$25,000-$49,999": "25,000-$49,999",
+      "$50,000-$74,999": "50,000-$74,999",
+      "$75,000-$99,999": "75,000-$99,999",
+      "$100,000-$124,999": "100,000-$124,999",
+      "$125,000-$199,999": "125,000-$199,999",
+      "$200,000-$999,999": "200,000-$999,999",
+      "$1M+": "1 Million and over"
+    }
+  },
+  "liquid_assets": { "type": "text", "pdf_field": "Including Spouse Liquid Assets" },
   "fixed_assets": { "type": "text", "pdf_field": "Fixed Assets" },
   "liabilities": { "type": "text", "pdf_field": "Liabilities" },
   "net_worth": { "type": "text", "pdf_field": "Net Worth" },
-  "joint_liquid_assets": { "type": "text", "pdf_field": "Fixed Assets_2" },
+  "joint_annual_income": {
+    "type": "radio_group",
+    "pdf_field": "Under 25000_2",
+    "value_map": {
+      "<$25,000": "Under 25000_2",
+      "$25,000-$49,999": "2500049999_2",
+      "$50,000-$74,999": "5000074999_2",
+      "$75,000-$99,999": "7500099999_2",
+      "$100,000-$124,999": "100000124999_2",
+      "$125,000-$199,999": "125000199999_2",
+      "$200,000-$999,999": "200000999999_2",
+      "$1M+": "1 Million and over_2"
+    }
+  },
+  "joint_liquid_assets": { "type": "text", "pdf_field": "Including Spouse Liquid Assets_2" },
   "joint_fixed_assets": { "type": "text", "pdf_field": "Fixed Assets_2" },
   "joint_liabilities": { "type": "text", "pdf_field": "Liabilities_2" },
   "joint_net_worth": { "type": "text", "pdf_field": "Net Worth_2" },
-  "investment_knowledge": { "type": "text", "pdf_field": "Novice" },
-  "joint_investment_knowledge": { "type": "text", "pdf_field": "Novice_2" },
+  "investment_knowledge": {
+    "type": "radio_group",
+    "pdf_field": "Novice",
+    "value_map": { "Novice": "Novice", "Fair": "Fair", "Good": "Good", "Sophisticated": "Sophisticated" }
+  },
+  "joint_investment_knowledge": {
+    "type": "radio_group",
+    "pdf_field": "Novice_2",
+    "value_map": { "Novice": "Novice_2", "Fair": "Fair_2", "Good": "Good_2", "Sophisticated": "Sophisticated_2" }
+  },
   "holdings_bonds": { "type": "checkbox", "pdf_field": "Bonds", "checked_value": "On" },
   "holdings_stocks": { "type": "checkbox", "pdf_field": "Stocks", "checked_value": "On" },
   "holdings_mutual_funds": { "type": "checkbox", "pdf_field": "Mutual Funds", "checked_value": "On" },
   "holdings_etfs": { "type": "checkbox", "pdf_field": "Term DepositsGIC", "checked_value": "On" },
   "holdings_gics": { "type": "checkbox", "pdf_field": "Term DepositsGIC", "checked_value": "On" },
   "holdings_real_estate": { "type": "checkbox", "pdf_field": "Real Estate  Mortgages", "checked_value": "On" },
+  "holdings_other": { "type": "checkbox", "pdf_field": "Other_2", "checked_value": "On" },
+  "joint_holdings_bonds": { "type": "checkbox", "pdf_field": "Bonds_2", "checked_value": "On" },
+  "joint_holdings_stocks": { "type": "checkbox", "pdf_field": "Stocks_2", "checked_value": "On" },
+  "joint_holdings_mutual_funds": { "type": "checkbox", "pdf_field": "Mutual Funds_2", "checked_value": "On" },
+  "joint_holdings_etfs": { "type": "checkbox", "pdf_field": "Term DepositsGIC_2", "checked_value": "On" },
+  "joint_holdings_gics": { "type": "checkbox", "pdf_field": "Term DepositsGIC_2", "checked_value": "On" },
+  "joint_holdings_real_estate": { "type": "checkbox", "pdf_field": "Real Estate  Mortgages_2", "checked_value": "On" },
+  "joint_holdings_other": { "type": "checkbox", "pdf_field": "Other_3", "checked_value": "On" },
   "account_type": {
     "type": "radio_group",
     "pdf_field": "Individual Account",
     "value_map": { "individual": "Individual Account", "joint": "Joint" }
   },
+  "joint_account_type": {
+    "type": "radio_group",
+    "pdf_field": "Individual Account_2",
+    "value_map": { "individual": "Individual Account_2", "joint": "Joint_2" }
+  },
   "plan_status": { "type": "radio_group", "pdf_field": "New", "value_map": { "New": "New", "Updated": "Updated" } },
+  "joint_plan_status": { "type": "radio_group", "pdf_field": "New_2", "value_map": { "New": "New_2", "Updated": "Updated_2" } },
   "plan_id": { "type": "text", "pdf_field": "Plan ID" },
-  "plan_type": { "type": "radio_group", "pdf_field": "NonRegistered", "value_map": { "Non-Registered": "NonRegistered", "RRSP": "RRSP", "RESP": "RESP", "RRIF": "RRIF", "LIRA": "LIRA", "TFSA": "TFSA", "SRSP": "SRSP", "RDSP": "RDSP", "LIF": "LIF" } },
+  "joint_plan_id": { "type": "text", "pdf_field": "Plan ID_2" },
+  "plan_type": {
+    "type": "radio_group",
+    "pdf_field": "NonRegistered",
+    "value_map": {
+      "Non-Registered": "NonRegistered",
+      "RRSP": "RRSP",
+      "RESP": "RESP",
+      "RRIF": "RRIF",
+      "LIRA": "LIRA",
+      "TFSA": "TFSA",
+      "SRSP": "SRSP",
+      "RDSP": "RDSP",
+      "LIF": "LIF",
+      "Other": "Other_4"
+    }
+  },
+  "joint_plan_type": {
+    "type": "radio_group",
+    "pdf_field": "NonRegistered_2",
+    "value_map": {
+      "Non-Registered": "NonRegistered_2",
+      "RRSP": "RRSP_2",
+      "RESP": "RESP_2",
+      "RRIF": "RRIF_2",
+      "LIRA": "LIRA_2",
+      "TFSA": "TFSA_2",
+      "SRSP": "SRSP_2",
+      "RDSP": "RDSP_2",
+      "LIF": "LIF_2",
+      "Other": "Other_5"
+    }
+  },
   "objective_safety": { "type": "text", "pdf_field": "Safety_1" },
   "objective_income": { "type": "text", "pdf_field": "Income_1" },
   "objective_growth": { "type": "text", "pdf_field": "Growth_1" },
   "objective_speculative": { "type": "text", "pdf_field": "Speculative_1" },
-  "risk_low": { "type": "text", "pdf_field": "Low_1" },
-  "risk_low_medium": { "type": "text", "pdf_field": "Low Medium_1" },
-  "risk_medium": { "type": "text", "pdf_field": "Medium_1" },
-  "risk_medium_high": { "type": "text", "pdf_field": "Medium High_1" },
-  "risk_high": { "type": "text", "pdf_field": "High_1" },
-  "time_horizon": { "type": "radio_group", "pdf_field": "1 Year", "value_map": { "<1 year": "1 Year", "1-3 years": "1  3 Years", "4-6 years": "4  6 Years", "7-9 years": "7  9 Years", "10+ years": "10 Years", "20+ years": "20 Years" } },
-  "investment_purpose": { "type": "radio_group", "pdf_field": "Retirement Planning", "value_map": { "Retirement Planning": "Retirement Planning", "Estate Planning": "Estate Planning", "Child Education": "Child Education", "Tax Planning": "Tax Savings", "Other": "Other_4" } },
-  "id_type": { "type": "text", "pdf_field": "Drivers License" },
+  "joint_objective_safety": { "type": "text", "pdf_field": "Safety_3" },
+  "joint_objective_income": { "type": "text", "pdf_field": "Income_3" },
+  "joint_objective_growth": { "type": "text", "pdf_field": "Growth_3" },
+  "joint_objective_speculative": { "type": "text", "pdf_field": "Speculative_3" },
+  "risk_tolerance": {
+    "type": "radio_group",
+    "pdf_field": "Low",
+    "value_map": {
+      "Low": "Low",
+      "Low-Medium": "LowMedium",
+      "Medium": "Medium",
+      "Medium-High": "MediumHigh",
+      "High": "High"
+    }
+  },
+  "joint_risk_tolerance": {
+    "type": "radio_group",
+    "pdf_field": "Low_2",
+    "value_map": {
+      "Low": "Low_2",
+      "Low-Medium": "LowMedium_2",
+      "Medium": "Medium_2",
+      "Medium-High": "MediumHigh_2",
+      "High": "High_2"
+    }
+  },
+  "time_horizon": {
+    "type": "radio_group",
+    "pdf_field": "1 Year",
+    "value_map": {
+      "<1 year": "1 Year",
+      "1-3 years": "1  3 Years",
+      "4-6 years": "4  6 Years",
+      "7-9 years": "7  9 Years",
+      "10+ years": "10 Years",
+      "20+ years": "20 Years"
+    }
+  },
+  "joint_time_horizon": {
+    "type": "radio_group",
+    "pdf_field": "1 Year_2",
+    "value_map": {
+      "<1 year": "1 Year_2",
+      "1-3 years": "1  3 Years_2",
+      "4-6 years": "4  6 Years_2",
+      "7-9 years": "7  9 Years_2",
+      "10+ years": "10 Years_2",
+      "20+ years": "20 Years_2"
+    }
+  },
+  "investment_purpose": {
+    "type": "radio_group",
+    "pdf_field": "Retirement Planning",
+    "value_map": {
+      "Retirement Planning": "Retirement Planning",
+      "Estate Planning": "Estate Planning",
+      "Child Education": "Child Education",
+      "Tax Planning": "Tax Savings",
+      "Other": "Other_4"
+    }
+  },
+  "joint_investment_purpose": {
+    "type": "radio_group",
+    "pdf_field": "Retirement Planning_2",
+    "value_map": {
+      "Retirement Planning": "Retirement Planning_2",
+      "Estate Planning": "Estate Planning_2",
+      "Child Education": "Child Education_2",
+      "Tax Planning": "Tax Savings_2",
+      "Other": "Other_5"
+    }
+  },
+  "id_type": {
+    "type": "radio_group",
+    "pdf_field": "Drivers License",
+    "value_map": {
+      "Driver's License": "Drivers License",
+      "Birth Certificate": "Birth Certificate",
+      "Passport": "Passport",
+      "Other": "Other Specify"
+    }
+  },
   "id_number": { "type": "text", "pdf_field": "Document Number" },
   "id_jurisdiction": { "type": "text", "pdf_field": "Jurisdiction" },
   "id_expiry": { "type": "text", "pdf_field": "Expiry" },
-  "citizenship": { "type": "text", "pdf_field": "Canadian" },
+  "citizenship": {
+    "type": "radio_group",
+    "pdf_field": "Canadian",
+    "value_map": { "Canadian": "Canadian", "US": "US", "Other": "Other Specify_2" }
+  },
+  "joint_id_type": {
+    "type": "radio_group",
+    "pdf_field": "Drivers License_2",
+    "value_map": {
+      "Driver's License": "Drivers License_2",
+      "Birth Certificate": "Birth Certificate_2",
+      "Passport": "Passport_2",
+      "Other": "Other Specify_3"
+    }
+  },
+  "joint_id_number": { "type": "text", "pdf_field": "Document Number_2" },
+  "joint_id_jurisdiction": { "type": "text", "pdf_field": "Jurisdiction_2" },
+  "joint_id_expiry": { "type": "text", "pdf_field": "Expiry_2" },
+  "joint_citizenship": {
+    "type": "radio_group",
+    "pdf_field": "Canadian_2",
+    "value_map": { "Canadian": "Canadian_2", "US": "US_2", "Other": "Other Specify_4" }
+  },
   "bank_name": { "type": "text", "pdf_field": "Financial Institution Name" },
   "bank_transit": { "type": "text", "pdf_field": "Transit Number" },
   "bank_institution": { "type": "text", "pdf_field": "Institution Number" },
   "bank_account": { "type": "text", "pdf_field": "Account Number" },
+  "bank_address": { "type": "text", "pdf_field": "Address_4" },
+  "bank_city": { "type": "text", "pdf_field": "City_3" },
+  "bank_province": { "type": "text", "pdf_field": "Province_3" },
+  "bank_postal_code": { "type": "text", "pdf_field": "Postal Code_3" },
   "signature_name": { "type": "text", "pdf_field": "Application Signature" },
   "signature_date": { "type": "text", "pdf_field": "Date" },
+  "joint_signature_name": { "type": "text", "pdf_field": "Joint Application Signature" },
+  "joint_signature_date": { "type": "text", "pdf_field": "Date_2" },
+  "agent_name": { "type": "text", "pdf_field": "Agent Name  Print Name" },
+  "agent_code": { "type": "text", "pdf_field": "Agent Code" },
+  "agent_signature": { "type": "text", "pdf_field": "Agent Signature" },
+  "agent_date": { "type": "text", "pdf_field": "Date_3" },
   "mailing_same_as_residence": { "type": "checkbox", "pdf_field": "Including Spouse Liquid Assets", "checked_value": "On" },
   "drivers_license": { "type": "checkbox", "pdf_field": "Drivers License", "checked_value": "On" },
   "passport": { "type": "checkbox", "pdf_field": "Passport", "checked_value": "On" },
