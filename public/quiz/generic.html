@@ -426,65 +426,7 @@
   <!-- Hidden file input (works in file:// or http://) -->
   <input type="file" id="qfile" accept=".json" style="display:none" />
 
-  <!-- Built-in sample questions (fallback & quick test). Replace or remove if you want only external JSON. -->
-  <script type="application/json" id="questions-inline">
-  {
-    "1. Cloud Architecture": [
-      {
-        "q": "Which cloud model provides virtualized compute, storage, and networking that you configure yourself?",
-        "options": ["SaaS", "PaaS", "IaaS", "FaaS"],
-        "answer": 2,
-        "explanation": "IaaS exposes compute, storage, and networking primitives you configure. SaaS is fully managed apps; PaaS gives managed runtimes; FaaS runs functions."
-      },
-      {
-        "q": "Which term describes distributing services across multiple regions for resiliency?",
-        "options": ["Vertical scaling", "Multi-region architecture", "Single-AZ deployment", "Over-provisioning"],
-        "answer": 1,
-        "explanation": "Multi-region architectures improve availability and reduce blast radius."
-      }
-    ],
-    "2. Deployment": [
-      {
-        "q": "What does 'blue/green deployment' aim to minimize?",
-        "options": ["CPU usage", "Downtime and risk", "Storage cost", "Code complexity"],
-        "answer": 1,
-        "explanation": "Blue/green keeps two environments and switches traffic, minimizing downtime and deployment risk."
-      }
-    ],
-    "3. Security": [
-      {
-        "q": "Which is the best place to enforce least privilege in cloud environments?",
-        "options": ["Network ACLs only", "Hypervisor", "Identity & Access Management (IAM)", "OS firewall only"],
-        "answer": 2,
-        "explanation": "IAM policies are central to least privilege in cloud, complemented by network and host controls."
-      }
-    ],
-    "4. Operations": [
-      {
-        "q": "Which metric is most associated with availability SLOs?",
-        "options": ["MTTD", "MTBF", "MTTR", "Error budget burn"],
-        "answer": 1,
-        "explanation": "Mean Time Between Failures (MTBF) is closely related to availability targets; MTTR affects restoration."
-      }
-    ],
-    "5. DevOps Fundamentals": [
-      {
-        "q": "Which tool is commonly used for CI/CD pipelines?",
-        "options": ["Jenkins", "Wireshark", "Nmap", "curl"],
-        "answer": 0,
-        "explanation": "Jenkins is a popular CI/CD automation server."
-      }
-    ],
-    "6. Troubleshooting": [
-      {
-        "q": "After deploying a VM, it has no internet access. Which component is most likely missing?",
-        "options": ["Security group", "Internet gateway/NAT egress", "Object storage bucket", "KMS key"],
-        "answer": 1,
-        "explanation": "Without an internet gateway/NAT egress and routes, instances can't reach the internet."
-      }
-    ]
-  }
-  </script>
+  <!-- Built-in sample questions removed. Use the file picker to load questions.json. -->
 
   <script>
     // ===== Global state =====
