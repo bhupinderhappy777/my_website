@@ -1,0 +1,3199 @@
+{
+  "Module 5: Data Link Layer - Multiple Access Protocols": [
+    {
+      "q": "What is a multiple access link?",
+      "options": [
+        "A dedicated point-to-point connection",
+        "A shared medium where two or more simultaneous transmissions can occur",
+        "A one-way communication channel",
+        "A fiber optic connection"
+      ],
+      "answer": 1,
+      "explanation": "A multiple access link is a shared medium where two or more simultaneous transmissions by nodes can occur. This sharing of the medium requires protocols to manage access and handle collisions."
+    },
+    {
+      "q": "What happens when two or more nodes transmit simultaneously on a shared medium?",
+      "options": [
+        "The signals merge successfully",
+        "A collision occurs causing interference",
+        "The faster signal wins",
+        "Nothing, both signals are received"
+      ],
+      "answer": 1,
+      "explanation": "When two or more nodes transmit simultaneously on a shared medium, a collision occurs causing interference. This interference can corrupt both transmissions, requiring protocols to manage and recover from such events."
+    },
+    {
+      "q": "What are the three main categories of multiple access protocols?",
+      "options": [
+        "Wired, Wireless, and Optical",
+        "Random Access, Controlled Access, and Channelization",
+        "Fast, Medium, and Slow",
+        "Analog, Digital, and Hybrid"
+      ],
+      "answer": 1,
+      "explanation": "The three main categories of multiple access protocols are Random Access (allowing/preventing collisions and recovering from them), Controlled Access (taking turns), and Channelization (channel partitioning into smaller pieces)."
+    },
+    {
+      "q": "Which multiple access category involves dividing the channel into smaller pieces like time slots or frequency bands?",
+      "options": [
+        "Random Access",
+        "Controlled Access",
+        "Channelization",
+        "Collision Detection"
+      ],
+      "answer": 2,
+      "explanation": "Channelization involves dividing the channel into smaller pieces such as time slots, frequency bands, or codes. Each piece is allocated to a node for exclusive use, preventing collisions through resource partitioning."
+    },
+    {
+      "q": "In random access protocols, what is the relationship between stations?",
+      "options": [
+        "One station controls all others",
+        "No station is superior and none is assigned control over another",
+        "Stations are organized in a strict hierarchy",
+        "Primary stations control secondary stations"
+      ],
+      "answer": 1,
+      "explanation": "In random access protocols, no station is superior to another station, and none is assigned control over another. The channel is not divided, and protocols focus on allowing/preventing collisions and recovering from them."
+    },
+    {
+      "q": "What characterizes controlled access protocols?",
+      "options": [
+        "Stations transmit whenever they want",
+        "Stations consult one another and must be authorized before sending",
+        "Stations divide the frequency spectrum",
+        "Stations never communicate"
+      ],
+      "answer": 1,
+      "explanation": "In controlled access protocols, stations consult one another to find which station has the right to send. A station cannot send unless it has been authorized by other stations, implementing a 'taking turns' approach."
+    },
+    {
+      "q": "Which of the following is an example of a shared medium?",
+      "options": [
+        "Dedicated fiber connection between two routers",
+        "WiFi network with multiple devices",
+        "Point-to-point leased line",
+        "Direct cable between two computers"
+      ],
+      "answer": 1,
+      "explanation": "A WiFi network with multiple devices is an example of a shared medium where multiple stations must compete for access to the wireless channel. Other examples include shared wire (cabled Ethernet), 4G/5G cellular, and satellite communications."
+    },
+    {
+      "q": "What principle is behind 'taking turns' protocols?",
+      "options": [
+        "First come, first served only",
+        "Nodes take turns, with nodes having more to send taking longer turns",
+        "Random selection of nodes",
+        "Nodes never wait for each other"
+      ],
+      "answer": 1,
+      "explanation": "The 'taking turns' principle means nodes take turns accessing the medium, but nodes with more data to send can take longer turns. This is characteristic of controlled access protocols like polling and token-passing."
+    },
+    {
+      "q": "Why is multiple access control necessary in shared networks?",
+      "options": [
+        "To increase physical cable length",
+        "To manage simultaneous transmissions and prevent or handle collisions",
+        "To encrypt all data",
+        "To reduce cable costs"
+      ],
+      "answer": 1,
+      "explanation": "Multiple access control is necessary to manage simultaneous transmissions on shared media and to prevent or handle collisions. Without proper access control, simultaneous transmissions would interfere with each other, making communication unreliable."
+    },
+    {
+      "q": "Which type of multiple access protocol allocates pieces of channel for exclusive use?",
+      "options": [
+        "Random access",
+        "Controlled access",
+        "Channelization",
+        "Collision avoidance"
+      ],
+      "answer": 2,
+      "explanation": "Channelization protocols allocate pieces of the channel (time slots, frequencies, or codes) to nodes for exclusive use. This prevents collisions by ensuring that each node has dedicated resources."
+    },
+    {
+      "q": "What does it mean that random access protocols 'recover' from collisions?",
+      "options": [
+        "They prevent all collisions",
+        "They have mechanisms to retransmit after collisions occur",
+        "They ignore collisions",
+        "They shut down after collisions"
+      ],
+      "answer": 1,
+      "explanation": "Random access protocols include mechanisms to recover from collisions, typically through detection of collisions and retransmission using backoff algorithms. This allows the network to continue functioning despite occasional collisions."
+    },
+    {
+      "q": "Which shared medium technology is mentioned as using multiple access for 4G/5G?",
+      "options": [
+        "Cabled Ethernet",
+        "Shared radio spectrum",
+        "Fiber optic cable",
+        "Telephone lines"
+      ],
+      "answer": 1,
+      "explanation": "4G/5G cellular networks use shared radio spectrum as their medium, requiring multiple access protocols to coordinate transmissions among multiple devices sharing the same wireless channel."
+    },
+    {
+      "q": "In the context of multiple access, what does 'collision' mean?",
+      "options": [
+        "Physical damage to network equipment",
+        "Interference when multiple signals overlap",
+        "Network congestion",
+        "Cable disconnection"
+      ],
+      "answer": 1,
+      "explanation": "In multiple access networks, a collision refers to interference that occurs when multiple signals overlap in time on the shared medium. This interference typically corrupts the transmitted data, requiring retransmission."
+    },
+    {
+      "q": "Which network type requires multiple access control: cabled Ethernet or dedicated point-to-point link?",
+      "options": [
+        "Only dedicated point-to-point links",
+        "Only cabled Ethernet (shared wire)",
+        "Both require it equally",
+        "Neither requires it"
+      ],
+      "answer": 1,
+      "explanation": "Cabled Ethernet using shared wire requires multiple access control because multiple devices share the same medium. Dedicated point-to-point links don't need multiple access control since only two devices use the link."
+    },
+    {
+      "q": "What is the fundamental challenge that multiple access protocols address?",
+      "options": [
+        "How to encrypt data",
+        "How to coordinate access to a shared communication medium",
+        "How to increase transmission speed",
+        "How to reduce cable costs"
+      ],
+      "answer": 1,
+      "explanation": "The fundamental challenge that multiple access protocols address is how to coordinate access to a shared communication medium among multiple nodes that want to transmit simultaneously, preventing or managing collisions."
+    },
+    {
+      "q": "What is the key characteristic of Pure ALOHA?",
+      "options": [
+        "Stations can only send during assigned time slots",
+        "Each station sends a frame whenever it has a frame to send",
+        "Stations must listen before transmitting",
+        "Only one station can send at a time"
+      ],
+      "answer": 1,
+      "explanation": "In Pure ALOHA, each station sends a frame whenever it has a frame to send without checking the channel or coordinating with other stations. This simplicity comes at the cost of potential collisions."
+    },
+    {
+      "q": "What is the vulnerable time for Pure ALOHA?",
+      "options": [
+        "Tfr (one frame transmission time)",
+        "2 × Tfr (twice the frame transmission time)",
+        "0.5 × Tfr",
+        "3 × Tfr"
+      ],
+      "answer": 1,
+      "explanation": "The vulnerable time for Pure ALOHA is 2 × Tfr. A frame sent at time t can collide with frames sent in the interval [t - Tfr, t + Tfr], making the vulnerable period twice the frame transmission time."
+    },
+    {
+      "q": "What is the main difference between Pure ALOHA and Slotted ALOHA?",
+      "options": [
+        "Slotted ALOHA uses different frame sizes",
+        "Slotted ALOHA divides time into equal slots and nodes transmit only at slot beginnings",
+        "Pure ALOHA is faster",
+        "Slotted ALOHA doesn't have collisions"
+      ],
+      "answer": 1,
+      "explanation": "Slotted ALOHA divides time into equal-size slots (time to transmit one frame) and requires nodes to start transmission only at slot beginnings. Nodes must be synchronized, unlike Pure ALOHA where transmission can begin anytime."
+    },
+    {
+      "q": "What is the vulnerable time for Slotted ALOHA?",
+      "options": [
+        "2 × Tfr",
+        "Tfr (one frame transmission time)",
+        "0.5 × Tfr",
+        "No vulnerable time"
+      ],
+      "answer": 1,
+      "explanation": "The vulnerable time for Slotted ALOHA is Tfr (one frame transmission time). This is half that of Pure ALOHA because frames can only collide with other frames starting in the same time slot, not frames from adjacent slots."
+    },
+    {
+      "q": "What requirement does Slotted ALOHA have that Pure ALOHA does not?",
+      "options": [
+        "Error detection",
+        "Node synchronization",
+        "Collision avoidance",
+        "Flow control"
+      ],
+      "answer": 1,
+      "explanation": "Slotted ALOHA requires node synchronization so that all stations know when time slots begin and can coordinate their transmissions to slot boundaries. Pure ALOHA has no such synchronization requirement."
+    },
+    {
+      "q": "In Slotted ALOHA, all frames must be what?",
+      "options": [
+        "Encrypted",
+        "The same size",
+        "From the same source",
+        "Error-free"
+      ],
+      "answer": 1,
+      "explanation": "In Slotted ALOHA, all frames must be the same size so that they fit exactly into the equal-sized time slots. This uniformity is necessary for the slotted timing mechanism to work properly."
+    },
+    {
+      "q": "What happens in Slotted ALOHA if two or more nodes transmit in the same slot?",
+      "options": [
+        "The first frame succeeds",
+        "All nodes detect collision",
+        "The frames merge successfully",
+        "The slot is extended"
+      ],
+      "answer": 1,
+      "explanation": "In Slotted ALOHA, if two or more nodes transmit in the same slot, all nodes detect the collision. The colliding stations must then wait and retry in a future slot, typically using a random backoff mechanism."
+    },
+    {
+      "q": "How does Slotted ALOHA improve upon Pure ALOHA?",
+      "options": [
+        "It eliminates all collisions",
+        "It reduces the vulnerable time by half, improving efficiency",
+        "It requires no synchronization",
+        "It supports variable frame sizes"
+      ],
+      "answer": 1,
+      "explanation": "Slotted ALOHA reduces the vulnerable time from 2 × Tfr to Tfr, cutting it in half. This improvement doubles the maximum theoretical throughput compared to Pure ALOHA, though it requires synchronization."
+    },
+    {
+      "q": "A frame sent at time t in Pure ALOHA can collide with frames sent during which time interval?",
+      "options": [
+        "[t, t + Tfr]",
+        "[t - Tfr, t]",
+        "[t - Tfr, t + Tfr]",
+        "[t - 2Tfr, t + 2Tfr]"
+      ],
+      "answer": 2,
+      "explanation": "In Pure ALOHA, a frame sent at time t can collide with frames sent during the interval [t - Tfr, t + Tfr]. This includes frames that started before t but are still transmitting, and frames that start while the frame at t is still transmitting."
+    },
+    {
+      "q": "What is the maximum theoretical throughput of Pure ALOHA?",
+      "options": [
+        "18.4%",
+        "36.8%",
+        "50%",
+        "100%"
+      ],
+      "answer": 0,
+      "explanation": "The maximum theoretical throughput of Pure ALOHA is approximately 18.4% (or 0.184) of the channel capacity. This low efficiency is due to the large vulnerable time and high collision probability."
+    },
+    {
+      "q": "What is the maximum theoretical throughput of Slotted ALOHA?",
+      "options": [
+        "18.4%",
+        "36.8%",
+        "50%",
+        "100%"
+      ],
+      "answer": 1,
+      "explanation": "The maximum theoretical throughput of Slotted ALOHA is approximately 36.8% (or 0.368) of the channel capacity. This is double that of Pure ALOHA due to the reduced vulnerable time."
+    },
+    {
+      "q": "Why does Pure ALOHA have a longer vulnerable time than Slotted ALOHA?",
+      "options": [
+        "It uses slower transmission speeds",
+        "Frames can start transmission at any time, not just at slot boundaries",
+        "It uses larger frames",
+        "It has more stations"
+      ],
+      "answer": 1,
+      "explanation": "Pure ALOHA has a longer vulnerable time because frames can start transmission at any time, not just at slot boundaries. This means a frame can collide with frames starting both before and after it, doubling the vulnerable period."
+    },
+    {
+      "q": "In Slotted ALOHA, when must nodes start transmission?",
+      "options": [
+        "Anytime they have data",
+        "Only at the beginning of time slots",
+        "After listening to the channel",
+        "After receiving permission"
+      ],
+      "answer": 1,
+      "explanation": "In Slotted ALOHA, nodes must start transmission only at the beginning of time slots. This synchronization requirement reduces the vulnerable time but adds complexity compared to Pure ALOHA."
+    },
+    {
+      "q": "What type of applications might benefit from Pure ALOHA's simplicity despite its low efficiency?",
+      "options": [
+        "High-traffic data centers",
+        "Low-traffic, bursty applications where simplicity is valued",
+        "Real-time video streaming",
+        "High-reliability control systems"
+      ],
+      "answer": 1,
+      "explanation": "Pure ALOHA is suitable for low-traffic, bursty applications where its simplicity (no synchronization required) is valued more than efficiency. Examples include early packet radio networks and some sensor networks with infrequent transmissions."
+    },
+    {
+      "q": "What must happen after a collision in ALOHA protocols?",
+      "options": [
+        "The network shuts down",
+        "Colliding stations wait and retry, typically after a random delay",
+        "A new station is assigned to control the network",
+        "All stations stop transmitting"
+      ],
+      "answer": 1,
+      "explanation": "After a collision in ALOHA protocols, the colliding stations must wait and retry their transmissions, typically after a random delay (backoff). This randomization helps reduce the probability of repeated collisions."
+    },
+    {
+      "q": "What does CSMA stand for?",
+      "options": [
+        "Central Station Multiple Access",
+        "Carrier Sense Multiple Access",
+        "Coded Signal Multiple Access",
+        "Collision Safe Multiple Access"
+      ],
+      "answer": 1,
+      "explanation": "CSMA stands for Carrier Sense Multiple Access. It is a protocol where stations listen to the channel (sense the carrier) before transmitting to reduce the probability of collisions."
+    },
+    {
+      "q": "What is the basic principle of CSMA?",
+      "options": [
+        "Transmit immediately when data is ready",
+        "Listen before transmit: if channel idle, transmit; if busy, defer",
+        "Always wait for permission to transmit",
+        "Transmit in assigned time slots only"
+      ],
+      "answer": 1,
+      "explanation": "The basic principle of CSMA is 'listen before transmit.' If the channel is sensed idle, the station transmits the entire frame. If the channel is sensed busy, the station defers transmission until the channel becomes idle."
+    },
+    {
+      "q": "Why can collisions still occur in CSMA despite carrier sensing?",
+      "options": [
+        "Stations don't listen properly",
+        "Propagation delay means nodes may not hear each other's just-started transmission",
+        "CSMA doesn't prevent collisions",
+        "Too many stations on the network"
+      ],
+      "answer": 1,
+      "explanation": "Collisions can still occur in CSMA due to propagation delay. Two nodes may sense the channel as idle and start transmitting because they haven't yet detected each other's just-started transmission. Distance and propagation delay affect collision probability."
+    },
+    {
+      "q": "What does CSMA/CD add to basic CSMA?",
+      "options": [
+        "Collision avoidance",
+        "Collision detection and immediate abort of transmission",
+        "Time slot allocation",
+        "Frequency division"
+      ],
+      "answer": 1,
+      "explanation": "CSMA/CD (Carrier Sense Multiple Access with Collision Detection) adds the ability to detect collisions during transmission and immediately abort the transmission. This reduces the amount of time wasted in collisions compared to basic CSMA."
+    },
+    {
+      "q": "What does a station do when it detects a collision in CSMA/CD?",
+      "options": [
+        "Continues transmitting",
+        "Aborts transmission, sends jam signal, and enters backoff",
+        "Waits for acknowledgment",
+        "Switches to a different frequency"
+      ],
+      "answer": 1,
+      "explanation": "When a station detects a collision in CSMA/CD, it aborts the transmission, sends a jam signal to ensure all stations detect the collision, and enters binary (exponential) backoff before trying again."
+    },
+    {
+      "q": "What is 1-persistent CSMA?",
+      "options": [
+        "Waits randomly when channel is busy",
+        "Continuously senses busy channel and transmits immediately when idle",
+        "Transmits with probability p when channel is idle",
+        "Never retransmits after collision"
+      ],
+      "answer": 1,
+      "explanation": "In 1-persistent CSMA, a station continuously senses a busy channel and transmits immediately (with probability 1) as soon as the channel becomes idle. This can lead to collisions if multiple stations are waiting."
+    },
+    {
+      "q": "What is nonpersistent CSMA?",
+      "options": [
+        "Continuously monitors until channel is idle",
+        "Senses busy channel, waits a random time, then senses again",
+        "Transmits immediately when channel is idle",
+        "Uses time slot allocation"
+      ],
+      "answer": 1,
+      "explanation": "In nonpersistent CSMA, when a station senses a busy channel, it waits a random amount of time before sensing again. This reduces collision probability compared to 1-persistent but may waste idle channel time."
+    },
+    {
+      "q": "What is p-persistent CSMA?",
+      "options": [
+        "Waits randomly when channel is busy",
+        "Always transmits when channel is idle",
+        "When channel is idle, transmits with probability p, otherwise waits for next slot",
+        "Uses polling mechanism"
+      ],
+      "answer": 2,
+      "explanation": "In p-persistent CSMA, when a station senses the channel as idle, it transmits with probability p. If it doesn't transmit (with probability 1-p), it waits for the next slot. This provides a balance between efficiency and collision probability."
+    },
+    {
+      "q": "What advantage does CSMA/CD have over basic CSMA?",
+      "options": [
+        "Prevents all collisions",
+        "Reduces the amount of time wasted in collisions by detecting and aborting",
+        "Requires no carrier sensing",
+        "Works on wireless networks"
+      ],
+      "answer": 1,
+      "explanation": "CSMA/CD reduces the amount of time wasted in collisions by detecting them early and aborting transmission. Instead of transmitting the entire frame during a collision, the station stops quickly, saving bandwidth."
+    },
+    {
+      "q": "What is a jam signal in CSMA/CD?",
+      "options": [
+        "A signal to request channel access",
+        "A signal sent during collision detection to ensure all stations detect the collision",
+        "A signal to synchronize clocks",
+        "A signal to end transmission"
+      ],
+      "answer": 1,
+      "explanation": "A jam signal is sent by a station when it detects a collision in CSMA/CD. The jam signal ensures that all stations on the network detect the collision, preventing partial frame reception and ensuring proper collision handling."
+    },
+    {
+      "q": "What backoff algorithm is used in CSMA/CD after detecting a collision?",
+      "options": [
+        "Linear backoff",
+        "Binary (exponential) backoff",
+        "Random backoff without pattern",
+        "Fixed delay backoff"
+      ],
+      "answer": 1,
+      "explanation": "CSMA/CD uses binary (exponential) backoff after detecting a collision. The waiting time range doubles after each successive collision, reducing the probability of repeated collisions among the same stations."
+    },
+    {
+      "q": "Why is CSMA more efficient than ALOHA?",
+      "options": [
+        "CSMA uses faster transmission speeds",
+        "CSMA senses the channel before transmitting, reducing collision probability",
+        "CSMA uses smaller frames",
+        "CSMA requires fewer stations"
+      ],
+      "answer": 1,
+      "explanation": "CSMA is more efficient than ALOHA because stations sense the channel before transmitting. This carrier sensing significantly reduces the probability of collisions compared to ALOHA's 'transmit anytime' approach."
+    },
+    {
+      "q": "In which persistence method is the collision probability highest when multiple stations are waiting?",
+      "options": [
+        "Nonpersistent",
+        "1-persistent",
+        "p-persistent",
+        "All have equal collision probability"
+      ],
+      "answer": 1,
+      "explanation": "1-persistent CSMA has the highest collision probability when multiple stations are waiting because all waiting stations will attempt to transmit immediately when the channel becomes idle, resulting in certain collision."
+    },
+    {
+      "q": "What factors affect the collision probability in CSMA?",
+      "options": [
+        "Only the number of stations",
+        "Distance and propagation delay between nodes",
+        "Only the frame size",
+        "Only the transmission speed"
+      ],
+      "answer": 1,
+      "explanation": "Distance and propagation delay between nodes play a significant role in determining collision probability in CSMA. Larger distances mean longer propagation delays, increasing the time window during which collisions can occur despite carrier sensing."
+    },
+    {
+      "q": "A network uses CSMA/CD. Two stations sense idle channel simultaneously and start transmitting. What happens?",
+      "options": [
+        "Both transmissions succeed",
+        "Collision occurs, both detect it, abort, send jam signal, and enter backoff",
+        "The first station's transmission succeeds",
+        "Both stations stop permanently"
+      ],
+      "answer": 1,
+      "explanation": "When two stations sense the idle channel simultaneously and start transmitting in CSMA/CD, a collision occurs. Both stations detect the collision, abort their transmissions, send jam signals, and enter binary exponential backoff before retrying."
+    },
+    {
+      "q": "Why is CSMA/CD suitable for wired Ethernet but not typically used in wireless networks?",
+      "options": [
+        "Wireless is too slow",
+        "Collision detection is difficult in wireless due to signal attenuation and hidden stations",
+        "Wireless doesn't have collisions",
+        "CSMA/CD requires too much power for wireless"
+      ],
+      "answer": 1,
+      "explanation": "CSMA/CD is not typically used in wireless networks because collision detection is difficult. Signal attenuation means a station's own strong transmitted signal can overwhelm weak incoming signals, making it hard to detect collisions. Additionally, hidden station problems complicate collision detection."
+    },
+    {
+      "q": "In nonpersistent CSMA, what is a potential disadvantage compared to 1-persistent?",
+      "options": [
+        "Higher collision rate",
+        "May waste idle channel time while stations wait randomly",
+        "More complex to implement",
+        "Requires more bandwidth"
+      ],
+      "answer": 1,
+      "explanation": "Nonpersistent CSMA may waste idle channel time because stations wait random periods before checking the channel again, even if it becomes idle. This reduces collisions but can lower channel utilization compared to 1-persistent."
+    },
+    {
+      "q": "What is the purpose of the exponential increase in backoff time after successive collisions?",
+      "options": [
+        "To punish stations that collide",
+        "To adapt to network load and reduce repeated collision probability",
+        "To ensure fairness",
+        "To save power"
+      ],
+      "answer": 1,
+      "explanation": "The exponential increase in backoff time adapts to network load. As more collisions occur (indicating higher contention), the backoff range increases, spreading out retransmission attempts and reducing the probability of repeated collisions among the same stations."
+    },
+    {
+      "q": "In p-persistent CSMA with p=0.5, what happens when a station senses an idle channel?",
+      "options": [
+        "It always transmits",
+        "It transmits with 50% probability, otherwise waits for next slot",
+        "It waits randomly",
+        "It requests permission to transmit"
+      ],
+      "answer": 1,
+      "explanation": "In p-persistent CSMA with p=0.5, when a station senses an idle channel, it transmits with 50% probability. If it doesn't transmit (the other 50% chance), it waits for the next slot and makes the decision again."
+    },
+    {
+      "q": "Classic Ethernet (10BASE-T) uses which multiple access protocol?",
+      "options": [
+        "ALOHA",
+        "CSMA/CD",
+        "Token passing",
+        "FDMA"
+      ],
+      "answer": 1,
+      "explanation": "Classic Ethernet (10BASE-T) uses CSMA/CD (Carrier Sense Multiple Access with Collision Detection) for managing access to the shared bus. Modern switched Ethernet eliminates collisions by using dedicated links, making CSMA/CD unnecessary."
+    },
+    {
+      "q": "What does CSMA/CA stand for?",
+      "options": [
+        "Carrier Sense Multiple Access with Collision Detection",
+        "Carrier Sense Multiple Access with Collision Avoidance",
+        "Central Station Multiple Access Control",
+        "Coded Signal Multiple Access Control"
+      ],
+      "answer": 1,
+      "explanation": "CSMA/CA stands for Carrier Sense Multiple Access with Collision Avoidance. It is used in wireless networks where collision detection is difficult, focusing instead on avoiding collisions through coordination mechanisms."
+    },
+    {
+      "q": "Why is collision detection difficult in wireless networks?",
+      "options": [
+        "Wireless signals travel too fast",
+        "A station's own strong signal overwhelms weak incoming signals",
+        "Wireless networks don't have collisions",
+        "Too few stations on wireless networks"
+      ],
+      "answer": 1,
+      "explanation": "Collision detection is difficult in wireless networks because a station's own strong transmitted signal can overwhelm weak incoming signals from other stations, making it nearly impossible to detect collisions while transmitting."
+    },
+    {
+      "q": "What is the hidden station problem in wireless networks?",
+      "options": [
+        "Stations that are too small to detect",
+        "Two stations out of range of each other but both in range of a third station",
+        "Stations that are turned off",
+        "Encrypted stations"
+      ],
+      "answer": 1,
+      "explanation": "The hidden station problem occurs when two stations (B and C) are out of range of each other but both are in range of a third station (A). B and C cannot hear each other's transmissions, potentially causing collisions at A."
+    },
+    {
+      "q": "What is the exposed station problem?",
+      "options": [
+        "Stations with weak security",
+        "A station unnecessarily defers transmission because it hears another station",
+        "Stations in open areas",
+        "Stations with visible antennas"
+      ],
+      "answer": 1,
+      "explanation": "The exposed station problem occurs when a station unnecessarily defers transmission because it hears another station transmitting, even though its own transmission wouldn't interfere with the ongoing transmission at the destination."
+    },
+    {
+      "q": "What does RTS stand for in CSMA/CA?",
+      "options": [
+        "Real Time Signal",
+        "Request to Send",
+        "Ready to Start",
+        "Radio Transmission Signal"
+      ],
+      "answer": 1,
+      "explanation": "RTS stands for Request to Send. It is a control frame sent by a station to the destination to request permission to send data, helping to coordinate access and avoid collisions in wireless networks."
+    },
+    {
+      "q": "What does CTS stand for in CSMA/CA?",
+      "options": [
+        "Continue to Send",
+        "Clear to Send",
+        "Cancel Transmission Signal",
+        "Coded Time Slot"
+      ],
+      "answer": 1,
+      "explanation": "CTS stands for Clear to Send. It is a control frame sent by the destination in response to an RTS, granting permission to the requesting station to transmit data and informing other stations to defer transmission."
+    },
+    {
+      "q": "How does the RTS/CTS handshake help solve the hidden station problem?",
+      "options": [
+        "It increases transmission power",
+        "The CTS from the destination informs hidden stations to defer transmission",
+        "It eliminates all collisions",
+        "It uses multiple frequencies"
+      ],
+      "answer": 1,
+      "explanation": "The RTS/CTS handshake helps solve the hidden station problem because the CTS sent by the destination can be heard by stations hidden from the sender. These stations learn the medium will be busy and defer their transmissions."
+    },
+    {
+      "q": "What is DIFS in CSMA/CA?",
+      "options": [
+        "Data Interference Frame Signal",
+        "DCF Interframe Space - a waiting period before sending RTS",
+        "Digital Frequency Selection",
+        "Direct Frame Sending"
+      ],
+      "answer": 1,
+      "explanation": "DIFS (DCF Interframe Space) is a waiting period in CSMA/CA that a station must observe before attempting to send an RTS. It helps coordinate channel access and provides priority levels for different frame types."
+    },
+    {
+      "q": "What is SIFS in CSMA/CA?",
+      "options": [
+        "Signal Interference Frame Space",
+        "Short Interframe Space - a short waiting period for control responses",
+        "Standard Internet Frame System",
+        "Slow Interval Frame Sending"
+      ],
+      "answer": 1,
+      "explanation": "SIFS (Short Interframe Space) is a short waiting period in CSMA/CA used between control frames and their responses (like between RTS and CTS, or between data and ACK). It's shorter than DIFS, giving control responses priority."
+    },
+    {
+      "q": "What does NAV stand for in CSMA/CA?",
+      "options": [
+        "Network Address Value",
+        "Network Allocation Vector - virtual carrier sensing",
+        "Node Access Variable",
+        "New Arrival Vector"
+      ],
+      "answer": 1,
+      "explanation": "NAV (Network Allocation Vector) is a virtual carrier sensing mechanism in CSMA/CA. Stations set their NAV based on duration information in RTS/CTS frames, indicating how long the medium will be busy, even if they can't physically sense the transmission."
+    },
+    {
+      "q": "Which wireless standard commonly uses CSMA/CA?",
+      "options": [
+        "Bluetooth",
+        "WiFi (802.11)",
+        "Zigbee only",
+        "NFC"
+      ],
+      "answer": 1,
+      "explanation": "WiFi (802.11) commonly uses CSMA/CA for managing access to the shared wireless medium. The protocol includes mechanisms like RTS/CTS handshaking to handle hidden and exposed station problems."
+    },
+    {
+      "q": "In CSMA/CA with RTS/CTS, when do other stations defer transmission?",
+      "options": [
+        "When they hear the RTS only",
+        "When they hear either RTS or CTS containing duration information",
+        "Never, they always compete",
+        "Only at night"
+      ],
+      "answer": 1,
+      "explanation": "In CSMA/CA with RTS/CTS, stations defer transmission when they hear either an RTS or CTS containing duration information. They set their NAV (Network Allocation Vector) based on this duration, implementing virtual carrier sensing."
+    },
+    {
+      "q": "What is sent after successful data transmission in CSMA/CA?",
+      "options": [
+        "Another RTS",
+        "An ACK (acknowledgment)",
+        "A CTS",
+        "Nothing"
+      ],
+      "answer": 1,
+      "explanation": "After successful data transmission in CSMA/CA, the destination sends an ACK (acknowledgment) to confirm receipt. This acknowledgment is sent after a SIFS interval and confirms the frame was received correctly."
+    },
+    {
+      "q": "A wireless network has stations B and C that cannot hear each other but both can hear station A. What problem is this?",
+      "options": [
+        "Exposed station problem",
+        "Hidden station problem",
+        "Collision detection problem",
+        "Routing problem"
+      ],
+      "answer": 1,
+      "explanation": "This is the hidden station problem. Stations B and C are hidden from each other but both can reach A. If both try to transmit to A simultaneously, their transmissions will collide at A, even though neither can detect the other's transmission."
+    },
+    {
+      "q": "Why is CSMA/CA considered 'collision avoidance' rather than 'collision detection'?",
+      "options": [
+        "It completely eliminates collisions",
+        "It uses mechanisms to try to avoid collisions since detecting them is difficult",
+        "It is faster than collision detection",
+        "It uses encryption"
+      ],
+      "answer": 1,
+      "explanation": "CSMA/CA is 'collision avoidance' because it uses mechanisms like RTS/CTS handshaking and NAV to try to avoid collisions before they happen, rather than detecting them during transmission, which is difficult in wireless networks."
+    },
+    {
+      "q": "What is the basic principle of controlled access protocols?",
+      "options": [
+        "Stations transmit randomly",
+        "Stations consult one another and must be authorized before sending",
+        "Stations never communicate",
+        "Stations divide frequency bands"
+      ],
+      "answer": 1,
+      "explanation": "In controlled access protocols, stations consult one another to determine which station has the right to send. A station cannot send unless it has been authorized by other stations, implementing orderly access to the shared medium."
+    },
+    {
+      "q": "What is the reservation access method?",
+      "options": [
+        "Stations can transmit anytime",
+        "Stations must make a reservation before sending data",
+        "First station gets permanent access",
+        "Random access with priorities"
+      ],
+      "answer": 1,
+      "explanation": "In the reservation access method, stations must make a reservation before sending data, preventing collisions on the shared medium. Time is divided into intervals, with each interval containing a reservation frame followed by data frames."
+    },
+    {
+      "q": "What is polling in controlled access protocols?",
+      "options": [
+        "All stations transmit simultaneously",
+        "A primary station queries secondary stations to see if they have data to send",
+        "Stations vote on who transmits next",
+        "Random selection of stations"
+      ],
+      "answer": 1,
+      "explanation": "In polling, a primary station actively queries (polls) secondary stations to determine if they have data to send. The primary station controls when each secondary station can transmit, preventing collisions."
+    },
+    {
+      "q": "What is the role of the primary station in polling?",
+      "options": [
+        "It only receives data",
+        "It controls when each secondary station can transmit",
+        "It generates encryption keys",
+        "It has no special role"
+      ],
+      "answer": 1,
+      "explanation": "The primary station in polling controls when each secondary station can transmit by actively querying them. It manages access to the medium by giving each secondary station an opportunity to send data in turn."
+    },
+    {
+      "q": "What does a secondary station send in response to a poll if it has no data?",
+      "options": [
+        "ACK",
+        "NAK (Negative Acknowledgment)",
+        "RTS",
+        "Nothing"
+      ],
+      "answer": 1,
+      "explanation": "When a secondary station receives a poll but has no data to send, it responds with a NAK (Negative Acknowledgment). This informs the primary station that it can move on to poll the next station."
+    },
+    {
+      "q": "What is the SEL (Select) function in polling?",
+      "options": [
+        "Selecting a frequency band",
+        "Primary station alerting a secondary that it wants to send data to it",
+        "Selecting error correction method",
+        "Choosing transmission speed"
+      ],
+      "answer": 1,
+      "explanation": "The SEL (Select) function is used when the primary station wants to send data to a secondary station. The primary sends a SEL frame to alert the secondary, which responds with ACK, then the primary sends the data."
+    },
+    {
+      "q": "What is token passing?",
+      "options": [
+        "Random frame transmission",
+        "A special token frame circulates and grants transmission rights to the holder",
+        "Time slot allocation",
+        "Frequency division"
+      ],
+      "answer": 1,
+      "explanation": "Token passing uses a special control frame called a token that circulates among stations in a logical ring. When a station receives the token, it has the right to transmit data. After transmitting (or if it has nothing to send), it passes the token to the next station."
+    },
+    {
+      "q": "How does token passing prevent collisions?",
+      "options": [
+        "It uses collision detection",
+        "Only the station holding the token can transmit",
+        "It uses multiple frequencies",
+        "It doesn't prevent collisions"
+      ],
+      "answer": 1,
+      "explanation": "Token passing prevents collisions because only the station currently holding the token has permission to transmit data. Since there is only one token circulating, only one station can send at any given time."
+    },
+    {
+      "q": "What topology is logically formed in token passing networks?",
+      "options": [
+        "Star topology",
+        "Bus topology",
+        "Ring topology",
+        "Mesh topology"
+      ],
+      "answer": 2,
+      "explanation": "Token passing networks form a logical ring topology where the token circulates from one station to the next in sequence. This can be implemented on various physical topologies including physical rings, bus rings, and star rings."
+    },
+    {
+      "q": "A station receives the token in a token passing network but has no data to send. What does it do?",
+      "options": [
+        "Holds the token indefinitely",
+        "Immediately passes the token to the next station",
+        "Destroys the token",
+        "Sends the token back to the sender"
+      ],
+      "answer": 1,
+      "explanation": "If a station receives the token but has no data to send, it immediately passes the token to the next station in the logical ring. This ensures the token continues circulating and other stations get opportunities to transmit."
+    },
+    {
+      "q": "What is a disadvantage of polling compared to random access?",
+      "options": [
+        "Higher collision rate",
+        "Overhead of polling and potential delay if primary station fails",
+        "Cannot handle multiple stations",
+        "Too simple"
+      ],
+      "answer": 1,
+      "explanation": "Disadvantages of polling include the overhead of poll messages and the potential for network failure if the primary station fails. Additionally, stations must wait to be polled even if the channel is idle, potentially causing delays."
+    },
+    {
+      "q": "What happens if the token is lost in a token passing network?",
+      "options": [
+        "Network continues normally",
+        "Network operation halts until a new token is generated",
+        "Stations switch to random access",
+        "Nothing, multiple tokens exist"
+      ],
+      "answer": 1,
+      "explanation": "If the token is lost in a token passing network, no station can transmit since possession of the token grants transmission rights. Network operation halts until a new token is generated through a token recovery mechanism."
+    },
+    {
+      "q": "Which controlled access method requires a primary-secondary station hierarchy?",
+      "options": [
+        "Token passing",
+        "Polling",
+        "Reservation",
+        "CSMA"
+      ],
+      "answer": 1,
+      "explanation": "Polling requires a primary-secondary station hierarchy where the primary station controls access by querying secondary stations. This centralized control distinguishes it from token passing, which is more distributed."
+    },
+    {
+      "q": "In token passing, can the physical topology be different from the logical ring?",
+      "options": [
+        "No, it must be a physical ring",
+        "Yes, logical ring can be implemented on bus or star physical topologies",
+        "Only on wireless networks",
+        "Token passing doesn't use rings"
+      ],
+      "answer": 1,
+      "explanation": "Yes, a logical ring topology can be implemented on various physical topologies including bus rings (logical ring on physical bus) and star rings (logical ring through a central hub), not just physical rings."
+    },
+    {
+      "q": "What is an advantage of controlled access over random access protocols?",
+      "options": [
+        "Simpler to implement",
+        "No collisions and predictable access patterns",
+        "Higher maximum throughput",
+        "Works better at low loads"
+      ],
+      "answer": 1,
+      "explanation": "Controlled access protocols eliminate collisions and provide predictable access patterns. This makes them suitable for applications requiring guaranteed access times, though they may be more complex and have overhead compared to random access."
+    },
+    {
+      "q": "What is the basic principle of channelization?",
+      "options": [
+        "Stations compete for access",
+        "Available bandwidth is shared in time, frequency, or code between stations",
+        "Only one station can use the network",
+        "Stations take turns randomly"
+      ],
+      "answer": 1,
+      "explanation": "Channelization divides the available bandwidth of a link by sharing it in time, frequency, or through code between different stations. Each station gets allocated resources for exclusive use, preventing collisions."
+    },
+    {
+      "q": "What does FDMA stand for?",
+      "options": [
+        "Fast Data Multiple Access",
+        "Frequency Division Multiple Access",
+        "Frame Division Multiple Access",
+        "Full Duplex Multiple Access"
+      ],
+      "answer": 1,
+      "explanation": "FDMA stands for Frequency Division Multiple Access. It divides the available bandwidth into frequency bands, with each station assigned a specific band for exclusive use."
+    },
+    {
+      "q": "What does TDMA stand for?",
+      "options": [
+        "Time Delay Multiple Access",
+        "Time Division Multiple Access",
+        "Token Distribution Multiple Access",
+        "Transmission Data Multiple Access"
+      ],
+      "answer": 1,
+      "explanation": "TDMA stands for Time Division Multiple Access. It divides time into slots, with each station assigned specific time slots for exclusive use of the entire bandwidth during those slots."
+    },
+    {
+      "q": "What does CDMA stand for?",
+      "options": [
+        "Central Data Multiple Access",
+        "Code Division Multiple Access",
+        "Collision Detection Multiple Access",
+        "Controlled Distribution Multiple Access"
+      ],
+      "answer": 1,
+      "explanation": "CDMA stands for Code Division Multiple Access. It allows all stations to transmit simultaneously using the entire bandwidth, with unique codes assigned to each station to separate transmissions."
+    },
+    {
+      "q": "How does FDMA allocate the channel?",
+      "options": [
+        "By dividing time into slots",
+        "By dividing bandwidth into separate frequency bands",
+        "By assigning unique codes",
+        "By random selection"
+      ],
+      "answer": 1,
+      "explanation": "FDMA allocates the channel by dividing the available bandwidth into separate frequency bands. Each station is assigned a specific frequency band for exclusive use, with guard bands separating adjacent channels to prevent interference."
+    },
+    {
+      "q": "What are guard bands in FDMA?",
+      "options": [
+        "Special security features",
+        "Unused frequency spaces separating allocated bands to prevent interference",
+        "Time intervals between transmissions",
+        "Error correction codes"
+      ],
+      "answer": 1,
+      "explanation": "Guard bands in FDMA are unused frequency spaces that separate allocated frequency bands. They prevent interference between adjacent channels due to imperfect filtering and signal leakage."
+    },
+    {
+      "q": "In TDMA, what does each station use during its assigned time slot?",
+      "options": [
+        "A small portion of the bandwidth",
+        "The entire channel bandwidth",
+        "A unique code",
+        "A different frequency"
+      ],
+      "answer": 1,
+      "explanation": "In TDMA, each station uses the entire channel bandwidth during its assigned time slot. The bandwidth is time-shared, with stations taking turns using the full bandwidth for short periods rather than using portions continuously."
+    },
+    {
+      "q": "What is unique about CDMA compared to FDMA and TDMA?",
+      "options": [
+        "It's faster",
+        "All stations can transmit simultaneously using the entire bandwidth",
+        "It uses less power",
+        "It's simpler to implement"
+      ],
+      "answer": 1,
+      "explanation": "CDMA is unique because all stations can transmit simultaneously using the entire bandwidth. Unique codes assigned to each station allow receivers to separate and extract individual transmissions from the combined signal."
+    },
+    {
+      "q": "In CDMA, how is data bit 1 represented?",
+      "options": [
+        "As -1",
+        "As +1",
+        "As 0",
+        "As 2"
+      ],
+      "answer": 1,
+      "explanation": "In CDMA, data bit 1 is represented as +1, data bit 0 is represented as -1, and silence is represented as 0. This bipolar representation is used in calculations with chip sequences."
+    },
+    {
+      "q": "In CDMA, how is data bit 0 represented?",
+      "options": [
+        "As +1",
+        "As -1",
+        "As 0",
+        "As 2"
+      ],
+      "answer": 1,
+      "explanation": "In CDMA, data bit 0 is represented as -1, data bit 1 is represented as +1, and silence is represented as 0. This representation allows for mathematical operations with chip sequences."
+    },
+    {
+      "q": "What is a chip sequence in CDMA?",
+      "options": [
+        "A sequence of encrypted data",
+        "A unique code assigned to each station for spreading its signal",
+        "A time slot allocation",
+        "A frequency band assignment"
+      ],
+      "answer": 1,
+      "explanation": "A chip sequence in CDMA is a unique code assigned to each station for spreading its signal. The data bit is multiplied by this sequence, spreading it across the bandwidth. Different stations have different chip sequences."
+    },
+    {
+      "q": "How does a receiver extract a specific station's data in CDMA?",
+      "options": [
+        "By using the correct frequency filter",
+        "By computing the inner product of received signal with the station's chip sequence",
+        "By waiting for the correct time slot",
+        "By using encryption keys"
+      ],
+      "answer": 1,
+      "explanation": "In CDMA, a receiver extracts a specific station's data by computing the inner product of the received composite signal with that station's chip sequence. The result, when summed and normalized, reveals the transmitted data bit."
+    },
+    {
+      "q": "What is the Walsh table used for in CDMA?",
+      "options": [
+        "Scheduling time slots",
+        "Generating orthogonal chip sequences",
+        "Allocating frequencies",
+        "Error detection"
+      ],
+      "answer": 1,
+      "explanation": "The Walsh table is used in CDMA to generate orthogonal chip sequences. Each row of the table provides a chip sequence, and the orthogonality ensures that different stations' signals don't interfere with each other."
+    },
+    {
+      "q": "For a Walsh table, the number of sequences must be what?",
+      "options": [
+        "Any number",
+        "N = 2^m where m is an integer",
+        "Always odd",
+        "Always prime"
+      ],
+      "answer": 1,
+      "explanation": "For a Walsh table, the number of sequences N must equal 2^m where m is an integer. This requirement comes from the recursive generation method, starting with W1 and building W2, W4, W8, etc."
+    },
+    {
+      "q": "If a CDMA chip sequence is [+1 -1 +1 -1] and data bit is 1, what is transmitted?",
+      "options": [
+        "[+1 -1 +1 -1]",
+        "[-1 +1 -1 +1]",
+        "[0 0 0 0]",
+        "[+1 +1 +1 +1]"
+      ],
+      "answer": 0,
+      "explanation": "Since data bit 1 is represented as +1, and the transmitted signal is the data bit multiplied by the chip sequence: +1 × [+1 -1 +1 -1] = [+1 -1 +1 -1]. The chip sequence is transmitted as-is."
+    },
+    {
+      "q": "If a CDMA chip sequence is [+1 -1 +1 -1] and data bit is 0, what is transmitted?",
+      "options": [
+        "[+1 -1 +1 -1]",
+        "[-1 +1 -1 +1]",
+        "[0 0 0 0]",
+        "[+1 +1 +1 +1]"
+      ],
+      "answer": 1,
+      "explanation": "Since data bit 0 is represented as -1, and the transmitted signal is the data bit multiplied by the chip sequence: -1 × [+1 -1 +1 -1] = [-1 +1 -1 +1]. The chip sequence is inverted."
+    },
+    {
+      "q": "After computing inner product in CDMA decoding, what does a result of -4 (for 4-chip sequence) indicate?",
+      "options": [
+        "Data bit 1",
+        "Data bit 0",
+        "Error in transmission",
+        "Silence"
+      ],
+      "answer": 1,
+      "explanation": "After computing the inner product and summing for a 4-chip sequence, the result -4 is normalized by dividing by 4 to get -1, which represents data bit 0 in CDMA."
+    },
+    {
+      "q": "What is an advantage of CDMA over FDMA and TDMA?",
+      "options": [
+        "Simpler to implement",
+        "All stations can transmit simultaneously, and it has inherent security through codes",
+        "Uses less bandwidth",
+        "Requires no synchronization"
+      ],
+      "answer": 1,
+      "explanation": "CDMA advantages include allowing all stations to transmit simultaneously without time or frequency coordination, better bandwidth utilization, and inherent security since only receivers with the correct chip sequence can decode transmissions."
+    },
+    {
+      "q": "Which channelization method is most commonly used in cellular telephone systems (3G)?",
+      "options": [
+        "FDMA only",
+        "TDMA only",
+        "CDMA",
+        "Token passing"
+      ],
+      "answer": 2,
+      "explanation": "CDMA is commonly used in 3G cellular telephone systems (like CDMA2000 and WCDMA/UMTS). It allows multiple users to share the same frequency band simultaneously by using unique spreading codes."
+    },
+    {
+      "q": "A network needs to support 8 stations with CDMA. What size Walsh table is needed?",
+      "options": [
+        "W4",
+        "W8",
+        "W16",
+        "W2"
+      ],
+      "answer": 1,
+      "explanation": "To support 8 stations with CDMA, a W8 Walsh table is needed since N = 2^m and 8 = 2^3. The W8 table provides 8 orthogonal chip sequences, one for each station."
+    }
+  ],
+
+  "Module 3: Physical Layer - Transmission Media": [
+    {
+      "q": "What are the two main categories of transmission media?",
+      "options": [
+        "Guided media and unguided media",
+        "Wired media and satellite media",
+        "Copper media and fiber media",
+        "Analog media and digital media"
+      ],
+      "answer": 0,
+      "explanation": "Transmission media are classified into two main categories: guided media (wired), where signals propagate through solid media like wire or fiber, and unguided media (wireless), where signals propagate freely through air or space."
+    },
+    {
+      "q": "Which transmission medium has the highest frequency range?",
+      "options": [
+        "Twisted pair cable",
+        "Coaxial cable",
+        "Optical fiber",
+        "Radio waves"
+      ],
+      "answer": 2,
+      "explanation": "Optical fiber operates in the frequency range of 10¹⁴ to 10¹⁵ Hz (visible light spectrum), which is significantly higher than twisted pair (~10² to 10⁸ Hz), coaxial cable (~10³ to 10⁹ Hz), or radio waves."
+    },
+    {
+      "q": "What does UTP stand for in networking cables?",
+      "options": [
+        "Universal Transmission Protocol",
+        "Unshielded Twisted Pair",
+        "Unified Terminal Pair",
+        "Ultra Thin Protection"
+      ],
+      "answer": 1,
+      "explanation": "UTP stands for Unshielded Twisted Pair, which refers to twisted pair cables without metal shielding. These cables are cost-effective, flexible, and the most common type of cabling used in networks."
+    },
+    {
+      "q": "Which type of twisted pair cable includes metal shielding for EMI protection?",
+      "options": [
+        "UTP (Unshielded Twisted Pair)",
+        "STP (Shielded Twisted Pair)",
+        "RTP (Regular Twisted Pair)",
+        "CTP (Coated Twisted Pair)"
+      ],
+      "answer": 1,
+      "explanation": "STP (Shielded Twisted Pair) cables include metal shielding that provides superior electromagnetic interference (EMI) protection. They are more expensive, rigid, and complex to install compared to UTP cables."
+    },
+    {
+      "q": "What is the primary material used for signal transmission in optical fiber?",
+      "options": [
+        "Copper wire",
+        "Aluminum wire",
+        "Glass or plastic",
+        "Steel wire"
+      ],
+      "answer": 2,
+      "explanation": "Optical fiber uses glass or plastic as the core material to transmit light pulses. Each light pulse represents a bit of data, enabling high-speed transmission with low error rates and immunity to electromagnetic noise."
+    },
+    {
+      "q": "What is the main advantage of guided transmission media over unguided media?",
+      "options": [
+        "Lower installation cost",
+        "Greater mobility",
+        "Provides a physical conduit with more controlled signal path",
+        "Easier to expand coverage area"
+      ],
+      "answer": 2,
+      "explanation": "Guided media provide a physical conduit from one device to another, offering a more controlled and reliable signal path. This results in better signal quality and less interference compared to unguided media, which broadcast signals freely through air or space."
+    },
+    {
+      "q": "How many pairs of wires are typically found in a standard twisted pair cable?",
+      "options": [
+        "Two pairs",
+        "Four pairs",
+        "Six pairs",
+        "Eight pairs"
+      ],
+      "answer": 1,
+      "explanation": "A standard twisted pair cable contains four pairs of color-coded copper wires. Each pair is twisted together and protected by plastic insulation to reduce electromagnetic interference and crosstalk."
+    },
+    {
+      "q": "What connector type is commonly used with twisted pair cables in Ethernet networks?",
+      "options": [
+        "BNC connector",
+        "RJ-45 connector",
+        "ST connector",
+        "SC connector"
+      ],
+      "answer": 1,
+      "explanation": "RJ-45 (Registered Jack-45) connectors are commonly used to terminate twisted pair cables in Ethernet networks. They are standard connectors for connecting devices to network switches, routers, and other networking equipment."
+    },
+    {
+      "q": "What does EMI stand for in the context of transmission media?",
+      "options": [
+        "Electric Motion Interface",
+        "Electromagnetic Interference",
+        "Electronic Media Installation",
+        "Energy Modulation Index"
+      ],
+      "answer": 1,
+      "explanation": "EMI stands for Electromagnetic Interference, which refers to unwanted electromagnetic signals that can disrupt or degrade the performance of cables and electronic devices. Twisted pair cables are particularly susceptible to EMI."
+    },
+    {
+      "q": "Which guided transmission medium is most immune to electromagnetic interference?",
+      "options": [
+        "Unshielded twisted pair",
+        "Shielded twisted pair",
+        "Coaxial cable",
+        "Optical fiber"
+      ],
+      "answer": 3,
+      "explanation": "Optical fiber is completely immune to electromagnetic interference (EMI) and radio frequency interference (RFI) because it transmits data as light pulses rather than electrical signals. This makes it ideal for environments with high electromagnetic noise."
+    },
+    {
+      "q": "What is the purpose of twisting wires in twisted pair cables?",
+      "options": [
+        "To increase cable flexibility",
+        "To reduce electromagnetic interference and crosstalk",
+        "To improve cable appearance",
+        "To reduce manufacturing cost"
+      ],
+      "answer": 1,
+      "explanation": "Wires are twisted in twisted pair cables to reduce electromagnetic interference (EMI) and crosstalk. The twisting creates a cancellation effect where the magnetic fields from each wire in a pair cancel each other out, minimizing interference."
+    },
+    {
+      "q": "Which organization establishes the categories and standards for twisted pair cables?",
+      "options": [
+        "ISO/IEC",
+        "TIA/EIA",
+        "ANSI/NIST",
+        "ITU/IEEE"
+      ],
+      "answer": 1,
+      "explanation": "The TIA/EIA (Telecommunications Industry Association/Electronic Industries Alliance) establishes the categories and standards for twisted pair cables through the TIA/EIA-568 standard, which covers cable types, lengths, connectors, and testing methods."
+    },
+    {
+      "q": "What type of signal do optical fibers transmit?",
+      "options": [
+        "Electrical signals",
+        "Radio waves",
+        "Light pulses",
+        "Magnetic fields"
+      ],
+      "answer": 2,
+      "explanation": "Optical fibers transmit light pulses, with each pulse representing a bit of data. This light-based transmission enables high-speed communication (10's to 100's Gbps) with low error rates and immunity to electromagnetic interference."
+    },
+    {
+      "q": "What does 'propagation' mean in the context of transmission media?",
+      "options": [
+        "The process of signal encryption",
+        "The way signals travel through or across media",
+        "The speed of data processing",
+        "The method of data compression"
+      ],
+      "answer": 1,
+      "explanation": "Propagation refers to how signals travel through or across transmission media. In guided media, signals propagate through solid media like wire or fiber, while in unguided media, signals propagate freely through air or space."
+    },
+    {
+      "q": "Which transmission medium offers the greatest mobility for users?",
+      "options": [
+        "Twisted pair cable",
+        "Coaxial cable",
+        "Optical fiber",
+        "Wireless media"
+      ],
+      "answer": 3,
+      "explanation": "Wireless media provides the greatest mobility option as users are not restricted by physical cables. This allows for freedom of movement within the coverage area, making it ideal for mobile devices and portable equipment."
+    },
+    {
+      "q": "What is the maximum data rate supported by Category 5 twisted pair cable?",
+      "options": [
+        "10 Mbps",
+        "100 Mbps",
+        "125 Mbps",
+        "200 Mbps"
+      ],
+      "answer": 1,
+      "explanation": "Category 5 twisted pair cable supports a maximum data rate of 100 Mbps. The cable wire is normally 24 AWG with a jacket and outside sheath, and it is commonly used in LAN environments."
+    },
+    {
+      "q": "Which category of twisted pair cable is an improvement over Category 5 with features to minimize crosstalk?",
+      "options": [
+        "Category 4",
+        "Category 5E",
+        "Category 6",
+        "Category 7"
+      ],
+      "answer": 1,
+      "explanation": "Category 5E (Enhanced) is an extension to Category 5 that includes extra features to minimize crosstalk and electromagnetic interference. It supports data rates up to 125 Mbps."
+    },
+    {
+      "q": "What is the approximate repeater distance requirement for digital signals on twisted pair cable?",
+      "options": [
+        "Every 500 meters",
+        "Every 1-2 km",
+        "Every 2-3 km",
+        "Every 5-6 km"
+      ],
+      "answer": 2,
+      "explanation": "For digital signals on twisted pair cables, repeaters are needed every 2-3 km due to signal attenuation. This is shorter than the 5-6 km requirement for analog signals on the same medium."
+    },
+    {
+      "q": "What is the typical bandwidth limitation of twisted pair cable?",
+      "options": [
+        "1000 Hz",
+        "3000 Hz",
+        "5000 Hz",
+        "10000 Hz"
+      ],
+      "answer": 1,
+      "explanation": "Twisted pair cable has a relatively low bandwidth of approximately 3000 Hz, which limits its frequency capacity. This is one of the key limitations of twisted pair cables compared to other transmission media like coaxial cable or optical fiber."
+    },
+    {
+      "q": "Which cable termination standard uses both ends with the same wiring scheme (either T568A or T568B)?",
+      "options": [
+        "Ethernet crossover cable",
+        "Ethernet straight-through cable",
+        "Rollover cable",
+        "Null modem cable"
+      ],
+      "answer": 1,
+      "explanation": "Ethernet straight-through cables use the same termination standard on both ends (either both T568A or both T568B). This cable type is used to connect a host to a network device like a switch or router."
+    },
+    {
+      "q": "What type of cable connects a host serial port to a router or switch console port?",
+      "options": [
+        "Straight-through cable",
+        "Crossover cable",
+        "Rollover cable",
+        "Patch cable"
+      ],
+      "answer": 2,
+      "explanation": "A rollover cable is a Cisco proprietary cable used to connect a host serial port to a router or switch console port, typically using an adapter. It has a different pinout configuration than straight-through or crossover cables."
+    },
+    {
+      "q": "What is the data rate supported by Category 6 twisted pair cable?",
+      "options": [
+        "100 Mbps",
+        "125 Mbps",
+        "200 Mbps",
+        "600 Mbps"
+      ],
+      "answer": 2,
+      "explanation": "Category 6 twisted pair cable supports a data rate of 200 Mbps. It requires matched components from the same manufacturer and must be tested at a 200 Mbps data rate."
+    },
+    {
+      "q": "Which twisted pair cable category is sometimes called SSTP (Shielded Screen Twisted Pair)?",
+      "options": [
+        "Category 5",
+        "Category 5E",
+        "Category 6",
+        "Category 7"
+      ],
+      "answer": 3,
+      "explanation": "Category 7 is sometimes called SSTP (Shielded Screen Twisted Pair). Each pair is individually wrapped in helical metallic foil followed by a metallic foil shield in addition to the outside sheath, supporting data rates up to 600 Mbps."
+    },
+    {
+      "q": "What mitigation technique uses opposite polarity on paired wires to reduce EMI?",
+      "options": [
+        "Attenuation",
+        "Cancellation",
+        "Amplification",
+        "Modulation"
+      ],
+      "answer": 1,
+      "explanation": "Cancellation is a mitigation technique where each wire in a pair uses opposite polarity (one negative, one positive). When twisted together, the magnetic fields effectively cancel each other and reduce outside EMI and RFI."
+    },
+    {
+      "q": "Which type of twisted pair cable was originally used in T-1 lines with a 2 Mbps data rate?",
+      "options": [
+        "Category 1",
+        "Category 2",
+        "Category 3",
+        "Category 4"
+      ],
+      "answer": 1,
+      "explanation": "Category 2 twisted pair cable was originally used in T-1 lines and supported a data rate of 2 Mbps. It represented an improvement over Category 1, which was used for basic telephone services."
+    },
+    {
+      "q": "What is a common application of Category 5e twisted pair cable?",
+      "options": [
+        "Telephone systems only",
+        "Ethernet LAN networking",
+        "Cable TV distribution",
+        "Long-distance telecommunications"
+      ],
+      "answer": 1,
+      "explanation": "Category 5e twisted pair cable is commonly used in Ethernet LAN networking. It can connect office computers to network switches and supports data rates up to 125 Mbps, making it suitable for modern network applications."
+    },
+    {
+      "q": "Which Category of twisted pair cable was improved for use in Token Ring networks with a 20 Mbps data rate?",
+      "options": [
+        "Category 2",
+        "Category 3",
+        "Category 4",
+        "Category 5"
+      ],
+      "answer": 2,
+      "explanation": "Category 4 twisted pair cable was an improved version of Category 3 specifically designed for Token Ring networks, supporting data rates up to 20 Mbps. It provided better performance for LAN applications."
+    },
+    {
+      "q": "What physical characteristic helps prevent crosstalk among wires within a twisted pair cable?",
+      "options": [
+        "All pairs twisted identically",
+        "Variation in the number of twists per pair",
+        "Thicker insulation on outer pairs",
+        "Metal shielding between pairs"
+      ],
+      "answer": 1,
+      "explanation": "Variation in twists is a key characteristic where each wire pair is twisted a different amount. This variation helps prevent crosstalk among the different pairs of wires within the cable, improving signal quality."
+    },
+    {
+      "q": "A network technician needs to connect two switches directly. Which cable type should traditionally be used?",
+      "options": [
+        "Straight-through cable",
+        "Crossover cable",
+        "Rollover cable",
+        "Null modem cable"
+      ],
+      "answer": 1,
+      "explanation": "Traditionally, an Ethernet crossover cable (with one end T568A and the other end T568B) is used to connect similar devices like switch-to-switch, router-to-router, or host-to-host. However, this is now considered legacy due to Auto-MDIX technology."
+    },
+    {
+      "q": "What does RFI stand for in networking terminology?",
+      "options": [
+        "Radio Frequency Interference",
+        "Rapid File Interface",
+        "Remote Function Indicator",
+        "Reliable Frame Implementation"
+      ],
+      "answer": 0,
+      "explanation": "RFI stands for Radio Frequency Interference, which refers to interference from radio frequency signals that can affect cable performance. Like EMI, RFI can disrupt signal transmission in twisted pair cables."
+    },
+    {
+      "q": "Which twisted pair cable category supports a data rate of 10 Mbps and was improved from Category 2?",
+      "options": [
+        "Category 1",
+        "Category 2",
+        "Category 3",
+        "Category 4"
+      ],
+      "answer": 2,
+      "explanation": "Category 3 is an improved version of Category 2 that supports a data rate of 10 Mbps and was commonly used in LANs. It provided better performance for early Ethernet networks."
+    },
+    {
+      "q": "What is the primary reason twisted pair cable is susceptible to attenuation?",
+      "options": [
+        "Too much insulation",
+        "Signal weakens over long distances",
+        "Excessive twisting of wires",
+        "Poor connector quality"
+      ],
+      "answer": 1,
+      "explanation": "Attenuation in twisted pair cable occurs because the signal weakens over long distances. This is a fundamental limitation requiring repeaters every 2-3 km for digital signals and every 5-6 km for analog signals."
+    },
+    {
+      "q": "A company is installing CCTV IP cameras. Which twisted pair cable category would be suitable for this application?",
+      "options": [
+        "Category 1",
+        "Category 3",
+        "Category 5e",
+        "Category 7"
+      ],
+      "answer": 2,
+      "explanation": "Category 5e twisted pair cable is suitable for security and surveillance systems, including CCTV IP cameras. It provides sufficient bandwidth and performance for transmitting video data over network connections."
+    },
+    {
+      "q": "What is the main disadvantage of STP cables compared to UTP cables?",
+      "options": [
+        "Lower data rates",
+        "More expensive, rigid, and complex to install",
+        "Less EMI protection",
+        "Shorter maximum cable length"
+      ],
+      "answer": 1,
+      "explanation": "STP (Shielded Twisted Pair) cables are more expensive, rigid, and complex to install compared to UTP cables. Despite providing superior EMI protection, these disadvantages limit their use to environments where EMI is a significant concern."
+    },
+    {
+      "q": "Which technology allows modern NICs to automatically sense cable type and complete connections?",
+      "options": [
+        "Auto-MDIX",
+        "Auto-Sense",
+        "Cable-Detect",
+        "Smart-Connect"
+      ],
+      "answer": 0,
+      "explanation": "Auto-MDIX (Automatic Medium-Dependent Interface Crossover) is a technology that allows network interface cards to automatically sense the cable type and adjust accordingly, making crossover cables largely obsolete for modern equipment."
+    },
+    {
+      "q": "How many conductors does a coaxial cable have?",
+      "options": [
+        "One conductor",
+        "Two conductors",
+        "Four conductors",
+        "Eight conductors"
+      ],
+      "answer": 1,
+      "explanation": "A coaxial cable has two conductors: an inner conductor (copper wire) and an outer conductor (shield) made of woven copper braid or metallic foil. These are separated by a layer of flexible plastic insulation."
+    },
+    {
+      "q": "What is the function of the outer conductor in a coaxial cable?",
+      "options": [
+        "To carry the primary signal",
+        "To provide shielding and ground reference",
+        "To add structural rigidity",
+        "To color-code the cable"
+      ],
+      "answer": 1,
+      "explanation": "The outer conductor in a coaxial cable serves as a shield to protect the inner conductor from electromagnetic interference and provides a ground reference. It is typically made of woven copper braid or metallic foil."
+    },
+    {
+      "q": "What is the approximate frequency range supported by coaxial cable?",
+      "options": [
+        "10² to 10⁸ Hz",
+        "10³ to 10⁹ Hz",
+        "10⁸ to 10¹² Hz",
+        "10¹⁴ to 10¹⁵ Hz"
+      ],
+      "answer": 1,
+      "explanation": "Coaxial cable supports frequencies ranging from approximately 10³ to 10⁹ Hz (1 kHz to 1 GHz). This is wider than twisted pair cable but narrower than optical fiber."
+    },
+    {
+      "q": "Which connector type is commonly associated with coaxial cable connections?",
+      "options": [
+        "RJ-45 connector",
+        "BNC connector",
+        "LC connector",
+        "SC connector"
+      ],
+      "answer": 1,
+      "explanation": "BNC (Bayonet Neill-Concelman) connectors are commonly used with coaxial cables. Other coaxial components include BNC T-connectors and 50-ohm BNC terminators for proper network termination."
+    },
+    {
+      "q": "What is a common application of coaxial cable in modern networks?",
+      "options": [
+        "Connecting computers in LANs",
+        "Cable internet installations",
+        "Fiber optic backbones",
+        "Wireless access points only"
+      ],
+      "answer": 1,
+      "explanation": "Coaxial cable is commonly used in cable internet installations for customer premises wiring. It is also used in wireless installations to attach antennas to wireless devices."
+    },
+    {
+      "q": "What type of signal does coaxial cable transmit?",
+      "options": [
+        "Light pulses only",
+        "Radio waves only",
+        "Electrical signals, bidirectional",
+        "Magnetic fields only"
+      ],
+      "answer": 2,
+      "explanation": "Coaxial cable transmits electrical signals in a bidirectional manner, meaning data can flow in both directions. The inner conductor carries the signal while the outer conductor provides shielding."
+    },
+    {
+      "q": "Which layer of a coaxial cable prevents minor physical damage?",
+      "options": [
+        "Inner conductor",
+        "Outer conductor",
+        "Plastic insulation",
+        "Plastic cover"
+      ],
+      "answer": 3,
+      "explanation": "The plastic cover (outer jacket) of a coaxial cable prevents minor physical damage to the cable. It protects the internal components including the outer conductor, insulation, and inner conductor."
+    },
+    {
+      "q": "How does attenuation in coaxial cable vary with frequency?",
+      "options": [
+        "Decreases as frequency increases",
+        "Increases as frequency increases",
+        "Remains constant regardless of frequency",
+        "Only occurs at very low frequencies"
+      ],
+      "answer": 1,
+      "explanation": "Attenuation in coaxial cable increases as frequency increases. This means that higher frequency signals experience more signal loss over distance, which is an important consideration when designing cable systems."
+    },
+    {
+      "q": "What material is typically used for the inner conductor of coaxial cable?",
+      "options": [
+        "Aluminum wire",
+        "Copper wire",
+        "Steel wire",
+        "Fiber glass"
+      ],
+      "answer": 1,
+      "explanation": "The inner conductor of coaxial cable is typically made of copper wire. Copper provides excellent electrical conductivity for signal transmission while being relatively cost-effective and durable."
+    },
+    {
+      "q": "In a coaxial cable system, what is the purpose of a 50-ohm BNC terminator?",
+      "options": [
+        "To amplify the signal",
+        "To split the cable into multiple paths",
+        "To properly terminate the cable and prevent signal reflection",
+        "To convert electrical signals to light"
+      ],
+      "answer": 2,
+      "explanation": "A 50-ohm BNC terminator is used to properly terminate coaxial cable networks. It prevents signal reflection at the end of the cable, ensuring proper signal integrity and network performance."
+    },
+    {
+      "q": "What physical phenomenon allows optical fiber to guide light through its core?",
+      "options": [
+        "Refraction only",
+        "Total internal reflection",
+        "Diffraction",
+        "Polarization"
+      ],
+      "answer": 1,
+      "explanation": "Optical fiber uses total internal reflection to guide light through its core. When light hits the boundary between the core and cladding at an angle greater than the critical angle, it reflects back into the core rather than refracting out."
+    },
+    {
+      "q": "What are the two main components of an optical fiber's glass structure?",
+      "options": [
+        "Core and jacket",
+        "Core and cladding",
+        "Cladding and buffer",
+        "Inner wire and outer wire"
+      ],
+      "answer": 1,
+      "explanation": "The two main glass components of an optical fiber are the core (the inner part that carries light) and the cladding (the outer layer that has a lower refractive index). The difference in refractive indices enables total internal reflection."
+    },
+    {
+      "q": "Which optical fiber type uses LEDs as the light source?",
+      "options": [
+        "Single-mode fiber",
+        "Multimode fiber",
+        "Both single-mode and multimode",
+        "Neither type uses LEDs"
+      ],
+      "answer": 1,
+      "explanation": "Multimode fiber uses less expensive LEDs (Light Emitting Diodes) as the light source. LEDs transmit light at different angles, which is suitable for the larger core of multimode fiber. Single-mode fiber requires expensive lasers."
+    },
+    {
+      "q": "What is the typical core diameter of single-mode optical fiber?",
+      "options": [
+        "7 micrometers",
+        "50 micrometers",
+        "62.5 micrometers",
+        "100 micrometers"
+      ],
+      "answer": 0,
+      "explanation": "Single-mode optical fiber has a very small core diameter of approximately 7 micrometers (7/125 designation). This small core size allows only one mode of light to propagate, enabling long-distance transmission."
+    },
+    {
+      "q": "What is the maximum data rate and distance supported by multimode fiber?",
+      "options": [
+        "1 Gbps over 100 meters",
+        "10 Gbps over 550 meters",
+        "40 Gbps over 2 kilometers",
+        "100 Gbps over 10 kilometers"
+      ],
+      "answer": 1,
+      "explanation": "Multimode fiber can support data rates up to 10 Gbps over distances of approximately 550 meters. It uses a larger core and less expensive LEDs, making it suitable for shorter distance applications like LANs."
+    },
+    {
+      "q": "Which component provides strength to the optical fiber cable construction?",
+      "options": [
+        "Glass core",
+        "Cladding",
+        "DuPont Kevlar",
+        "Plastic buffer"
+      ],
+      "answer": 2,
+      "explanation": "DuPont Kevlar (aramid yarn) is incorporated into fiber optic cable construction to provide strength and protect the glass fiber from physical stress. It is positioned between the plastic buffer and the outer jacket."
+    },
+    {
+      "q": "What color jacket is typically used for single-mode fiber optic cables?",
+      "options": [
+        "Orange",
+        "Yellow",
+        "Blue",
+        "Green"
+      ],
+      "answer": 1,
+      "explanation": "Single-mode fiber optic cables typically have a yellow jacket for easy identification. Multimode fiber cables use orange or aqua colored jackets. This color coding helps technicians quickly identify cable types."
+    },
+    {
+      "q": "Which fiber optic connector type is known as the Straight-Tip connector?",
+      "options": [
+        "SC connector",
+        "ST connector",
+        "LC connector",
+        "MT-RJ connector"
+      ],
+      "answer": 1,
+      "explanation": "ST stands for Straight-Tip connector, which is one of the common fiber optic connector types. It uses a bayonet-style coupling mechanism and was widely used in network installations."
+    },
+    {
+      "q": "What is the typical cladding diameter for most optical fibers?",
+      "options": [
+        "7 micrometers",
+        "50 micrometers",
+        "125 micrometers",
+        "250 micrometers"
+      ],
+      "answer": 2,
+      "explanation": "The standard cladding diameter for most optical fibers is 125 micrometers, regardless of whether it's single-mode or multimode. The core diameter varies (7, 50, 62.5, or 100 micrometers), but the cladding is consistently 125 micrometers."
+    },
+    {
+      "q": "What happens when light strikes the core-cladding boundary at less than the critical angle?",
+      "options": [
+        "Total internal reflection occurs",
+        "Refraction occurs and light escapes the core",
+        "Light is absorbed by the cladding",
+        "Light speed increases"
+      ],
+      "answer": 1,
+      "explanation": "When light strikes the core-cladding boundary at an angle less than the critical angle, refraction occurs and the light escapes the core into the cladding. Only angles greater than the critical angle result in total internal reflection."
+    },
+    {
+      "q": "Which optical fiber type is best suited for long-distance telecommunications?",
+      "options": [
+        "Multimode graded index fiber",
+        "Multimode step index fiber",
+        "Single-mode fiber",
+        "Plastic optical fiber"
+      ],
+      "answer": 2,
+      "explanation": "Single-mode fiber is best suited for long-distance telecommunications because its very small core allows only one mode of light propagation, minimizing modal dispersion. It uses expensive lasers and can transmit over very long distances."
+    },
+    {
+      "q": "What does a 62.5/125 fiber designation indicate?",
+      "options": [
+        "62.5 μm cladding and 125 μm core",
+        "62.5 μm core and 125 μm cladding",
+        "62.5 MHz bandwidth and 125 meter length",
+        "62.5 degree angle and 125 watt power"
+      ],
+      "answer": 1,
+      "explanation": "The designation 62.5/125 indicates a fiber with a 62.5 micrometer core diameter and a 125 micrometer cladding diameter. This is a common multimode graded index fiber specification."
+    },
+    {
+      "q": "Which fiber optic connector provides duplex connectivity in a small form factor?",
+      "options": [
+        "ST connector",
+        "SC connector",
+        "LC connector",
+        "BNC connector"
+      ],
+      "answer": 2,
+      "explanation": "LC (Lucent Connector) provides duplex connectivity in a small form factor, making it popular for high-density installations. It's smaller than SC or ST connectors while maintaining good performance characteristics."
+    },
+    {
+      "q": "A company needs to transmit data at 40 Gbps over 10 kilometers without repeaters. Which medium should they use?",
+      "options": [
+        "Category 6 twisted pair",
+        "Coaxial cable",
+        "Multimode fiber",
+        "Single-mode fiber"
+      ],
+      "answer": 3,
+      "explanation": "Single-mode fiber is the appropriate choice for high-speed, long-distance transmission. It can support data rates from 10 Mbps to 100 Gbps over distances of 1 to 100,000 meters with repeaters spaced far apart."
+    },
+    {
+      "q": "What is the main advantage of optical fiber's immunity to EMI?",
+      "options": [
+        "Allows cheaper installation",
+        "Enables reliable transmission in electrically noisy environments",
+        "Reduces cable weight",
+        "Simplifies connector design"
+      ],
+      "answer": 1,
+      "explanation": "Optical fiber's complete immunity to EMI and RFI enables reliable transmission in electrically noisy environments such as industrial facilities, power plants, or areas with high electromagnetic activity. This is because optical fiber transmits light rather than electrical signals."
+    },
+    {
+      "q": "Which optical fiber type has a larger core diameter?",
+      "options": [
+        "Single-mode fiber",
+        "Multimode fiber",
+        "Both have the same core size",
+        "Neither has a measurable core"
+      ],
+      "answer": 1,
+      "explanation": "Multimode fiber has a larger core diameter (typically 50, 62.5, or 100 micrometers) compared to single-mode fiber (approximately 7 micrometers). The larger core allows multiple modes of light to propagate simultaneously."
+    },
+    {
+      "q": "In fiber optic systems, what does 'mode' refer to?",
+      "options": [
+        "The color of the fiber jacket",
+        "The path that light takes through the fiber",
+        "The connector type used",
+        "The cable installation method"
+      ],
+      "answer": 1,
+      "explanation": "In fiber optic systems, 'mode' refers to the different paths that light can take through the fiber. Single-mode fiber allows only one path, while multimode fiber allows multiple paths, which can lead to modal dispersion."
+    },
+    {
+      "q": "What is a common application of optical fiber in metropolitan areas?",
+      "options": [
+        "Home security systems",
+        "Metropolitan trunks",
+        "Wireless hotspots",
+        "Desktop computer connections"
+      ],
+      "answer": 1,
+      "explanation": "Optical fiber is commonly used in metropolitan trunks for high-capacity data transmission across city networks. Other applications include long-haul trunks, subscriber loops, and LAN backbones."
+    },
+    {
+      "q": "Comparing fiber to UTP, which has higher bandwidth capacity?",
+      "options": [
+        "UTP has much higher bandwidth",
+        "They have approximately equal bandwidth",
+        "Fiber has significantly higher bandwidth",
+        "Neither supports high bandwidth"
+      ],
+      "answer": 2,
+      "explanation": "Fiber optic cable has significantly higher bandwidth capacity (10 Mb/s to 100 Gb/s) compared to UTP cabling (10 Mb/s to 10 Gb/s). This makes fiber ideal for high-speed, high-capacity network backbones."
+    },
+    {
+      "q": "What is the main disadvantage of optical fiber compared to UTP cabling?",
+      "options": [
+        "Lower bandwidth",
+        "Susceptibility to EMI",
+        "Higher cost and installation skill requirements",
+        "Shorter maximum distance"
+      ],
+      "answer": 2,
+      "explanation": "The main disadvantages of optical fiber are its highest media and connector costs, highest installation skill requirements, and highest safety precautions needed. Despite these drawbacks, its performance advantages make it essential for many applications."
+    },
+    {
+      "q": "What is the main characteristic of unguided transmission media?",
+      "options": [
+        "Signals propagate through solid conductors",
+        "Signals propagate freely through air or space",
+        "Signals are confined to specific cables",
+        "Signals only travel short distances"
+      ],
+      "answer": 1,
+      "explanation": "Unguided transmission media (wireless) is characterized by signals propagating freely through air or space without physical confinement. There is no physical wire connecting the sender and receiver."
+    },
+    {
+      "q": "What are the three main types of wireless transmission?",
+      "options": [
+        "Copper, fiber, and satellite",
+        "Radio waves, microwaves, and infrared",
+        "UTP, STP, and coaxial",
+        "Analog, digital, and hybrid"
+      ],
+      "answer": 1,
+      "explanation": "The three main types of wireless transmission are radio waves, microwaves, and infrared. Each operates in different frequency bands and has different characteristics suitable for various applications."
+    },
+    {
+      "q": "Which wireless transmission type is used for multicast communications like radio and television?",
+      "options": [
+        "Infrared",
+        "Microwave",
+        "Radio waves",
+        "Laser"
+      ],
+      "answer": 2,
+      "explanation": "Radio waves are used for multicast communications such as radio and television broadcasting, as well as paging systems. They can propagate omnidirectionally and reach multiple receivers simultaneously."
+    },
+    {
+      "q": "What type of antenna is typically used for radio wave transmission?",
+      "options": [
+        "Directional antenna",
+        "Omnidirectional antenna",
+        "Parabolic antenna",
+        "Yagi antenna"
+      ],
+      "answer": 1,
+      "explanation": "Radio wave transmission typically uses omnidirectional antennas that can broadcast signals in all directions. This makes radio waves suitable for multicast applications like broadcasting to multiple receivers."
+    },
+    {
+      "q": "Which wireless transmission method is used for unicast communication like cellular telephones?",
+      "options": [
+        "Radio waves",
+        "Microwaves",
+        "Infrared",
+        "AM radio"
+      ],
+      "answer": 1,
+      "explanation": "Microwaves are used for unicast communication such as cellular telephones, satellite networks, and wireless LANs. Microwave transmission typically uses directional communication between specific points."
+    },
+    {
+      "q": "What is the frequency range for VHF (Very High Frequency)?",
+      "options": [
+        "3-30 kHz",
+        "300 kHz-3 MHz",
+        "30-300 MHz",
+        "30-300 GHz"
+      ],
+      "answer": 2,
+      "explanation": "VHF (Very High Frequency) operates in the range of 30-300 MHz. This band is used for VHF television, FM radio, and uses both sky and line-of-sight propagation methods."
+    },
+    {
+      "q": "Which frequency band is used for AM radio broadcasting?",
+      "options": [
+        "VLF (Very Low Frequency)",
+        "MF (Middle Frequency)",
+        "HF (High Frequency)",
+        "VHF (Very High Frequency)"
+      ],
+      "answer": 1,
+      "explanation": "AM radio broadcasting operates in the MF (Middle Frequency) band, which ranges from 300 kHz to 3 MHz. This band uses sky wave propagation for signal transmission."
+    },
+    {
+      "q": "What propagation method is required for UHF and higher frequencies?",
+      "options": [
+        "Ground wave propagation",
+        "Sky wave propagation",
+        "Line-of-sight propagation",
+        "Random propagation"
+      ],
+      "answer": 2,
+      "explanation": "UHF (Ultrahigh Frequency) and higher frequencies require line-of-sight propagation. This means there must be a direct, unobstructed path between the transmitter and receiver for effective communication."
+    },
+    {
+      "q": "Which wireless band is used for satellite communication?",
+      "options": [
+        "MF (Middle Frequency)",
+        "VHF (Very High Frequency)",
+        "SHF (Superhigh Frequency)",
+        "VLF (Very Low Frequency)"
+      ],
+      "answer": 2,
+      "explanation": "SHF (Superhigh Frequency), operating in the 3-30 GHz range, is used for satellite communication. It requires line-of-sight propagation and is also used for terrestrial microwave links."
+    },
+    {
+      "q": "What is a limitation of infrared wireless transmission?",
+      "options": [
+        "Cannot penetrate walls or solid objects",
+        "Too expensive for consumer use",
+        "Requires licensed spectrum",
+        "Only works at night"
+      ],
+      "answer": 0,
+      "explanation": "Infrared signals can be used for short-range communication in a closed area using line-of-sight propagation. They cannot penetrate walls or solid objects, limiting their use to direct line-of-sight applications in confined spaces."
+    },
+    {
+      "q": "A company needs to provide wireless internet in a rural area covering 10 km radius. What technology would be appropriate?",
+      "options": [
+        "Bluetooth",
+        "Infrared",
+        "4G/5G cellular",
+        "WiFi only"
+      ],
+      "answer": 2,
+      "explanation": "4G/5G cellular technology is appropriate for wide-area wireless coverage of approximately 10 km. 4G provides data rates of tens of Mbps, while 5G offers higher speeds. WiFi and Bluetooth have much shorter ranges, and infrared requires line-of-sight."
+    },
+    {
+      "q": "What is the typical coverage range of WiFi wireless LANs?",
+      "options": [
+        "Tens of centimeters",
+        "Tens of meters",
+        "Tens of kilometers",
+        "Hundreds of kilometers"
+      ],
+      "answer": 1,
+      "explanation": "WiFi wireless LANs typically have a coverage range of tens of meters and provide data rates of 10-100's Mbps. This makes them suitable for indoor and local area networking applications."
+    },
+    {
+      "q": "What is the typical data rate for terrestrial microwave communication?",
+      "options": [
+        "1 Mbps",
+        "10 Mbps",
+        "45 Mbps",
+        "1000 Mbps"
+      ],
+      "answer": 2,
+      "explanation": "Terrestrial microwave systems typically provide point-to-point communication with data rates around 45 Mbps per channel. They use line-of-sight propagation between microwave towers."
+    },
+    {
+      "q": "What is the approximate end-to-end delay for geostationary satellite communication?",
+      "options": [
+        "1 millisecond",
+        "10 milliseconds",
+        "100 milliseconds",
+        "270 milliseconds"
+      ],
+      "answer": 3,
+      "explanation": "Geostationary satellite communication has an end-to-end delay of approximately 270 milliseconds due to the long distance signals must travel to and from the satellite orbit at 35,786 km above Earth."
+    },
+    {
+      "q": "Which wireless technology is designed specifically for short-distance cable replacement?",
+      "options": [
+        "WiFi",
+        "Bluetooth",
+        "Satellite",
+        "4G cellular"
+      ],
+      "answer": 1,
+      "explanation": "Bluetooth is designed specifically for cable replacement over short distances with limited data rates. It is commonly used for wireless peripherals, audio devices, and personal area networks."
+    },
+    {
+      "q": "A hospital needs to install a network that is immune to electromagnetic interference from medical equipment. Which transmission medium is most appropriate?",
+      "options": [
+        "Unshielded twisted pair",
+        "Shielded twisted pair",
+        "Coaxial cable",
+        "Optical fiber"
+      ],
+      "answer": 3,
+      "explanation": "Optical fiber is most appropriate for hospitals because it is completely immune to electromagnetic interference (EMI) from medical equipment. It transmits light signals rather than electrical signals, ensuring reliable communication in electrically noisy medical environments."
+    },
+    {
+      "q": "An office building needs to connect computers on different floors, with distances up to 80 meters. What is the most cost-effective solution?",
+      "options": [
+        "Single-mode fiber",
+        "Category 5e or 6 UTP cable",
+        "Coaxial cable",
+        "Wireless only"
+      ],
+      "answer": 1,
+      "explanation": "Category 5e or 6 UTP cable is the most cost-effective solution for connecting computers within an office building at distances up to 80-100 meters. It provides sufficient bandwidth for typical office applications and has the lowest installation cost and skill requirements."
+    },
+    {
+      "q": "A data center needs to connect switches in adjacent racks 15 meters apart at 10 Gbps. Which solution provides the best performance?",
+      "options": [
+        "Category 5e UTP",
+        "Category 6 UTP",
+        "Multimode fiber with LC connectors",
+        "Coaxial cable"
+      ],
+      "answer": 2,
+      "explanation": "Multimode fiber with LC connectors provides the best performance for 10 Gbps data center connections over short distances. LC connectors offer high density, and multimode fiber easily supports 10 Gbps over 550 meters while being more cost-effective than single-mode for short runs."
+    },
+    {
+      "q": "A cable TV company needs to run signals from the street to customer homes. Which medium do they typically use?",
+      "options": [
+        "Twisted pair cable",
+        "Coaxial cable",
+        "Optical fiber",
+        "Wireless only"
+      ],
+      "answer": 1,
+      "explanation": "Cable TV and cable internet companies typically use coaxial cable for customer premises wiring. Coaxial cable provides good bandwidth for video and internet signals while being cost-effective for last-mile connections."
+    },
+    {
+      "q": "A telecommunications provider needs to connect cities 200 km apart with high-capacity links. What is the best solution?",
+      "options": [
+        "Category 7 twisted pair with repeaters",
+        "Coaxial cable with amplifiers",
+        "Single-mode fiber optic cable",
+        "Multiple WiFi access points"
+      ],
+      "answer": 2,
+      "explanation": "Single-mode fiber optic cable is best for long-distance, high-capacity telecommunications between cities. It can transmit at high speeds (10's to 100's Gbps) over long distances (up to 100 km or more) with repeaters spaced far apart."
+    },
+    {
+      "q": "A warehouse wants to deploy mobile barcode scanners that connect to the network. What transmission medium should be used?",
+      "options": [
+        "Twisted pair cable",
+        "Coaxial cable",
+        "Optical fiber",
+        "Wireless (WiFi)"
+      ],
+      "answer": 3,
+      "explanation": "Wireless (WiFi) is the appropriate choice for mobile barcode scanners in a warehouse. Wireless media provides the greatest mobility option, allowing workers to move freely throughout the facility while maintaining network connectivity."
+    },
+    {
+      "q": "An outdoor security camera installation requires 120-meter cable runs. The area has high electrical interference. What cable should be used?",
+      "options": [
+        "Category 5e UTP",
+        "Category 6 STP with proper grounding",
+        "Standard coaxial cable",
+        "Plastic optical fiber"
+      ],
+      "answer": 1,
+      "explanation": "Category 6 STP (Shielded Twisted Pair) with proper grounding should be used in high-interference outdoor environments. The metallic shielding provides superior EMI/RFI protection, and Cat 6 provides sufficient bandwidth for IP cameras over the 120-meter distance."
+    },
+    {
+      "q": "A small office has 20 computers to connect to a switch, all within 50 meters. Budget is limited. What is the most practical choice?",
+      "options": [
+        "Single-mode fiber to each computer",
+        "Multimode fiber to each computer",
+        "Category 5e UTP cable",
+        "Wireless mesh network"
+      ],
+      "answer": 2,
+      "explanation": "Category 5e UTP cable is the most practical choice for a small office with budget constraints. It has the lowest cost for media, connectors, and installation, while providing adequate performance (up to 125 Mbps) for typical office applications over 50 meters."
+    },
+    {
+      "q": "A network technician discovers signal degradation on a 5 km twisted pair cable run. What is the most likely cause?",
+      "options": [
+        "Wrong cable color",
+        "Attenuation exceeding cable limitations",
+        "Too many twists in the cable",
+        "Connector polarity reversed"
+      ],
+      "answer": 1,
+      "explanation": "Attenuation is the most likely cause of signal degradation over a 5 km twisted pair cable run. Twisted pair cables require repeaters every 2-3 km for digital signals due to signal weakening over long distances, so 5 km exceeds the cable's limitations without repeaters."
+    },
+    {
+      "q": "A company wants to prevent unauthorized network access through cable tapping. Which medium offers the best security against this threat?",
+      "options": [
+        "Unshielded twisted pair",
+        "Shielded twisted pair",
+        "Coaxial cable",
+        "Optical fiber"
+      ],
+      "answer": 3,
+      "explanation": "Optical fiber offers the best security against cable tapping because it transmits light signals that are difficult to intercept without detection. Any attempt to tap the fiber disrupts the light path, potentially alerting administrators to the security breach."
+    },
+    {
+      "q": "An industrial facility has significant electromagnetic noise from heavy machinery. Computers are 60 meters from the network switch. What solution is recommended?",
+      "options": [
+        "Category 5e UTP",
+        "Category 6 STP or fiber optic cable",
+        "Standard coaxial cable",
+        "Wireless network only"
+      ],
+      "answer": 1,
+      "explanation": "Category 6 STP (Shielded Twisted Pair) or fiber optic cable is recommended for industrial facilities with significant EMI. STP provides good EMI protection at lower cost, while fiber offers complete immunity to electromagnetic noise if budget allows."
+    },
+    {
+      "q": "A university campus needs to connect buildings 500 meters apart with 1 Gbps links. What is the most appropriate solution?",
+      "options": [
+        "Category 5e UTP with repeaters",
+        "Multimode fiber optic cable",
+        "Multiple wireless bridges",
+        "Category 7 twisted pair"
+      ],
+      "answer": 1,
+      "explanation": "Multimode fiber optic cable is most appropriate for 1 Gbps connections over 500 meters between campus buildings. Multimode fiber easily supports this distance and data rate, and it's more cost-effective than single-mode fiber for distances under 550 meters."
+    },
+    {
+      "q": "A remote control application needs wireless communication within a single room, with minimal interference to other systems. Which technology is best?",
+      "options": [
+        "WiFi",
+        "Bluetooth",
+        "Infrared",
+        "4G cellular"
+      ],
+      "answer": 2,
+      "explanation": "Infrared is ideal for remote control applications within a single room. It provides short-range, line-of-sight communication in closed areas without interfering with other wireless systems, and is commonly used in TV remotes and similar devices."
+    },
+    {
+      "q": "What is the main advantage of using a straight-through cable versus a crossover cable in modern networks?",
+      "options": [
+        "Straight-through cables are faster",
+        "Auto-MDIX technology makes crossover cables largely unnecessary",
+        "Straight-through cables are less expensive",
+        "Straight-through cables have better EMI protection"
+      ],
+      "answer": 1,
+      "explanation": "Modern network devices with Auto-MDIX (Automatic Medium-Dependent Interface Crossover) technology can automatically detect and adapt to cable types, making crossover cables largely unnecessary. This is why crossover cables are now considered legacy technology."
+    },
+    {
+      "q": "A network experiences frequent connection issues during thunderstorms. The network uses twisted pair cables in an area with frequent lightning. What improvement would help?",
+      "options": [
+        "Use longer cable runs",
+        "Replace with fiber optic cable",
+        "Add more switches",
+        "Use wireless instead"
+      ],
+      "answer": 1,
+      "explanation": "Replacing twisted pair with fiber optic cable would help because fiber is completely immune to electrical hazards including lightning-induced surges. Twisted pair cables have low immunity to electrical hazards, making them vulnerable during thunderstorms."
+    },
+    {
+      "q": "A technician needs to test fiber optic connectivity. The cable is labeled with an orange jacket. What type of fiber is this?",
+      "options": [
+        "Single-mode fiber",
+        "Multimode fiber",
+        "Hybrid fiber",
+        "Plastic fiber"
+      ],
+      "answer": 1,
+      "explanation": "An orange jacket (or aqua) indicates multimode fiber optic cable. Yellow jackets are used for single-mode fiber cables. This color coding standard helps technicians quickly identify the fiber type during installation and maintenance."
+    },
+    {
+      "q": "An organization needs to connect two routers directly for redundancy. What cable configuration should be used?",
+      "options": [
+        "Straight-through cable",
+        "Crossover cable (or straight-through with Auto-MDIX)",
+        "Rollover cable",
+        "Null modem cable"
+      ],
+      "answer": 1,
+      "explanation": "Traditionally, a crossover cable (one end T568A, other end T568B) should be used for router-to-router connections. However, modern routers with Auto-MDIX can work with straight-through cables as they automatically detect and adjust to the cable type."
+    },
+    {
+      "q": "A company wants to maximize bandwidth between data center core switches 20 meters apart. They need the highest possible speed. What should they use?",
+      "options": [
+        "Category 6a twisted pair",
+        "Multiple Category 6 cables bonded together",
+        "Single-mode fiber with high-speed transceivers",
+        "Coaxial cable bundle"
+      ],
+      "answer": 2,
+      "explanation": "Single-mode fiber with high-speed transceivers provides the highest bandwidth capacity (up to 100 Gbps or more) for data center core switch connections. While the distance is short, fiber's superior bandwidth makes it ideal for maximum-speed backbone connections."
+    },
+    {
+      "q": "A building automation system needs to connect sensors 3 km away from the control center. The system requires 10 Mbps bandwidth. What is the most economical choice?",
+      "options": [
+        "Category 5e UTP with repeaters every 2 km",
+        "Single-mode fiber",
+        "Wireless bridge",
+        "Multiple twisted pair cables"
+      ],
+      "answer": 0,
+      "explanation": "Category 5e UTP with repeaters placed every 2 km is the most economical choice for 10 Mbps over 3 km. While fiber would provide better performance, UTP with appropriate repeaters meets the bandwidth requirement at lower cost for this modest data rate."
+    },
+    {
+      "q": "What is a key consideration when choosing between Category 5e and Category 6 cable for a new office installation?",
+      "options": [
+        "Cat 5e supports 100 Mbps, Cat 6 supports 200 Mbps",
+        "Cat 5e is always cheaper regardless of performance needs",
+        "Cat 6 provides better future-proofing for higher speeds",
+        "They have identical specifications"
+      ],
+      "answer": 2,
+      "explanation": "While Category 5e supports 125 Mbps and Category 6 supports 200 Mbps, the key consideration is future-proofing. Category 6 provides better performance margins and supports higher speeds (10 Gbps over shorter distances), making it a better investment for long-term installations despite higher initial cost."
+    }
+  ],
+  "Module 4: Data Link Layer - Control Protocols": [
+    {
+      "q": "What is the primary responsibility of the Data Link Layer?",
+      "options": [
+        "Routing packets across networks",
+        "Transferring frames from one node to a physically adjacent node over a link",
+        "Managing end-to-end connections",
+        "Providing user interface services"
+      ],
+      "answer": 1,
+      "explanation": "The Data Link Layer is responsible for transferring frames from one node to a physically adjacent node over a link. It handles direct node-to-node communication and ensures reliable data transfer between adjacent devices."
+    },
+    {
+      "q": "What are the two sublayers of the Data Link Layer?",
+      "options": [
+        "Network sublayer and Transport sublayer",
+        "Upper sublayer for data link control and Lower sublayer for media access",
+        "Physical sublayer and Logical sublayer",
+        "Frame sublayer and Packet sublayer"
+      ],
+      "answer": 1,
+      "explanation": "The Data Link Layer is divided into two functionality-oriented sublayers: the upper sublayer responsible for data link control, and the lower sublayer responsible for resolving access to shared media. If the channel is dedicated, the lower sublayer is not needed."
+    },
+    {
+      "q": "Where is the Link Layer typically implemented?",
+      "options": [
+        "In the operating system kernel only",
+        "In the application software",
+        "On-chip or in the Network Interface Card (NIC)",
+        "In the router's firmware"
+      ],
+      "answer": 2,
+      "explanation": "The Link Layer is implemented on-chip or in the Network Interface Card (NIC). This hardware-level implementation allows for efficient frame processing and direct interface with the physical transmission medium."
+    },
+    {
+      "q": "What is framing in the context of the Data Link Layer?",
+      "options": [
+        "Compressing data to reduce transmission time",
+        "Encapsulating datagrams into frames by adding headers and trailers",
+        "Converting analog signals to digital",
+        "Routing frames to their destination"
+      ],
+      "answer": 1,
+      "explanation": "Framing is the process of encapsulating datagrams into frames by adding headers and trailers. This packaging allows the Data Link Layer to add control information, error detection codes, and addressing information to the upper layer data."
+    },
+    {
+      "q": "What type of addresses are used in frame headers to identify source and destination?",
+      "options": [
+        "IP addresses",
+        "MAC addresses",
+        "Port numbers",
+        "Domain names"
+      ],
+      "answer": 1,
+      "explanation": "MAC (Media Access Control) addresses are used in frame headers to identify the source and destination devices. These are physical addresses burned into the Network Interface Card and operate at the Data Link Layer."
+    },
+    {
+      "q": "What is the purpose of flow control in the Data Link Layer?",
+      "options": [
+        "To encrypt data for security",
+        "To restrict the amount of data a sender can send before waiting for acknowledgment",
+        "To compress data for faster transmission",
+        "To route frames to the correct destination"
+      ],
+      "answer": 1,
+      "explanation": "Flow control restricts the amount of data that the sender can send before waiting for acknowledgment from the receiver. This prevents buffer overflow at the receiver and ensures efficient data transmission."
+    },
+    {
+      "q": "What does half-duplex communication mean?",
+      "options": [
+        "Data can flow in both directions, but only one direction at a time",
+        "Data flows in one direction only",
+        "Data flows in both directions simultaneously",
+        "Data is transmitted in encrypted format"
+      ],
+      "answer": 0,
+      "explanation": "Half-duplex communication allows data to flow in both directions, but only one direction at a time. This is in contrast to full-duplex, where data can flow in both directions simultaneously, and simplex, where data flows in only one direction."
+    },
+    {
+      "q": "Which Link Layer service is responsible for detecting corrupted frames?",
+      "options": [
+        "Flow control",
+        "Framing",
+        "Error control",
+        "Media access control"
+      ],
+      "answer": 2,
+      "explanation": "Error control is responsible for detecting and recovering from errors that occur during frame transmission. It includes error detection mechanisms like parity checking, checksums, and CRC, as well as error recovery through retransmission."
+    },
+    {
+      "q": "What is the significance of understanding data boundaries in framing?",
+      "options": [
+        "To encrypt the data properly",
+        "To know where headers can be read and frames begin and end",
+        "To calculate transmission speed",
+        "To determine the IP address"
+      ],
+      "answer": 1,
+      "explanation": "Data boundaries must be known so that headers can be read correctly and the receiver can identify where each frame begins and ends. This is essential for proper frame processing and data extraction."
+    },
+    {
+      "q": "What are the three main types of framing methods?",
+      "options": [
+        "Analog, Digital, and Hybrid",
+        "Byte-oriented, Bit-oriented, and Clock-based",
+        "Wired, Wireless, and Optical",
+        "Synchronous, Asynchronous, and Isochronous"
+      ],
+      "answer": 1,
+      "explanation": "The three main types of framing methods are byte (character) oriented protocols, bit-oriented protocols, and clock-based protocols. Each method uses different techniques to identify frame boundaries."
+    },
+    {
+      "q": "Which Link Layer protocol is mentioned as an example that uses different protocols over different links?",
+      "options": [
+        "HTTP and FTP",
+        "TCP and UDP",
+        "WiFi and Ethernet",
+        "SMTP and POP3"
+      ],
+      "answer": 2,
+      "explanation": "WiFi and Ethernet are examples of different Link Layer protocols used over different types of links. A datagram may be transferred by different Link Layer protocols over different segments of its journey through the network."
+    },
+    {
+      "q": "When is the lower sublayer of the Data Link Layer not needed?",
+      "options": [
+        "When using wireless communication",
+        "When the channel is dedicated",
+        "When transmitting large files",
+        "When using fiber optic cables"
+      ],
+      "answer": 1,
+      "explanation": "If the channel is dedicated (point-to-point), there is no need for the lower sublayer that resolves access to shared media. The lower sublayer is primarily needed when multiple devices share the same transmission medium."
+    },
+    {
+      "q": "What does it mean that each Link Layer protocol provides different services?",
+      "options": [
+        "They all operate at different speeds",
+        "Some may or may not provide reliable data transfer over the link",
+        "They use different cable types exclusively",
+        "They require different operating systems"
+      ],
+      "answer": 1,
+      "explanation": "Each Link Layer protocol provides different services, meaning some may provide reliable data transfer over the link while others may not. The level of service depends on the specific requirements and design of the protocol."
+    },
+    {
+      "q": "What are the two main components added during framing?",
+      "options": [
+        "Encryption and compression",
+        "Header and trailer",
+        "Source code and destination code",
+        "Timestamp and checksum only"
+      ],
+      "answer": 1,
+      "explanation": "During framing, upper layer data is packed into frames by adding a header and a trailer. The header typically contains addressing and control information, while the trailer often contains error detection codes."
+    },
+    {
+      "q": "What is the broadcast MAC address?",
+      "options": [
+        "00:00:00:00:00:00",
+        "FF:FF:FF:FF:FF:FF",
+        "AA:AA:AA:AA:AA:AA",
+        "11:11:11:11:11:11"
+      ],
+      "answer": 1,
+      "explanation": "The broadcast destination MAC address is FF:FF:FF:FF:FF:FF, where all bits are set to 1. This is a special case of the multicast address that is used to send frames to all devices on the local network segment."
+    },
+    {
+      "q": "What is byte stuffing in byte-oriented protocols?",
+      "options": [
+        "Adding extra bytes to increase frame size",
+        "Adding an extra ECS byte whenever there is a flag or escape character in the text",
+        "Removing unnecessary bytes from the frame",
+        "Encrypting bytes for security"
+      ],
+      "answer": 1,
+      "explanation": "Byte stuffing is the process of adding one extra ECS (Escape Character) byte whenever there is a flag or escape character in the text data. This prevents the receiver from mistaking data for control characters."
+    },
+    {
+      "q": "In byte-oriented protocols, what happens if the END flag appears in the actual data?",
+      "options": [
+        "The frame is terminated prematurely",
+        "An ECS (Escape Character) is added before the flag",
+        "The flag is ignored",
+        "The transmission fails"
+      ],
+      "answer": 1,
+      "explanation": "If the END flag appears in the actual data, a special character (ECS) is added before the flag to distinguish it from the actual END flag. This ensures that the receiver doesn't mistake data for the frame delimiter."
+    },
+    {
+      "q": "Which protocol commonly uses byte-oriented framing with byte stuffing?",
+      "options": [
+        "Ethernet",
+        "Point-to-Point Protocol (PPP)",
+        "WiFi (802.11)",
+        "Bluetooth"
+      ],
+      "answer": 1,
+      "explanation": "Point-to-Point Protocol (PPP) uses byte-oriented framing with byte stuffing. PPP is commonly used in modem connections, DSL, and cellular data connections for direct point-to-point communication."
+    },
+    {
+      "q": "In byte counting framing, how does the sender indicate the length of the data?",
+      "options": [
+        "At the end of the frame",
+        "In the middle of the frame",
+        "At the beginning of each frame",
+        "In a separate control frame"
+      ],
+      "answer": 2,
+      "explanation": "In byte counting framing, the sender inserts the length of the data in bytes at the beginning of each frame. The receiver extracts this length value and reads that many bytes to determine the frame boundaries."
+    },
+    {
+      "q": "What is a significant problem with byte counting framing?",
+      "options": [
+        "It requires too much processing power",
+        "If there is an error in the count field, frame synchronization is lost",
+        "It only works with ASCII characters",
+        "It is too slow for modern networks"
+      ],
+      "answer": 1,
+      "explanation": "If there is an error transmitting the count field in byte counting framing, the receiver will read the wrong number of bytes, causing frame synchronization to be lost. This can lead to misinterpretation of subsequent frames."
+    },
+    {
+      "q": "What flag pattern is used in HDLC (High-level Data Link Control) bit-oriented protocol?",
+      "options": [
+        "10101010",
+        "01111110",
+        "11111111",
+        "00000000"
+      ],
+      "answer": 1,
+      "explanation": "HDLC uses the flag pattern 01111110 to mark the start and end of frames. This distinctive pattern helps the receiver identify frame boundaries in bit-oriented protocols."
+    },
+    {
+      "q": "What is bit stuffing in bit-oriented protocols?",
+      "options": [
+        "Adding extra bits to increase frame size",
+        "Inserting a 0 after each sequence of five consecutive 1s followed by a 0",
+        "Removing unnecessary bits from the frame",
+        "Converting bits to bytes"
+      ],
+      "answer": 1,
+      "explanation": "Bit stuffing involves inserting a 0 after each sequence of five consecutive 1s followed by a 0 in the data. This prevents the receiver from mistaking the pattern 0111110 for the HDLC flag (01111110)."
+    },
+    {
+      "q": "In clock-based framing protocols, how are frames distinguished?",
+      "options": [
+        "By special flag characters",
+        "By counting bytes",
+        "By precise, fixed-time intervals with synchronized timing",
+        "By color coding"
+      ],
+      "answer": 2,
+      "explanation": "Clock-based protocols transmit frames at precise, fixed-time intervals and rely on synchronized timing between the sender and receiver. They typically use fixed-size frames and are common in synchronous networks."
+    },
+    {
+      "q": "Which type of network primarily uses clock-based framing protocols?",
+      "options": [
+        "Ethernet LANs",
+        "WiFi networks",
+        "SONET (Synchronous Optical Network)",
+        "Bluetooth networks"
+      ],
+      "answer": 2,
+      "explanation": "Clock-based framing is primarily used in high-speed, synchronous, point-to-point networks like SONET (Synchronous Optical Network). These networks rely on precise timing synchronization for frame delimitation."
+    },
+    {
+      "q": "A data sequence contains '11111101111110'. After bit stuffing for HDLC, what does the sequence become?",
+      "options": [
+        "111111001111110",
+        "1111110011111100",
+        "111110101111110",
+        "No change is needed"
+      ],
+      "answer": 1,
+      "explanation": "After bit stuffing, the sequence becomes '1111110011111100'. A 0 is inserted after the first five 1s (making it 111110), and another 0 is inserted after the second sequence of five 1s (making it 111110), preventing confusion with the flag pattern."
+    },
+    {
+      "q": "What advantage does bit-oriented framing have over byte-oriented framing?",
+      "options": [
+        "It is faster",
+        "It is not restricted to 8-bit character boundaries",
+        "It uses less bandwidth",
+        "It is easier to implement"
+      ],
+      "answer": 1,
+      "explanation": "Bit-oriented framing is not restricted to 8-bit character boundaries, making it more flexible for various data types. This allows for more efficient transmission of data that doesn't naturally align with byte boundaries."
+    },
+    {
+      "q": "In byte stuffing, what happens if the ECS (Escape Character) itself appears in the data?",
+      "options": [
+        "It is ignored",
+        "Another ECS is added before it",
+        "The frame transmission fails",
+        "It is replaced with a different character"
+      ],
+      "answer": 1,
+      "explanation": "If the ECS (Escape Character) itself appears in the data, another ECS is added before it. This recursive approach ensures that all special characters in the data are properly distinguished from control characters."
+    },
+    {
+      "q": "What is the primary characteristic of fixed-size frames in clock-based protocols?",
+      "options": [
+        "All frames contain the same amount of data",
+        "Frames are transmitted at variable intervals",
+        "Frames use special delimiters",
+        "Frames require byte stuffing"
+      ],
+      "answer": 0,
+      "explanation": "In clock-based protocols with fixed-size frames, all frames contain the same amount of data and are transmitted at precise, fixed intervals. This regularity allows the receiver to synchronize based on timing rather than explicit delimiters."
+    },
+    {
+      "q": "Which framing method is most susceptible to errors in the length field?",
+      "options": [
+        "Byte stuffing",
+        "Bit stuffing",
+        "Byte counting",
+        "Clock-based"
+      ],
+      "answer": 2,
+      "explanation": "Byte counting is most susceptible to errors in the length field. If the count field is corrupted, the receiver will read the wrong number of bytes, causing loss of frame synchronization and misinterpretation of subsequent data."
+    },
+    {
+      "q": "A network uses byte-oriented framing with START and END flags. What problem does byte stuffing solve?",
+      "options": [
+        "Prevents data compression",
+        "Prevents confusion when flag patterns appear in the actual data",
+        "Increases transmission speed",
+        "Reduces frame size"
+      ],
+      "answer": 1,
+      "explanation": "Byte stuffing solves the problem of flag patterns appearing in the actual data. By adding escape characters before data that looks like flags, the receiver can distinguish between actual control flags and data that happens to match the flag pattern."
+    },
+    {
+      "q": "What are the two main aspects of error control in the Data Link Layer?",
+      "options": [
+        "Encryption and decryption",
+        "Error detection and error correction/recovery",
+        "Compression and decompression",
+        "Routing and forwarding"
+      ],
+      "answer": 1,
+      "explanation": "Error control consists of two main aspects: error detection (detecting corrupted frames) and error correction/recovery (handling detected errors). Detection methods include parity checks, checksums, and CRC, while recovery is typically handled through retransmission using ARQ protocols."
+    },
+    {
+      "q": "What does ARQ stand for in error recovery protocols?",
+      "options": [
+        "Automatic Repeat Question",
+        "Automatic Repeat reQuest",
+        "Advanced Recovery Queue",
+        "Acknowledged Response Query"
+      ],
+      "answer": 1,
+      "explanation": "ARQ stands for Automatic Repeat reQuest. ARQ protocols are used by the Data Link Layer to handle error recovery through retransmission when corrupted frames are detected."
+    },
+    {
+      "q": "What does single-bit parity checking detect?",
+      "options": [
+        "All types of errors",
+        "Single-bit errors only",
+        "Burst errors reliably",
+        "No errors at all"
+      ],
+      "answer": 1,
+      "explanation": "Single-bit parity checking can detect single-bit errors but is not reliable against burst errors (multiple consecutive bit errors). It sets a parity bit so there is an even or odd number of 1s in the data."
+    },
+    {
+      "q": "In even parity, how is the parity bit set?",
+      "options": [
+        "Always set to 1",
+        "Always set to 0",
+        "Set so the total number of 1s (including parity bit) is even",
+        "Set randomly"
+      ],
+      "answer": 2,
+      "explanation": "In even parity, the parity bit is set so that the total number of 1s, including the parity bit itself, is even. The receiver can then check if the received bits contain an even number of 1s to detect errors."
+    },
+    {
+      "q": "What advantage does two-dimensional parity have over single-bit parity?",
+      "options": [
+        "It is faster",
+        "It can detect and correct single-bit errors",
+        "It uses less overhead",
+        "It works only with even parity"
+      ],
+      "answer": 1,
+      "explanation": "Two-dimensional parity can detect and correct single-bit errors, whereas single-bit parity can only detect them. It arranges data in a grid with both row and column parity bits, allowing identification of the exact error location."
+    },
+    {
+      "q": "How many bit errors can two-dimensional parity detect?",
+      "options": [
+        "Only 1-bit errors",
+        "All 1, 2, or 3-bit errors and some 4-bit errors",
+        "Only 2-bit errors",
+        "Unlimited errors"
+      ],
+      "answer": 1,
+      "explanation": "Two-dimensional parity can detect all 1, 2, or 3-bit errors and some 4-bit errors. This makes it more robust than single-bit parity, though it still has limitations with certain error patterns."
+    },
+    {
+      "q": "What does CRC stand for?",
+      "options": [
+        "Central Recovery Code",
+        "Cyclic Redundancy Check",
+        "Continuous Repeat Checking",
+        "Computed Recovery Checksum"
+      ],
+      "answer": 1,
+      "explanation": "CRC stands for Cyclic Redundancy Check. It is a more powerful error-detection coding method widely used in practice, including in Ethernet and 802.11 WiFi protocols."
+    },
+    {
+      "q": "Which error detection method is widely used in Ethernet and WiFi?",
+      "options": [
+        "Single-bit parity",
+        "Two-dimensional parity",
+        "CRC (Cyclic Redundancy Check)",
+        "Simple checksum"
+      ],
+      "answer": 2,
+      "explanation": "CRC (Cyclic Redundancy Check) is widely used in Ethernet and 802.11 WiFi networks. It provides powerful error detection capabilities and can detect all burst errors less than r+1 bits, where r is the number of CRC bits."
+    },
+    {
+      "q": "In CRC, what does the variable 'G' represent?",
+      "options": [
+        "The data bits to be transmitted",
+        "The generator bit pattern of r+1 bits",
+        "The number of errors detected",
+        "The transmission speed"
+      ],
+      "answer": 1,
+      "explanation": "In CRC, 'G' represents the generator bit pattern of r+1 bits. This generator polynomial is specified in the CRC standard and is used by both sender and receiver for computing and verifying the CRC."
+    },
+    {
+      "q": "How does the CRC sender compute the CRC bits 'R'?",
+      "options": [
+        "By adding all data bits together",
+        "By computing R = remainder of (D × 2^r) divided by G",
+        "By counting the number of 1s in the data",
+        "By encrypting the data"
+      ],
+      "answer": 1,
+      "explanation": "The CRC sender computes R as the remainder of (D × 2^r) divided by G using modulo-2 arithmetic, where D is the data, r is the number of CRC bits, and G is the generator. This ensures that <D,R> is exactly divisible by G."
+    },
+    {
+      "q": "At the CRC receiver, how is an error detected?",
+      "options": [
+        "If the received frame is too short",
+        "If dividing the received frame by G produces a non-zero remainder",
+        "If the frame arrives too late",
+        "If the MAC address is incorrect"
+      ],
+      "answer": 1,
+      "explanation": "The CRC receiver divides the received frame <D,R> by the generator G. If the division produces a non-zero remainder, an error is detected. A zero remainder indicates no error (or an undetectable error pattern)."
+    },
+    {
+      "q": "What type of burst errors can CRC detect?",
+      "options": [
+        "Only single-bit errors",
+        "All burst errors less than r+1 bits",
+        "Only errors in the header",
+        "No burst errors"
+      ],
+      "answer": 1,
+      "explanation": "CRC can detect all burst errors less than r+1 bits, where r is the number of CRC bits. This makes CRC particularly effective against burst errors, which are common in real-world transmission channels."
+    },
+    {
+      "q": "A 7-bit ASCII character with even parity has the bits '10110101'. Is there an error?",
+      "options": [
+        "No error, the parity is correct",
+        "Yes, there is an error",
+        "Cannot determine without more information",
+        "The parity bit is missing"
+      ],
+      "answer": 1,
+      "explanation": "There is an error because the total number of 1s is 5 (odd), which violates even parity. For even parity, the total number of 1s including the parity bit must be even."
+    },
+    {
+      "q": "What is the main limitation of single-bit parity checking?",
+      "options": [
+        "It requires too much computational power",
+        "It is not reliable against burst errors",
+        "It only works with text data",
+        "It increases frame size too much"
+      ],
+      "answer": 1,
+      "explanation": "Single-bit parity checking is not reliable against burst errors. When multiple bits are corrupted in a burst, parity checking may fail to detect the errors, especially if an even number of bits are flipped."
+    },
+    {
+      "q": "In two-dimensional parity, if both a row parity error and column parity error are detected, what can be determined?",
+      "options": [
+        "The total number of errors only",
+        "The exact location of a single-bit error",
+        "Nothing useful",
+        "The transmission speed"
+      ],
+      "answer": 1,
+      "explanation": "When both a row parity error and a column parity error are detected in two-dimensional parity, the intersection of the error row and error column identifies the exact location of a single-bit error, allowing it to be corrected."
+    },
+    {
+      "q": "What happens when a frame with detected errors is received at the Data Link Layer?",
+      "options": [
+        "It is automatically corrected",
+        "It is considered invalid and typically retransmitted using ARQ",
+        "It is passed to the Network Layer anyway",
+        "It is ignored permanently"
+      ],
+      "answer": 1,
+      "explanation": "When an error is detected, the frame is considered invalid. The Data Link Layer handles this using retransmission through Automatic Repeat reQuest (ARQ) protocols, which request the sender to retransmit the corrupted frame."
+    },
+    {
+      "q": "Which error detection method provides the most powerful error detection capability?",
+      "options": [
+        "Single-bit parity",
+        "Two-dimensional parity",
+        "CRC (Cyclic Redundancy Check)",
+        "Simple checksum"
+      ],
+      "answer": 2,
+      "explanation": "CRC (Cyclic Redundancy Check) provides the most powerful error-detection capability among the methods discussed. It can detect all burst errors less than r+1 bits and is widely used in modern networking protocols."
+    },
+    {
+      "q": "In a CRC calculation with data D=101110 and generator G=1001, what is appended to the data?",
+      "options": [
+        "The generator G",
+        "The CRC remainder R",
+        "The data D again",
+        "Nothing"
+      ],
+      "answer": 1,
+      "explanation": "The CRC remainder R is appended to the data D to form the transmitted frame <D,R>. The receiver can then verify the frame by checking if <D,R> is divisible by G with zero remainder."
+    },
+    {
+      "q": "What arithmetic operation is used in CRC calculations?",
+      "options": [
+        "Decimal arithmetic",
+        "Binary arithmetic with carry",
+        "Modulo-2 arithmetic (XOR)",
+        "Floating-point arithmetic"
+      ],
+      "answer": 2,
+      "explanation": "CRC uses modulo-2 arithmetic, which is equivalent to the XOR operation. In modulo-2 arithmetic, addition and subtraction are both performed as XOR, with no carry or borrow operations."
+    },
+    {
+      "q": "If a received frame has the correct parity bit but still contains errors, what likely happened?",
+      "options": [
+        "No errors occurred",
+        "An even number of bits were flipped",
+        "The parity method is working perfectly",
+        "The receiver made a calculation error"
+      ],
+      "answer": 1,
+      "explanation": "If an even number of bits are flipped in transmission, the parity will still be correct, and the error will go undetected. This is a fundamental limitation of single-bit parity checking."
+    },
+    {
+      "q": "What is the purpose of flow control protocols?",
+      "options": [
+        "To encrypt data during transmission",
+        "To coordinate the number of frames sent before waiting for acknowledgment and prevent buffer overflow",
+        "To route frames to the correct destination",
+        "To compress data for efficiency"
+      ],
+      "answer": 1,
+      "explanation": "Flow control protocols restrict and coordinate the number of frames a sender can transmit before waiting for acknowledgment from the receiver. This helps regulate data flow and prevents buffer overflow at the receiver."
+    },
+    {
+      "q": "In the simplest noiseless channel protocol, what does the sender do?",
+      "options": [
+        "Waits for acknowledgment after each frame",
+        "Sends a sequence of frames without waiting for acknowledgment",
+        "Sends frames at random intervals",
+        "Sends only error-free frames"
+      ],
+      "answer": 1,
+      "explanation": "In the simplest noiseless channel protocol, the sender sends a sequence of frames without waiting for acknowledgment. This works only when the channel is completely reliable and the receiver can process frames as fast as they arrive."
+    },
+    {
+      "q": "What does the Stop-and-Wait protocol require the sender to do?",
+      "options": [
+        "Send multiple frames simultaneously",
+        "Send one frame and wait for feedback before sending the next",
+        "Send frames continuously without stopping",
+        "Send frames only during specific time slots"
+      ],
+      "answer": 1,
+      "explanation": "In the Stop-and-Wait protocol, the sender sends one frame and waits for feedback (acknowledgment) from the receiver. When the ACK arrives, the sender sends the next frame. This ensures flow control but has limited efficiency."
+    },
+    {
+      "q": "What additional feature does Stop-and-Wait ARQ have compared to simple Stop-and-Wait?",
+      "options": [
+        "It transmits faster",
+        "It uses sequence numbers and retransmission timers",
+        "It requires less bandwidth",
+        "It only works on noiseless channels"
+      ],
+      "answer": 1,
+      "explanation": "Stop-and-Wait ARQ adds sequence numbers to frames and uses retransmission timers. The sender keeps a copy of the sent frame and retransmits it when the ACK timer expires, providing error recovery on noisy channels."
+    },
+    {
+      "q": "In Stop-and-Wait ARQ, what numbering system is used for sequence numbers?",
+      "options": [
+        "Decimal numbering",
+        "Binary numbering",
+        "Modulo-2 arithmetic",
+        "Hexadecimal numbering"
+      ],
+      "answer": 2,
+      "explanation": "Stop-and-Wait ARQ uses sequence numbers based on modulo-2 arithmetic, meaning only two sequence numbers (0 and 1) are used alternately. This is sufficient since only one frame is outstanding at any time."
+    },
+    {
+      "q": "What does the acknowledgment number in Stop-and-Wait ARQ announce?",
+      "options": [
+        "The number of errors detected",
+        "The sequence number of the next frame expected",
+        "The total frames received",
+        "The transmission speed"
+      ],
+      "answer": 1,
+      "explanation": "The acknowledgment number announces the sequence number of the next frame expected by the receiver. This implicitly acknowledges all frames with lower sequence numbers."
+    },
+    {
+      "q": "What is a sliding window in flow control?",
+      "options": [
+        "A physical component of the network",
+        "An abstract concept defining an imaginary box of frame sequence numbers",
+        "A type of error detection",
+        "A hardware buffer"
+      ],
+      "answer": 1,
+      "explanation": "The sliding window is an abstract concept defining an imaginary box that contains frame sequence numbers. It represents the frames that can be sent (send window) or received (receive window) at any given time."
+    },
+    {
+      "q": "In sliding window protocols, sequence numbers are based on what?",
+      "options": [
+        "Modulo-2 arithmetic",
+        "Modulo-2^m arithmetic",
+        "Decimal arithmetic",
+        "Random numbering"
+      ],
+      "answer": 1,
+      "explanation": "In sliding window protocols, sequence numbers are based on modulo-2^m arithmetic, where m determines the range of sequence numbers. This allows for wrapping of sequence numbers after reaching the maximum value."
+    },
+    {
+      "q": "What is the maximum send window size in a sliding window protocol with m-bit sequence numbers?",
+      "options": [
+        "2^m",
+        "2^m - 1",
+        "m",
+        "m - 1"
+      ],
+      "answer": 1,
+      "explanation": "The maximum send window size is 2^m - 1, where m is the number of bits used for sequence numbers. This limitation is necessary to avoid ambiguity between new frames and retransmissions in the sequence number space."
+    },
+    {
+      "q": "How is Stop-and-Wait ARQ related to Go-Back-N ARQ?",
+      "options": [
+        "They are completely different protocols",
+        "Stop-and-Wait is a special case of Go-Back-N with window size 1",
+        "Go-Back-N is faster in all cases",
+        "They use different sequence numbering systems"
+      ],
+      "answer": 1,
+      "explanation": "Stop-and-Wait ARQ is a special case of Go-Back-N ARQ where the send window size is 1. This means only one frame can be outstanding at a time, which is the defining characteristic of Stop-and-Wait."
+    },
+    {
+      "q": "What happens when the send window slides in a sliding window protocol?",
+      "options": [
+        "The protocol resets",
+        "The window moves forward when valid acknowledgments arrive",
+        "The transmission speed increases",
+        "Errors are corrected automatically"
+      ],
+      "answer": 1,
+      "explanation": "The send window can slide (move forward) one or more slots when valid acknowledgments arrive. This allows the sender to transmit new frames with sequence numbers that are now within the updated window."
+    },
+    {
+      "q": "What is the size of the receive window in basic Go-Back-N protocol?",
+      "options": [
+        "Same as send window",
+        "Size of 1",
+        "Unlimited",
+        "2^m - 1"
+      ],
+      "answer": 1,
+      "explanation": "In basic Go-Back-N protocol, the receive window size is 1. The receiver can only accept frames in order and does not buffer out-of-order frames, which simplifies implementation but reduces efficiency."
+    },
+    {
+      "q": "What does pipelining mean in the context of sliding window protocols?",
+      "options": [
+        "Sending frames through multiple physical cables",
+        "Sending multiple frames before waiting for acknowledgments",
+        "Using multiple protocols simultaneously",
+        "Compressing multiple frames together"
+      ],
+      "answer": 1,
+      "explanation": "Pipelining means sending multiple frames before waiting for acknowledgments. The sliding window allows multiple frames to be 'in flight' simultaneously, greatly improving channel utilization compared to Stop-and-Wait."
+    },
+    {
+      "q": "In Stop-and-Wait ARQ, why does the sender keep a copy of the sent frame?",
+      "options": [
+        "For statistical analysis",
+        "To retransmit if the ACK timer expires",
+        "To compress future frames",
+        "For error detection"
+      ],
+      "answer": 1,
+      "explanation": "The sender keeps a copy of the sent frame so it can retransmit the frame if the ACK timer expires (indicating the frame or its acknowledgment was lost). This copy is discarded once a valid acknowledgment is received."
+    },
+    {
+      "q": "What are the three variables in the send window concept?",
+      "options": [
+        "Speed, Size, and Sequence",
+        "Sf (first frame), Sn (next frame), and Ssize (window size)",
+        "Source, Destination, and Data",
+        "Start, Middle, and End"
+      ],
+      "answer": 1,
+      "explanation": "The send window has three variables: Sf (first outstanding frame), Sn (next frame to send), and Ssize (size of the window). These variables define which frames can be transmitted at any given time."
+    },
+    {
+      "q": "What type of acknowledgment does Go-Back-N use?",
+      "options": [
+        "Individual ACK for each frame",
+        "Cumulative ACK for correctly-received packets so far",
+        "Negative ACK only",
+        "No acknowledgments"
+      ],
+      "answer": 1,
+      "explanation": "Go-Back-N uses cumulative acknowledgments, which acknowledge the highest in-order frame received. An ACK(n) indicates that all frames up to and including frame n have been correctly received."
+    },
+    {
+      "q": "In Go-Back-N, what happens when the receiver receives an out-of-order packet?",
+      "options": [
+        "It buffers the packet and waits for missing packets",
+        "It discards the packet and resends the last ACK",
+        "It forwards the packet to the upper layer",
+        "It sends a negative acknowledgment"
+      ],
+      "answer": 1,
+      "explanation": "In Go-Back-N, when the receiver receives an out-of-order packet, it discards the packet (no buffering) and resends the ACK for the last correctly received in-order frame. This simplifies the receiver but can lead to unnecessary retransmissions."
+    },
+    {
+      "q": "When a timeout occurs in Go-Back-N with window size N, what does the sender do?",
+      "options": [
+        "Retransmits only the timed-out packet",
+        "Retransmits the timed-out packet and all higher sequence number packets in the window",
+        "Waits for more timeouts",
+        "Resets the connection"
+      ],
+      "answer": 1,
+      "explanation": "When a timeout occurs in Go-Back-N, the sender retransmits the timed-out packet (frame n) and all higher sequence number packets currently in the window. This 'go back' behavior gives the protocol its name."
+    },
+    {
+      "q": "In Go-Back-N with window size 4, if ACK(1) is received, what happens to the window?",
+      "options": [
+        "The window closes",
+        "The window moves forward to begin at frame 2",
+        "The window stays in the same position",
+        "The window expands"
+      ],
+      "answer": 1,
+      "explanation": "When ACK(n) is received in Go-Back-N, the window moves forward to begin at frame n+1. So receiving ACK(1) moves the window to begin at frame 2, allowing new frames to be transmitted."
+    },
+    {
+      "q": "What is the main disadvantage of Go-Back-N protocol?",
+      "options": [
+        "It is too complex to implement",
+        "It may retransmit frames that were received correctly but out of order",
+        "It requires too much memory",
+        "It only works on noiseless channels"
+      ],
+      "answer": 1,
+      "explanation": "The main disadvantage of Go-Back-N is that it may retransmit frames that were actually received correctly but were out of order. Since the receiver discards out-of-order frames, all frames from the error point onward must be retransmitted."
+    },
+    {
+      "q": "How does Selective Repeat differ from Go-Back-N in terms of acknowledgments?",
+      "options": [
+        "Selective Repeat uses cumulative ACKs",
+        "Selective Repeat individually acknowledges all correctly received packets",
+        "Selective Repeat doesn't use ACKs",
+        "They use the same ACK mechanism"
+      ],
+      "answer": 1,
+      "explanation": "Selective Repeat individually acknowledges all correctly received packets, whereas Go-Back-N uses cumulative acknowledgments. This allows the sender in Selective Repeat to know exactly which frames need retransmission."
+    },
+    {
+      "q": "What does the Selective Repeat receiver do with out-of-order packets?",
+      "options": [
+        "Discards them immediately",
+        "Buffers them as needed",
+        "Forwards them to upper layer out of order",
+        "Sends negative acknowledgments"
+      ],
+      "answer": 1,
+      "explanation": "The Selective Repeat receiver buffers out-of-order packets as needed. This allows it to avoid discarding correctly received frames, reducing unnecessary retransmissions compared to Go-Back-N."
+    },
+    {
+      "q": "In Selective Repeat, when a frame times out, what does the sender retransmit?",
+      "options": [
+        "All frames in the window",
+        "Only the frame with no ACK",
+        "The frame and all subsequent frames",
+        "Nothing, it waits for more timeouts"
+      ],
+      "answer": 1,
+      "explanation": "In Selective Repeat, when a frame times out, the sender retransmits only that specific frame (the one with no ACK). This selective retransmission is more efficient than Go-Back-N's approach of retransmitting all subsequent frames."
+    },
+    {
+      "q": "A Go-Back-N sender with window size 4 sends frames 0, 1, 2, 3. Frame 2 is lost. What frames need to be retransmitted?",
+      "options": [
+        "Only frame 2",
+        "Frames 2, 3",
+        "Frames 2, 3, and any new frames sent before timeout",
+        "All frames 0, 1, 2, 3"
+      ],
+      "answer": 2,
+      "explanation": "In Go-Back-N, when frame 2 times out, the sender must retransmit frame 2 and all higher sequence number frames in the window (frame 3, plus any additional frames like 4, 5 that may have been sent before the timeout was detected)."
+    },
+    {
+      "q": "Why might Go-Back-N generate duplicate acknowledgments?",
+      "options": [
+        "Due to transmission errors in ACKs",
+        "When out-of-order packets arrive, the receiver resends the last in-order ACK",
+        "The protocol is malfunctioning",
+        "To increase reliability"
+      ],
+      "answer": 1,
+      "explanation": "Go-Back-N may generate duplicate acknowledgments because when out-of-order packets arrive (after a frame is lost), the receiver discards them and resends the ACK for the last correctly received in-order frame each time."
+    },
+    {
+      "q": "In Selective Repeat, if frames 0, 1, 2, 3 are sent and frame 2 is lost but frame 3 is received, what does the receiver do?",
+      "options": [
+        "Discards frame 3",
+        "Buffers frame 3 and sends ACK(3)",
+        "Forwards frame 3 to upper layer immediately",
+        "Sends a negative ACK"
+      ],
+      "answer": 1,
+      "explanation": "In Selective Repeat, the receiver buffers frame 3 and sends ACK(3) even though frame 2 is missing. When frame 2 eventually arrives, the receiver can deliver both frames 2 and 3 in order to the upper layer."
+    },
+    {
+      "q": "What is the main advantage of Selective Repeat over Go-Back-N?",
+      "options": [
+        "Simpler implementation",
+        "Avoids unnecessary retransmissions of correctly received frames",
+        "Uses less bandwidth for ACKs",
+        "Works on noiseless channels only"
+      ],
+      "answer": 1,
+      "explanation": "The main advantage of Selective Repeat is that it avoids unnecessary retransmissions of frames that were received correctly but out of order. By buffering these frames, only the missing frames need to be retransmitted."
+    },
+    {
+      "q": "In Go-Back-N, what timer mechanism is typically used?",
+      "options": [
+        "Separate timer for each frame",
+        "Single timer for the oldest in-flight packet",
+        "No timer is used",
+        "Random timer intervals"
+      ],
+      "answer": 1,
+      "explanation": "Go-Back-N typically uses a single timer for the oldest in-flight packet. When this timer expires, all frames from that point onward are retransmitted. This simplifies timer management compared to maintaining separate timers."
+    },
+    {
+      "q": "A Selective Repeat receiver receives frames 0, 1, 3, 4, 5 (frame 2 is missing). What can it deliver to the upper layer?",
+      "options": [
+        "All frames 0, 1, 3, 4, 5 immediately",
+        "Only frames 0 and 1 until frame 2 arrives",
+        "No frames until frame 2 arrives",
+        "Only frame 0"
+      ],
+      "answer": 1,
+      "explanation": "The Selective Repeat receiver can deliver only frames 0 and 1 to the upper layer because frame 2 is missing. Frames 3, 4, 5 are buffered. Once frame 2 arrives, all buffered frames can be delivered in order."
+    },
+    {
+      "q": "What happens in Go-Back-N when ACK(2) arrives at the sender?",
+      "options": [
+        "Only frame 2 is acknowledged",
+        "Frames 0, 1, and 2 are acknowledged",
+        "The connection resets",
+        "Nothing, ACKs are ignored"
+      ],
+      "answer": 1,
+      "explanation": "In Go-Back-N, ACK(2) is a cumulative acknowledgment that acknowledges frames 0, 1, and 2. This means all frames up to and including frame 2 have been correctly received, and the sender can remove them from its buffer."
+    },
+    {
+      "q": "A network uses Stop-and-Wait ARQ with a 100 ms round-trip time and 1000-bit frames at 1 Mbps. What is the channel utilization?",
+      "options": [
+        "Approximately 1%",
+        "Approximately 10%",
+        "Approximately 50%",
+        "Approximately 100%"
+      ],
+      "answer": 0,
+      "explanation": "Channel utilization = (transmission time) / (transmission time + RTT). Transmission time = 1000 bits / 1 Mbps = 1 ms. Utilization = 1/(1+100) ≈ 1%. Stop-and-Wait is very inefficient for high bandwidth-delay product networks."
+    },
+    {
+      "q": "A company experiences frequent frame corruption on their network. Which combination of techniques should they implement?",
+      "options": [
+        "Byte stuffing and clock-based framing",
+        "CRC for error detection and ARQ for error recovery",
+        "Only increase transmission speed",
+        "Use longer cables"
+      ],
+      "answer": 1,
+      "explanation": "To handle frequent frame corruption, the company should implement CRC for powerful error detection combined with ARQ protocols for error recovery through retransmission. This provides both detection and correction capabilities."
+    },
+    {
+      "q": "A satellite link has a 270 ms one-way delay. Which flow control protocol would be most efficient?",
+      "options": [
+        "Stop-and-Wait ARQ",
+        "Simple Stop-and-Wait",
+        "Go-Back-N or Selective Repeat with large window",
+        "No flow control"
+      ],
+      "answer": 2,
+      "explanation": "For high-delay links like satellites (540 ms RTT), Go-Back-N or Selective Repeat with large windows are most efficient. They allow many frames to be in transit, maintaining high channel utilization despite the long delay."
+    },
+    {
+      "q": "A network designer must choose between Go-Back-N and Selective Repeat for a high-error-rate wireless link. Which is better and why?",
+      "options": [
+        "Go-Back-N because it's simpler",
+        "Selective Repeat because it avoids retransmitting correctly received frames",
+        "Stop-and-Wait because it's more reliable",
+        "Neither, error rates don't matter"
+      ],
+      "answer": 1,
+      "explanation": "Selective Repeat is better for high-error-rate links because it only retransmits frames that were actually lost or corrupted, not correctly received out-of-order frames. This significantly reduces unnecessary retransmissions compared to Go-Back-N."
+    },
+    {
+      "q": "A frame arrives with calculated CRC bits that match the received CRC. What can be concluded?",
+      "options": [
+        "The frame is definitely error-free",
+        "The frame is probably error-free, but some error patterns could go undetected",
+        "The frame definitely has errors",
+        "The CRC calculation was wrong"
+      ],
+      "answer": 1,
+      "explanation": "While matching CRC bits strongly indicate the frame is error-free, CRC cannot detect all possible error patterns. Some rare combinations of errors can produce the same CRC, though this probability is very low for well-designed CRC polynomials."
+    },
+    {
+      "q": "A protocol needs to transmit real-time video where occasional frame loss is acceptable but retransmissions cause delays. What approach is best?",
+      "options": [
+        "Stop-and-Wait ARQ for reliability",
+        "Go-Back-N for better throughput",
+        "Simple protocol without ARQ, accepting some losses",
+        "Selective Repeat with unlimited retries"
+      ],
+      "answer": 2,
+      "explanation": "For real-time video where delays from retransmissions are more problematic than occasional losses, a simple protocol without ARQ is best. This accepts some frame losses but avoids retransmission delays that would disrupt real-time playback."
+    },
+    {
+      "q": "A network administrator notices that Go-Back-N is retransmitting many correctly received frames. What modification would help?",
+      "options": [
+        "Switch to Stop-and-Wait",
+        "Switch to Selective Repeat",
+        "Increase the timeout values",
+        "Decrease the window size"
+      ],
+      "answer": 1,
+      "explanation": "Switching to Selective Repeat would help because it buffers out-of-order frames and only retransmits specifically those frames that are lost or corrupted, avoiding the unnecessary retransmissions characteristic of Go-Back-N."
+    },
+    {
+      "q": "For a protocol using 3-bit sequence numbers, what is the maximum window size for proper operation?",
+      "options": [
+        "3 frames",
+        "7 frames",
+        "8 frames",
+        "Unlimited"
+      ],
+      "answer": 1,
+      "explanation": "With 3-bit sequence numbers (m=3), the sequence number space is 2^3=8. The maximum window size should be 2^m - 1 = 7 frames to avoid ambiguity between sequence numbers of new frames and retransmissions."
+    },
+    {
+      "q": "A point-to-point synchronous optical network needs precise timing for frame delimitation. Which framing method is most appropriate?",
+      "options": [
+        "Byte stuffing",
+        "Bit stuffing",
+        "Clock-based framing",
+        "Byte counting"
+      ],
+      "answer": 2,
+      "explanation": "Clock-based framing is most appropriate for synchronous optical networks like SONET that require precise timing. These networks use fixed-size frames transmitted at precise intervals with synchronized timing between sender and receiver."
+    },
+    {
+      "q": "A wireless sensor network has limited processing power and memory. Between Go-Back-N and Selective Repeat, which is more suitable?",
+      "options": [
+        "Selective Repeat because it's more efficient",
+        "Go-Back-N because it has simpler receiver implementation with no buffering",
+        "Neither, use Stop-and-Wait",
+        "Both are equally suitable"
+      ],
+      "answer": 1,
+      "explanation": "Go-Back-N is more suitable for resource-constrained devices because its receiver implementation is simpler with no buffering requirement (window size of 1). Selective Repeat requires more memory for buffering out-of-order frames and more complex processing logic."
+    }
+  ]
+}
