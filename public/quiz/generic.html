@@ -301,14 +301,14 @@
 <body>
   <div class="container">
     <header>
-      <h1>🌩️ CompTIA Cloud+ CV0-004 Practice Hub</h1>
+      <h1>🌩️ Quiz Hub - Generic</h1>
       <div class="stats">
         <div class="stat-box">
           <div class="stat-number" id="totalQuestions">0</div>
           <div class="stat-label">Total Questions</div>
         </div>
         <div class="stat-box">
-          <div class="stat-number" id="totalDomains">6</div>
+          <div class="stat-number" id="totalDomains">_</div>
           <div class="stat-label">Domains</div>
         </div>
         <div class="stat-box">
@@ -351,7 +351,7 @@
       <div id="examSetup" class="exam-setup">
         <h2>Full Mock Exam</h2>
         <p style="color: #666; margin-bottom: 20px;">
-          Simulates the real CompTIA Cloud+ CV0-004 exam experience
+          Simulates the real exam experience
         </p>
         <div class="exam-info">
           <div class="info-item">
@@ -599,7 +599,7 @@
 
     // ===== Loaders =====
     async function loadQuestionsViaFetch() {
-      const res = await fetch('./questions_cloudplus.json', { cache: 'no-store' });
+      const res = await fetch('./questions.json', { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
       allQuestions = await res.json();
     }
