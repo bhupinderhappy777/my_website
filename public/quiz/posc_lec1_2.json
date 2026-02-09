@@ -1,0 +1,1117 @@
+{
+  "Module 1: Lecture 1 – Government Functions and Finance": [
+    {
+      "q": "According to Sowell, which statement best captures why a modern market economy cannot exist \"in a vacuum\"?",
+      "options": [
+        "Markets naturally self-regulate without any need for external rules or enforcement",
+        "Market transactions require a framework of rules and an authority to enforce contracts and standards",
+        "Government must directly own the major industries for markets to function efficiently",
+        "International organizations, not national governments, provide the real foundation for markets"
+      ],
+      "answer": 1,
+      "explanation": "Sowell argues that market transactions take place within a framework of rules and require someone with the authority to enforce those rules and contracts. Government also sets standards (pounds, miles, bushels) and collects taxes. He explicitly rejects the idea that markets operate in a pure vacuum without this legal and institutional framework."
+    },
+    {
+      "q": "Why does Sowell emphasize the \"reliability\" of laws as more crucial than their perfect impartiality for economic development?",
+      "options": [
+        "Impartial laws are always less efficient than biased ones",
+        "Reliability lowers uncertainty for investors even if the rules are somewhat discriminatory",
+        "Reliability only matters for domestic investors, not foreign investors",
+        "Impartiality can be assumed in all modern legal systems, so reliability is irrelevant"
+      ],
+      "answer": 1,
+      "explanation": "Sowell notes that even discriminatory laws can support development if they are predictable and consistently applied. Investors can plan around known discrimination, but cannot plan around arbitrary, corrupt, or constantly changing rules. Therefore reliability (predictability) is foundational, even if impartiality is desirable."
+    },
+    {
+      "q": "In Sowell's discussion of Congo and Bolivia, what is the key economic consequence of widespread corruption and bureaucratic delay?",
+      "options": [
+        "Higher public-sector wages and lower unemployment",
+        "Short-term boosts in government revenue from bribes",
+        "Foregone investments, delayed activity, and the emigration of skilled people",
+        "Greater equality because corruption affects everyone the same way"
+      ],
+      "answer": 2,
+      "explanation": "Sowell stresses that the true cost of corruption is not the bribe itself but the opportunities that never materialize: enterprises not started, investments not made or delayed, output and employment that fail to expand, and the loss of talented, entrepreneurial people who leave. These are large, long-term economic losses."
+    },
+    {
+      "q": "The World Bank finding that it takes less than 10 days to start a business in Singapore but 155 days in Congo primarily illustrates which concept?",
+      "options": [
+        "The importance of exchange rates for business formation",
+        "How differences in legal efficiency and bureaucracy affect economic activity",
+        "That poorer countries usually have more careful regulatory screening",
+        "That natural resource endowments are more important than institutions"
+      ],
+      "answer": 1,
+      "explanation": "The contrast in days required to start a business highlights how legal efficiency, administrative capacity, and bureaucratic obstacles shape the ease of doing business. Sowell uses this to show how legal and institutional differences, not just resources, drive economic outcomes."
+    },
+    {
+      "q": "Why do property rights, in Sowell's view, often benefit people with little or no property of their own?",
+      "options": [
+        "Because property owners are legally required to donate part of their holdings to the poor",
+        "Because property rights ensure that only the rich can influence economic policy",
+        "Because property rights generate more efficient use of resources, lowering prices and raising living standards for everyone",
+        "Because property rights allow governments to tax land more easily and fund welfare programs"
+      ],
+      "answer": 2,
+      "explanation": "Sowell argues that property rights create strong incentives for efficient use, maintenance, and investment. Even people who own little benefit from the resulting greater output and lower prices. The gain is systemic: more efficient use of land, capital, and resources benefits the population at large."
+    },
+    {
+      "q": "The classic \"tragedy of the commons\" example with overgrazed pasture land is used by Sowell to demonstrate what about property systems?",
+      "options": [
+        "That government ownership is always superior to private ownership",
+        "That unowned or commonly owned resources tend to be overused when individual users do not bear full costs",
+        "That private landowners will always deny access to all others",
+        "That traditional societies manage common resources perfectly without rules"
+      ],
+      "answer": 1,
+      "explanation": "In the commons, each herder has an incentive to add more animals because the costs are spread across all users. This leads to overuse. Privately owned adjacent land is better maintained because the owner internalizes the costs and benefits. This illustrates how well-defined property rights mitigate overuse problems."
+    },
+    {
+      "q": "Which example best illustrates Sowell's notion of a \"self-monitoring\" system created by property rights?",
+      "options": [
+        "A government inspector checking every shipment of food leaving a warehouse",
+        "A salaried manager overseeing public housing tenants",
+        "A farmer removing rotten fruit from his own produce before shipping it to market",
+        "A consumer complaints hotline operated by a regulatory agency"
+      ],
+      "answer": 2,
+      "explanation": "Sowell contrasts costly external monitoring with automatic self-monitoring by owners. The farmer who owns the produce has a direct financial incentive to remove rotten fruit to prevent spoilage of the rest. This behavior requires no external inspector, only the owner's stake in the asset."
+    },
+    {
+      "q": "In Sowell's Soviet agricultural shipping example, what was the primary reason for widespread spoilage of food in transit?",
+      "options": [
+        "Lack of refrigeration technology",
+        "Absence of clear property rights linking losses to those handling the goods",
+        "Excessive competition between shipping companies",
+        "Price controls that made food too cheap"
+      ],
+      "answer": 1,
+      "explanation": "Food was nominally \"owned by the people\" and handlers were salaried bureaucrats whose pay did not depend on care taken. Without property rights that made them bear the cost of spoilage, they had little incentive to prevent it. This demonstrates how unclear ownership undermines care and efficiency."
+    },
+    {
+      "q": "Which of the following best illustrates an external cost in Sowell's framework?",
+      "options": [
+        "A company paying overtime to its workers",
+        "A coal-fired power plant emitting smoke that damages nearby property",
+        "Consumers paying a sales tax at the point of purchase",
+        "A firm investing in worker training programs"
+      ],
+      "answer": 1,
+      "explanation": "An external cost is a cost imposed on third parties not part of the transaction. Smoke from a coal plant that dirties nearby houses and harms health is a classic external cost because the damage is not reflected in the plant's or buyer's private costs unless regulated."
+    },
+    {
+      "q": "Why does Sowell argue that mud flaps on vehicles are underprovided if left purely to individual choice?",
+      "options": [
+        "Because mud flaps are too expensive for most drivers",
+        "Because drivers derive no significant safety benefit from mud flaps",
+        "Because each driver benefits from others having mud flaps but gets little direct benefit from installing them on their own car",
+        "Because manufacturers refuse to install mud flaps unless paid by the government"
+      ],
+      "answer": 2,
+      "explanation": "Mud flaps largely benefit drivers behind you by reducing spray. You gain little from putting them on your own car, but benefit when others do so. This positive externality means that private incentives underprovide them unless mandated by regulation."
+    },
+    {
+      "q": "National defense, in Sowell's analysis, is an example of:",
+      "options": [
+        "A purely private good easily provided through markets",
+        "A good with divisible benefits that can be sold individually",
+        "An indivisible benefit where either everyone in a jurisdiction is defended or no one is",
+        "A service that only benefits the wealthy"
+      ],
+      "answer": 2,
+      "explanation": "Defense has indivisible benefits: if a territory is defended, all residents enjoy the protection, regardless of their individual payments. This indivisibility and the free-rider problem make it ill-suited to private market provision and justify tax-financed collective provision."
+    },
+    {
+      "q": "Which situation best exemplifies a private, non-governmental solution to an externality problem in Sowell's sense?",
+      "options": [
+        "A national legislature passing an air-quality act",
+        "A shopping mall owner maintaining clean common areas to attract more tenants and customers",
+        "A central bank adjusting interest rates to control inflation",
+        "A municipality imposing fines for littering"
+      ],
+      "answer": 1,
+      "explanation": "The mall bears the cost of cleaning but recoups it through higher rents from tenants who benefit from greater foot traffic. This aligns incentives without direct government intervention and shows how private arrangements can internalize externalities."
+    },
+    {
+      "q": "William Easterly's term \"radius of trust\" best explains which of the following patterns?",
+      "options": [
+        "Why some countries adopt different exchange-rate regimes",
+        "Why firms in some societies remain small, family-based enterprises",
+        "Why democracies have lower inflation than authoritarian regimes",
+        "Why stock markets are more volatile in emerging economies"
+      ],
+      "answer": 1,
+      "explanation": "Where people only trust family members, firms tend to remain small because hiring outsiders is perceived as too risky. Easterly's \"radius of trust\" describes how far trust extends beyond family, which crucially affects firm size, specialization, and economic complexity."
+    },
+    {
+      "q": "The examples of Marwari traders in India and Hasidic jewelers in New York illustrate what advantage in corrupt or low-trust environments?",
+      "options": [
+        "Access to better formal courts",
+        "Ability to ignore property rights",
+        "Strong internal social sanctions enabling reliable verbal contracts within the group",
+        "Government subsidies to minority groups"
+      ],
+      "answer": 2,
+      "explanation": "These groups rely on intense internal social control: cheating a fellow member carries high social and economic penalties. This trust within the group allows large-scale transactions based on verbal agreements even when the broader legal system is unreliable or corrupt."
+    },
+    {
+      "q": "In Sowell's discussion, how can well-intentioned rent control laws end up favoring dishonest landlords over honest ones?",
+      "options": [
+        "Honest landlords receive more government subsidies",
+        "Dishonest landlords are legally exempt from compliance",
+        "Rent control caps legal rents below the cost of required services, making honest compliance unprofitable while dishonest landlords save money by cutting services or taking bribes",
+        "Rent control applies only to new buildings, not old ones"
+      ],
+      "answer": 2,
+      "explanation": "When controlled rents do not cover legally required services (heat, maintenance, hot water), honest landlords may face negative returns. Dishonest landlords who skimp on services or accept under-the-table payments can still profit, enabling them to outbid honest landlords for buildings."
+    },
+    {
+      "q": "Which statement best captures Sowell's distinction between \"costs to government\" and \"costs to society\"?",
+      "options": [
+        "They are always identical because government represents society",
+        "Government expenditures fully measure total social costs of a policy",
+        "Government may spend little while imposing enormous opportunity costs on private actors",
+        "Only private expenditures matter because government spending is always waste"
+      ],
+      "answer": 2,
+      "explanation": "Sowell highlights cases where government outlays (e.g., for a planning agency) are small, but the private investment opportunities blocked or destroyed by rules are enormous. Social cost is the value of foregone alternatives, not just the budgetary cost to government."
+    },
+    {
+      "q": "In the urban redevelopment example, why does Sowell argue that \"just compensation\" based on post-announcement market values understates the real cost of the project?",
+      "options": [
+        "Because courts always undervalue land",
+        "Because compensation excludes relocation expenses for tenants",
+        "Because the very announcement of redevelopment reduces market values by scaring off potential buyers and investors",
+        "Because governments overestimate construction costs"
+      ],
+      "answer": 2,
+      "explanation": "Once redevelopment is announced, private buyers anticipate expropriation and retreat, driving prices down. Government then buys at these depressed prices, but the real cost to society is the value that land would have commanded absent the project-induced uncertainty."
+    },
+    {
+      "q": "Which example best demonstrates Sowell's point that political incentives favor visible new projects over maintenance?",
+      "options": [
+        "A government allocating more funding to central bank operations than to social programs",
+        "A minister cutting their own salary to balance the budget",
+        "A mayor inaugurating a new stadium while deferring road repairs despite higher vehicle damage costs",
+        "A legislature indexing pensions to inflation"
+      ],
+      "answer": 2,
+      "explanation": "Sowell, echoing Adam Smith, notes that large, visible projects like highways or stadiums create ribbon-cutting opportunities and media coverage, while mundane but economically crucial maintenance (like pothole repairs) yields little political credit, even if it is more cost-effective."
+    },
+    {
+      "q": "Why does Sowell argue that open-ended guarantees, such as deposit insurance or loan guarantees, can appear costless in the short term but be extremely expensive in the long run?",
+      "options": [
+        "Because the funds are always invested in low-yield assets",
+        "Because they only pay out when specific adverse events occur and can accumulate massive liabilities when those events materialize",
+        "Because they force governments to raise interest rates permanently",
+        "Because they automatically reduce tax revenues every year"
+      ],
+      "answer": 1,
+      "explanation": "Guarantees do not require immediate cash outlays when loans perform or deposits remain safe, so they look cheap or free. However, when crises occur (e.g., savings and loan collapse), the accumulated guarantees turn into huge actual obligations, often in the hundreds of billions."
+    },
+    {
+      "q": "What is the core structural difference between government pensions like Social Security and private annuities, according to Sowell?",
+      "options": [
+        "Only government pensions are indexed to inflation",
+        "Government pensions invest in physical capital, while private annuities do not",
+        "Private annuities invest contributions to create real assets that fund future payments, whereas government pensions typically pay current retirees out of current workers' contributions",
+        "Private annuities guarantee a fixed real rate of return while government pensions do not"
+      ],
+      "answer": 2,
+      "explanation": "Private annuities invest funds in real assets (factories, buildings, financial instruments). Their returns finance future payments. Government pensions in pay-as-you-go systems use current contributions to pay current retirees, creating a dependence on future taxpayers and demographic ratios rather than accumulated assets."
+    },
+    {
+      "q": "Why are government pension systems especially vulnerable to demographic changes such as declining birth rates and increased life expectancy?",
+      "options": [
+        "Because pension formulas are automatically indexed to GDP growth",
+        "Because benefits are usually paid in foreign currency",
+        "Because they rely on a stable or growing ratio of workers to retirees to finance benefits pay-as-you-go",
+        "Because governments are legally forbidden from adjusting pension ages"
+      ],
+      "answer": 2,
+      "explanation": "In pay-as-you-go systems, current workers fund current retirees. If the number of retirees grows faster than the number of workers, or workers' productivity and wages do not keep pace, financing promised benefits becomes increasingly difficult, leading to fiscal stress or benefit cuts."
+    },
+    {
+      "q": "In the Alaska cigarette tax case, what key lesson about tax policy does Sowell draw?",
+      "options": [
+        "High tax rates always guarantee higher revenues",
+        "Consumers never adjust behavior in response to tax changes",
+        "Large rate increases can sharply reduce the tax base through stockpiling and avoidance, leading to revenue declines",
+        "Cigarette taxes are uniquely ineffective compared to other excise taxes"
+      ],
+      "answer": 2,
+      "explanation": "Sowell notes that before the tax increase took effect, smokers stockpiled cigarettes and then reduced purchases, causing revenue collections to drop by about 60%. This illustrates that raising rates can reduce the tax base sufficiently to lower total revenue."
+    },
+    {
+      "q": "What did the Maryland \"millionaire tax\" experience reveal about the relationship between tax rates and taxpayer mobility?",
+      "options": [
+        "High-income taxpayers never move in response to tax changes",
+        "Raising marginal rates on high earners can encourage them to relocate, shrinking the tax base and reducing revenues",
+        "Only corporate taxes affect mobility, not personal income taxes",
+        "Mobility is driven solely by local public services, not tax rates"
+      ],
+      "answer": 1,
+      "explanation": "Maryland's surcharge on high earners led to a drop in the number of millionaires filing in the state, and revenues fell instead of rising. Sowell uses this to show that high earners can and do move in response to tax differentials, eroding the intended tax base."
+    },
+    {
+      "q": "Why did US federal capital gains tax cuts in 1997 lead to higher, not lower, total revenues from this tax, according to Sowell?",
+      "options": [
+        "Capital gains are completely inelastic with respect to tax rates",
+        "Lower rates encouraged more realizations and new investments, expanding the taxable base more than enough to offset the lower rate",
+        "The government simultaneously increased other taxes to compensate",
+        "The cut only applied to very small investors"
+      ],
+      "answer": 1,
+      "explanation": "Sowell explains that at high tax rates, investors defer realizing gains or use shelters. When the rate was cut, many realized gains and reallocated capital, which dramatically increased the volume of taxable transactions, producing higher revenue at a lower rate."
+    },
+    {
+      "q": "Which scenario best illustrates the concept of tax incidence rather than statutory liability?",
+      "options": [
+        "A law states that only consumers shall pay the value-added tax at checkout",
+        "The government shifts corporate income taxes to property taxes",
+        "An employer that is legally responsible for half of payroll taxes lowers wages to offset this cost",
+        "A government imposes a lump-sum license fee on businesses"
+      ],
+      "answer": 2,
+      "explanation": "Although the law says the employer pays half of payroll taxes, Sowell emphasizes that the true burden falls on workers through lower wages if employers incorporate these costs into what they are willing to pay for labor. Tax incidence is about who bears the economic burden, not who writes the cheque."
+    },
+    {
+      "q": "In Sowell's South African gold example, why can producers not simply pass the full $10/ounce tax on to buyers in the world market?",
+      "options": [
+        "Because international organizations prohibit tax shifting",
+        "Because gold has no substitutes in industrial uses",
+        "Because South African gold is indistinguishable from other gold, and buyers can switch to untaxed sources at the world price",
+        "Because domestic law caps the price of gold at home"
+      ],
+      "answer": 2,
+      "explanation": "Gold is a homogeneous commodity traded on a world market. If South Africa tried to raise its price by $10/ounce, buyers would switch to suppliers not subject to that tax. Thus, most of the tax burden falls on South African producers, not buyers."
+    },
+    {
+      "q": "How did the share of US federal income tax revenue paid by the top 5% of earners change after top marginal rates fell from 70% to 35%, according to Sowell?",
+      "options": [
+        "It fell significantly, confirming that tax cuts mainly help the rich",
+        "It stayed about the same, indicating no distributional change",
+        "It rose from about 37% to over 50%, indicating a higher effective burden on top earners",
+        "It fluctuated randomly without any clear pattern"
+      ],
+      "answer": 2,
+      "explanation": "Sowell notes that despite rhetoric about \"tax cuts for the rich,\" the top 5% of earners' share of income tax revenue increased after rate cuts. This suggests that lower marginal rates reduced avoidance and broadened the base, increasing their share of the total tax burden."
+    },
+    {
+      "q": "Why does Sowell criticize the Congressional Budget Office's repeated projections about the revenue effects of capital gains tax changes?",
+      "options": [
+        "Because the CBO always assumes zero economic growth",
+        "Because the CBO models ignore behavioral responses to tax rate changes, leading to systematic underestimation of revenues after cuts and overestimation after increases",
+        "Because the CBO is legally forbidden from analyzing capital gains taxes",
+        "Because the CBO uses outdated inflation assumptions"
+      ],
+      "answer": 1,
+      "explanation": "Sowell argues that the CBO relies on static scoring that does not consider how investors change behavior when tax rates change. As a result, it repeatedly mispredicts revenue outcomes, underestimating revenues after cuts and overestimating them after increases."
+    },
+    {
+      "q": "Which of the following is the best example of an \"automatic stabilizer\" in fiscal policy?",
+      "options": [
+        "A discretionary stimulus package passed by parliament in a recession",
+        "Unemployment insurance payments that rise when the economy weakens and fall when it improves",
+        "A central bank decision to cut interest rates",
+        "A balanced-budget rule requiring spending cuts when revenues fall"
+      ],
+      "answer": 1,
+      "explanation": "Automatic stabilizers like unemployment insurance and progressive income taxes adjust automatically with the business cycle. When the economy slows, more people qualify for benefits and tax revenues fall, injecting net spending without new legislative action."
+    },
+    {
+      "q": "Sowell argues that when governments subsidize goods so that the purchase price is below what the good costs to produce, what typically happens?",
+      "options": [
+        "Only the rich benefit from the subsidy",
+        "The public ends up paying more in total than the good is worth to them, through taxes plus the subsidized price",
+        "Demand falls because people mistrust subsidized goods",
+        "Overall spending in the economy declines"
+      ],
+      "answer": 1,
+      "explanation": "If a good costs $10 but consumers are only willing to pay $6, government may supply it for $6 and cover $4 with taxes. The public effectively pays $10 for something they value at $6, indicating a misallocation of resources and negative net benefit."
+    },
+    {
+      "q": "Which scenario best captures Sowell's critique of equating government expenditure with total social cost?",
+      "options": [
+        "A government spends heavily on teacher salaries in a small town",
+        "An environmental agency issues regulations that prevent development on land it later buys cheaply for a park",
+        "A legislature cuts its own salaries during a recession",
+        "A government borrows to finance a new airport"
+      ],
+      "answer": 1,
+      "explanation": "By restricting development, the agency drives down land values, then acquires the land cheaply. Official spending understates the social cost, which includes the foregone value of what private owners could have done with the land under different rules."
+    },
+    {
+      "q": "Sowell notes that in some high-crime neighborhoods, businesses face much higher operating costs than in low-crime areas. Which of the following is a direct economic consequence of this difference?",
+      "options": [
+        "Greater access to credit for firms in high-crime areas",
+        "Lower prices in high-crime neighborhoods due to competition",
+        "Higher prices and fewer services for residents of high-crime neighborhoods",
+        "No difference, because security costs are tax-deductible"
+      ],
+      "answer": 2,
+      "explanation": "Businesses in high-crime areas must spend more on security measures, which raises their cost structure. Some firms refuse to locate there; those that do often charge higher prices or provide lower-quality services, leaving residents worse off despite not being responsible for the crime."
+    },
+    {
+      "q": "How does Sowell use the example of landlords vandalizing their own buildings in Hong Kong under rent control to make a broader point about policy design?",
+      "options": [
+        "That vandalism is usually caused by tenants, not landlords",
+        "That strict regulation always reduces rental supply",
+        "That policies must be judged by their incentive effects and actual outcomes, not by their intentions",
+        "That Asian housing markets are uniquely prone to distortion"
+      ],
+      "answer": 2,
+      "explanation": "Landlords vandalized their legally unprofitable buildings to make them uninhabitable and tear them down. Sowell argues this shows that policymakers must consider how rules change incentives; well-intended laws can produce perverse and destructive behavior."
+    },
+    {
+      "q": "Which of the following best summarizes Sowell's warning about open-ended government insurance schemes like the savings and loan guarantees in the United States?",
+      "options": [
+        "They always encourage inflation",
+        "They appear inexpensive because no money is spent up front, but when defaults occur the ultimate costs can be comparable to a major war",
+        "They primarily hurt foreign investors rather than domestic taxpayers",
+        "They are easily reversed without political cost"
+      ],
+      "answer": 1,
+      "explanation": "The S&L crisis cost over $500 billion, roughly equivalent to several years of war spending. Guarantees look cheap until a crisis triggers mass claims. Sowell uses this to highlight the danger of ignoring contingent liabilities."
+    },
+    {
+      "q": "From Sowell's perspective, which criterion should be central when evaluating property rights regimes?",
+      "options": [
+        "Whether they conform to philosophical notions of distributive justice",
+        "Whether they maximize government control over resources",
+        "Whether they improve the allocation of scarce resources with alternative uses and raise overall living standards",
+        "Whether they always preserve traditional ownership patterns"
+      ],
+      "answer": 2,
+      "explanation": "Sowell emphasizes the economic function of property rights: how they affect the use and allocation of scarce resources, the incentives for investment and care, and ultimately the living standards of the population."
+    },
+    {
+      "q": "Why does Sowell consider wealthy homeowners' use of zoning and open-space laws to be a restriction of property rights that often harms the less affluent?",
+      "options": [
+        "Because these laws reduce local tax revenues across all income groups",
+        "Because they are always unconstitutional",
+        "Because they prevent land from being subdivided into smaller, more affordable lots, blocking the market mechanism that would allow middle-income households to move in",
+        "Because they primarily protect environmental amenities rather than housing"
+      ],
+      "answer": 2,
+      "explanation": "By requiring large lots or restricting development, affluent communities prevent entrepreneurs from converting estates into denser, more affordable housing. This neutralizes the aggregate purchasing power of the non-rich and keeps communities exclusive."
+    },
+    {
+      "q": "In Sowell's framework, which of the following would most likely be classified as a regressive tax?",
+      "options": [
+        "A tax that only applies to luxury cars",
+        "An income tax with higher rates on higher brackets",
+        "A payroll tax that applies only to earnings below a fixed ceiling",
+        "A 90% tax on inheritances above a certain threshold"
+      ],
+      "answer": 2,
+      "explanation": "A payroll tax with a cap on taxable earnings imposes a higher effective rate on lower and middle incomes than on higher incomes (income above the cap is untaxed), which makes it regressive in incidence."
+    },
+    {
+      "q": "Sowell's critique of purely static tax analysis implies which of the following for policymakers designing new tax measures?",
+      "options": [
+        "They should ignore projected behavioral responses because they are too hard to estimate",
+        "They should assume all taxpayers are perfectly inelastic in their responses",
+        "They must account for changes in work, investment, and location decisions when forecasting revenues and economic effects",
+        "They should prioritize raising statutory rates as the main lever of policy"
+      ],
+      "answer": 2,
+      "explanation": "The repeated mispredictions of revenue changes when rates changed show that ignoring behavioral responses leads to unreliable forecasts. Policymakers must consider elasticity of supply, demand, and mobility when assessing tax changes."
+    },
+    {
+      "q": "According to Sowell, what is a key difference between a government that primarily enforces laws and contracts and one that also engages in widespread ownership and control of industry?",
+      "options": [
+        "Only the latter can maintain rule of law",
+        "The former focuses on creating a predictable framework, while the latter directly allocates resources and substitutes political decisions for market signals",
+        "The former cannot collect taxes, while the latter can",
+        "The former is always more democratic than the latter"
+      ],
+      "answer": 1,
+      "explanation": "When government confines itself mainly to enforcing laws and contracts, it shapes the rules of the game. When it also owns and directs industries, it begins to replace decentralized price and profit signals with political and bureaucratic allocation decisions, with different incentive structures."
+    },
+    {
+      "q": "In the Indian example with Aditya Birla, what is the main economic cost of requiring numerous licenses, approvals, and clearances for industrial projects?",
+      "options": [
+        "It ensures all projects are of the highest quality",
+        "It raises government revenues through official fees",
+        "It delays or prevents investment, pushing capital and jobs to other countries",
+        "It reduces corruption by increasing oversight points"
+      ],
+      "answer": 2,
+      "explanation": "The protracted approval process induced Birla to invest abroad, taking with him jobs, tax revenues, and economic opportunities that India could have had. Sowell uses this to show how overregulation and bureaucratic obstacles stifle domestic growth."
+    },
+    {
+      "q": "Which scenario most clearly reflects Sowell's concern about government policies that unintentionally reward dishonesty over honesty?",
+      "options": [
+        "A competitive grant program that favors innovative proposals",
+        "A rent control regime where only landlords who illegally cut services or take bribes can make a profit",
+        "A progressive tax code with clear brackets",
+        "A transparent procurement process with open bidding"
+      ],
+      "answer": 1,
+      "explanation": "By capping rents below the cost of mandated services, rent control makes honest compliance financially impossible. Landlords who break the rules or accept under-the-table payments can still make money, thus shifting property ownership toward less scrupulous actors."
+    },
+    {
+      "q": "Sowell's repeated examples of unreliable legal systems (Congo, Bolivia, parts of Russia) primarily aim to show that:",
+      "options": [
+        "Economic success depends mainly on climate and geography",
+        "Legal institutions are secondary to culture in determining growth",
+        "Without predictable enforcement of laws and contracts, natural resources and human talent cannot be fully developed",
+        "Foreign aid can easily substitute for domestic legal reforms"
+      ],
+      "answer": 2,
+      "explanation": "Countries with abundant resources can remain poor if investors cannot rely on contracts, property rights, and fair legal processes. Sowell emphasizes that predictable legal enforcement is a prerequisite for large, long-term investments needed to develop such resources."
+    },
+    {
+      "q": "Why does Sowell say that legal discrimination can sometimes still allow minority groups (e.g., Chinese in Southeast Asia, Christians and Jews in the Ottoman Empire) to prosper economically?",
+      "options": [
+        "Because they are exempt from taxes",
+        "Because their rights, although limited, are reliably enforced, allowing them to plan and invest within those constraints",
+        "Because majority groups voluntarily avoid economic activity",
+        "Because discriminatory laws are never enforced"
+      ],
+      "answer": 1,
+      "explanation": "Even though these groups had fewer rights than the majority, the rights they did have were predictable and reliable. This allowed them to engage in commerce, banking, and industry with sufficient security to thrive economically within their niche."
+    }
+  ],
+  "Module 2: Lecture 2 – Canadian Regime and Business–Government Relations": [
+    {
+      "q": "Which feature most clearly distinguishes Canada's Westminster system from the American presidential system?",
+      "options": [
+        "Canada has a written constitution while the United States does not",
+        "Canada separates the executive and legislative branches completely, while the United States fuses them",
+        "Canada fuses executive and legislative power in a Cabinet drawn from Parliament, while the United States separates personnel and powers",
+        "Canada directly elects its prime minister, while the United States does not directly elect its president"
+      ],
+      "answer": 2,
+      "explanation": "In Canada, the prime minister and ministers are drawn from the House of Commons and sit in the legislature while exercising executive functions. In the US, Cabinet members cannot be members of Congress, and the branches are institutionally separate."
+    },
+    {
+      "q": "According to Wernick, which statement best describes responsible government in the Canadian context?",
+      "options": [
+        "A system where the executive is directly elected by the people for a fixed term",
+        "A regime in which legislative and executive power are fused in a Cabinet that is accountable to an elected assembly",
+        "A system in which courts supervise all executive decisions before they take effect",
+        "A structure where provincial governments report directly to the Crown, bypassing Parliament"
+      ],
+      "answer": 1,
+      "explanation": "Responsible government means the Crown acts on the advice of ministers who sit in and are accountable to the elected House of Commons. The Cabinet must maintain the confidence of the House in order to govern."
+    },
+    {
+      "q": "In the Westminster model, what is the primary role of the Governor General during an unclear election outcome, such as a hung Parliament?",
+      "options": [
+        "To dictate policy priorities for the next government",
+        "To unilaterally appoint a new prime minister from outside Parliament",
+        "To determine, based on conventions, which party leader is best placed to command the confidence of the House and invite them to form government",
+        "To call an immediate nationwide referendum on who should govern"
+      ],
+      "answer": 2,
+      "explanation": "The Governor General acts as the Crown's representative and, in rare situations where it is unclear who should form government, exercises reserve powers guided by constitutional conventions to select the leader most likely to command the confidence of the House."
+    },
+    {
+      "q": "Why is it a strong convention in Canada that ministers (including the prime minister) should be Members of Parliament?",
+      "options": [
+        "Because the written Constitution explicitly forbids non-MPs from serving as ministers",
+        "Because ministers must be directly answerable to, and removable by, the elected House of Commons",
+        "Because senators cannot legally hold any executive office",
+        "Because the governor general personally appoints ministers from the civil service"
+      ],
+      "answer": 1,
+      "explanation": "Wernick emphasizes that prime ministers and ministers come from the elected House to ensure direct accountability to the people’s representatives. Although there are rare exceptions (e.g., ministers from the Senate or appointed before election), these confirm the strength of the convention."
+    },
+    {
+      "q": "Why are fixed election dates in the US not fully transplantable to a Westminster system like Canada's, according to the lecture materials?",
+      "options": [
+        "Because Canada has no constitutional authority to regulate elections",
+        "Because responsible government requires flexibility to dissolve the House when confidence is lost or a minority Parliament becomes unworkable",
+        "Because Canadian voters are opposed to fixed dates",
+        "Because the Crown prefers to call elections at random intervals"
+      ],
+      "answer": 1,
+      "explanation": "In a responsible government system, the executive must be able to seek a new mandate when it loses confidence or when a minority Parliament becomes dysfunctional. This flexibility is built into the conventions and makes rigid fixed-date requirements problematic."
+    },
+    {
+      "q": "Which scenario would most clearly trigger the confidence convention in Canada's Parliament?",
+      "options": [
+        "The defeat of a minor opposition motion criticizing a minister",
+        "The passage of a private member's bill on a local issue",
+        "The defeat of the government's budget in the House of Commons",
+        "The governor general's decision to travel abroad"
+      ],
+      "answer": 2,
+      "explanation": "Budgets and other core supply and throne speech votes are understood to be matters of confidence. If the government loses such a vote, the prime minister is expected either to resign or request dissolution and an election."
+    },
+    {
+      "q": "What is the purpose of the \"continuity\" convention described by Wernick?",
+      "options": [
+        "To ensure that each minister serves only a fixed four-year term",
+        "To guarantee that all ministers are replaced immediately after an election",
+        "To maintain uninterrupted executive authority by having a designated acting minister whenever a minister leaves office or is incapacitated",
+        "To require that the Senate must approve all Cabinet appointments"
+      ],
+      "answer": 2,
+      "explanation": "Continuity means there is never a gap in ministerial authority. A pre-approved list of acting ministers ensures that if a minister resigns or is incapacitated, another minister automatically assumes their powers until a permanent replacement is sworn in."
+    },
+    {
+      "q": "What does \"coverage\" mean in the context of Canadian ministerial responsibility?",
+      "options": [
+        "Ensuring every MP has a Cabinet post",
+        "Ensuring that every federal entity (departments, agencies, tribunals) has a minister who is answerable to Parliament for it",
+        "Ensuring that each province has an equal number of ministers",
+        "Ensuring that Cabinet meetings are open to the media"
+      ],
+      "answer": 1,
+      "explanation": "Wernick explains that there must be complete coverage: every federal organization exercises powers under some statute and must have a minister assigned who can be held accountable by Parliament for its actions and performance."
+    },
+    {
+      "q": "During an election campaign, why does the \"convention of restraint\" matter for the executive branch?",
+      "options": [
+        "Because the executive legally loses all its powers during campaigns",
+        "Because ministers are forbidden from speaking publicly",
+        "Because the government still holds full legal powers but agrees to act as a caretaker and avoid major new decisions that could bind a future Parliament",
+        "Because Parliament continues to sit throughout the campaign"
+      ],
+      "answer": 2,
+      "explanation": "The executive technically retains its formal powers even after dissolution, but conventions and guidelines instruct it to act with restraint, making only routine or urgent decisions and avoiding major policy or appointment moves that would illegitimately constrain the next government."
+    },
+    {
+      "q": "Why does Wernick insist that the public service is not an independent branch of government?",
+      "options": [
+        "Because public servants are elected like MPs",
+        "Because they are part of the executive, serving under ministers and implementing the elected government's agenda, even though they are nonpartisan",
+        "Because they sit in the House of Commons",
+        "Because they report only to the courts"
+      ],
+      "answer": 1,
+      "explanation": "Public servants are embedded in the executive branch. Their role is to provide professional, nonpartisan advice and to implement the decisions of elected ministers, while being accountable through ministers and various oversight mechanisms to Parliament."
+    },
+    {
+      "q": "What is the main practical effect of entrenching the Charter of Rights and Freedoms into Canada's Constitution in 1982, as described by Wernick?",
+      "options": [
+        "It eliminated federalism by centralizing all power in Ottawa",
+        "It shifted some power away from legislatures toward courts and citizens, constraining Cabinet's policy options",
+        "It abolished the Senate",
+        "It removed the monarch from Canada's constitutional structure"
+      ],
+      "answer": 1,
+      "explanation": "The Charter gives courts the authority to review legislation and executive action for rights violations. This change intentionally limited Parliament and Cabinet, giving individuals and groups (e.g., language minorities, Indigenous peoples) stronger constitutional protections."
+    },
+    {
+      "q": "Which statement best describes Canadian federalism as presented in the lectures?",
+      "options": [
+        "Provinces are administrative units that exercise only powers delegated by the federal government",
+        "Both the federal and provincial governments are sovereign within their own constitutional jurisdictions, with disputes resolved by the courts",
+        "Provinces can unilaterally override federal laws within their territory",
+        "Municipal governments have constitutional status equal to provinces"
+      ],
+      "answer": 1,
+      "explanation": "Canada is a federation where the Constitution assigns different spheres of jurisdiction to federal and provincial governments. Neither is fully sovereign over everything; courts resolve disputes. Municipalities derive their powers from provinces, not directly from the Constitution."
+    },
+    {
+      "q": "Why does Wernick say comparisons with Nordic states or other small unitary states often \"fall apart\" when analyzing Canadian governance?",
+      "options": [
+        "Because Canada has a different legal tradition from all European states",
+        "Because unitary states do not have the same federal-provincial division of powers and intergovernmental complexity",
+        "Because Nordic countries lack democratic institutions",
+        "Because Canada has a much shorter constitutional history"
+      ],
+      "answer": 1,
+      "explanation": "Small unitary states like Sweden or New Zealand do not face the same structural challenges of divided jurisdiction, intergovernmental negotiations, and regional diversity that federations like Canada and Australia must manage."
+    },
+    {
+      "q": "Which of the following best captures Wernick's view of political capital?",
+      "options": [
+        "A fixed budget of campaign funds that parties can spend",
+        "A purely legal measure of a government's constitutional powers",
+        "An intangible stock of trust, legitimacy, and goodwill that enables governments to take on difficult or risky initiatives",
+        "A measure of the number of seats held in Parliament"
+      ],
+      "answer": 2,
+      "explanation": "Political capital is not just seat count; it includes public trust, brand, perceived competence, and legitimacy. Governments with more political capital can more easily pursue ambitious or controversial policies; mismanagement, scandals, or fatigue erode it."
+    },
+    {
+      "q": "What is the logic behind Cabinet solidarity in the Westminster system?",
+      "options": [
+        "To allow ministers to publicly disagree with the prime minister on major issues",
+        "To ensure ministers are free to contradict each other in Parliament",
+        "To require that once a decision is taken, all ministers publicly support it or resign, preserving a unified executive accountable as a team",
+        "To prevent ministers from ever resigning on principle"
+      ],
+      "answer": 2,
+      "explanation": "Cabinet solidarity means ministers debate internally but speak with one voice externally. If a minister cannot publicly support a decision, the convention is that they should leave Cabinet. This preserves clear lines of responsibility and accountability."
+    },
+    {
+      "q": "Why is the confidentiality of Cabinet and government caucus discussions so important in Wernick's account?",
+      "options": [
+        "Because secrecy is inherently valuable in a democracy",
+        "Because it shields ministers from all scrutiny",
+        "Because without a private space, ministers and MPs would be less candid, weakening internal deliberation and shifting power away from Cabinet government",
+        "Because it allows the governor general to monitor all discussions"
+      ],
+      "answer": 2,
+      "explanation": "Confidentiality encourages frank discussion and dissent within Cabinet and caucus. If every comment were public, participants would be more guarded, undermining effective collective decision-making and potentially changing the balance of power within the system."
+    },
+    {
+      "q": "In the lecture, why is the phrase \"the government the voters pick for them\" significant for understanding a prime minister's leadership challenges?",
+      "options": [
+        "Because the prime minister can freely choose all MPs",
+        "Because voters directly elect the prime minister separately from MPs",
+        "Because the prime minister must work with and manage the team that emerges from the election, not a handpicked group, and maintain their support over time",
+        "Because Cabinet members have fixed terms that the PM cannot alter"
+      ],
+      "answer": 2,
+      "explanation": "The prime minister inherits a caucus selected by voters. Managing that team—shoring up weaknesses, nurturing strengths, addressing regional and factional concerns—is central to maintaining confidence and governing effectively."
+    },
+    {
+      "q": "Which of the following best illustrates Wernick's point that governing and winning elections \"drive each other\" in a democracy?",
+      "options": [
+        "A government that ignores public opinion entirely to pursue its agenda",
+        "A government that only focuses on poll numbers without any policy agenda",
+        "A government that shapes policies mindful of electoral prospects, but also uses its time in office to implement its platform and demonstrate competence",
+        "A government that refuses to consult any stakeholders on major reforms"
+      ],
+      "answer": 2,
+      "explanation": "Wernick argues that governing is inherently political: governments shape policies considering their electoral implications, but their main purpose is to make decisions and set direction. Long-term electoral success often depends on being perceived as competent and trustworthy in governing."
+    },
+    {
+      "q": "What is the main reason, according to the lectures, that Canadian municipalities do not have the same constitutional status as provinces?",
+      "options": [
+        "Because they are mentioned only in the Charter, not in other constitutional texts",
+        "Because the Constitution grants provinces authority over municipalities, making them creatures of provincial law rather than autonomous constitutional orders",
+        "Because municipalities are appointed by the federal government",
+        "Because municipal governments are considered part of the private sector"
+      ],
+      "answer": 1,
+      "explanation": "Under Canada's Constitution, provinces have jurisdiction over municipal institutions. Municipalities derive their powers from provincial statutes and can be restructured or dissolved by provincial legislatures."
+    },
+    {
+      "q": "Jane Jacobs' distinction between the \"commercial\" and \"guardian\" moral syndromes is primarily used in the course to illustrate what?",
+      "options": [
+        "That public and private organizations share identical value systems",
+        "That business and government operate with distinct, often incompatible sets of values and incentives, making unreflective mixing dangerous",
+        "That all moral values are relative and interchangeable",
+        "That only the private sector can be trusted to act ethically"
+      ],
+      "answer": 1,
+      "explanation": "Jacobs contrasts a commercial syndrome (voluntary exchange, efficiency, honesty, innovation) with a guardian one (hierarchy, loyalty, force, honor). Roy uses this to show that sectoral boundaries matter; mixing logics without safeguards can create \"monstrous hybrids\" prone to corruption and abuse."
+    },
+    {
+      "q": "Which of the following traits belongs to Jacobs' guardian syndrome rather than the commercial syndrome?",
+      "options": [
+        "Compete",
+        "Respect contracts",
+        "Be open to inventiveness and novelty",
+        "Adhere to tradition and respect hierarchy"
+      ],
+      "answer": 3,
+      "explanation": "Guardian traits include adherence to tradition, respect for hierarchy, loyalty, ostentation, and the use of force. Commercial traits emphasize voluntary agreements, efficiency, innovation, thrift, and competition."
+    },
+    {
+      "q": "Why does Roy describe Silvio Berlusconi's time as Italian prime minister as close to Jacobs' idea of a \"monstrous hybrid\"?",
+      "options": [
+        "Because he refused to work with business at all",
+        "Because he fused large-scale private media ownership with public office, blurring lines between public purpose and private gain",
+        "Because he abolished all regulations on broadcasting",
+        "Because he nationalized all private companies"
+      ],
+      "answer": 1,
+      "explanation": "Berlusconi simultaneously controlled vast private media assets and held public office, raising serious concerns about leveraging public power for private interest, a prime example of the dangerous fusion Jacobs warns about."
+    },
+    {
+      "q": "Stanbury's \"policy arena\" concept focuses primarily on which aspect of business–government relations?",
+      "options": [
+        "Internal management structures within firms",
+        "The formal legal hierarchy between courts and Parliament",
+        "The interactions through which actors, especially lobbyists, attempt to influence government decisions in relatively separate market and state spheres",
+        "International trade negotiations"
+      ],
+      "answer": 2,
+      "explanation": "Stanbury accepts sectoral distinctions and then analyzes how actors—particularly professional lobbyists—operate in the policy arena to influence decisions when guardian and commercial interests intersect or clash."
+    },
+    {
+      "q": "Why is professional lobbying more prominent in countries like Canada and the United States than in some Scandinavian countries, according to Roy's summary of Stanbury?",
+      "options": [
+        "Because Canada and the US ban transparency in policymaking",
+        "Because Scandinavian systems tend to be more transparent and open, allowing direct participation and reducing the need for specialized intermediaries",
+        "Because Scandinavian countries do not allow interest groups",
+        "Because lobbyists are illegal in Canada and the US"
+      ],
+      "answer": 1,
+      "explanation": "Stanbury suggests that where policy processes are open and accessible (e.g., Scandinavia), groups and citizens can influence decisions more directly, reducing the niche for professional lobbyists. In systems with more separation and limited transparency, lobbyists play a larger role."
+    },
+    {
+      "q": "What characterizes the \"secrecy\" model of business–government relations, as exemplified by France in Roy's account?",
+      "options": [
+        "Highly regulated, publicly disclosed lobbying with open registries",
+        "Complete prohibition of any contact between business and government",
+        "Close, often informal and opaque ties between elite networks in public and private sectors, with little formal recognition of lobbying",
+        "Exclusive reliance on online consultations"
+      ],
+      "answer": 2,
+      "explanation": "In France, historically, collaboration occurred through elite networks and state-linked enterprises rather than formalized, transparent lobbying. This public–private fusion was effective in some areas (e.g., Airbus) but increasingly clashed with demands for transparency."
+    },
+    {
+      "q": "Which sectors form the three corners of Paquet's modified Boulding governance triangle?",
+      "options": [
+        "Federal, provincial, municipal",
+        "Executive, legislative, judicial",
+        "Economy (market), polity (state), and society (civil/third sector)",
+        "Business, unions, and media"
+      ],
+      "answer": 2,
+      "explanation": "Paquet's triangle locates the market economy, the state (polity), and civil society as distinct but interacting sectors. He emphasizes their interdependence and the need for co-evolutionary learning across these domains."
+    },
+    {
+      "q": "What is the key difference between Jacobs' and Paquet's perspectives on cross-sector interaction?",
+      "options": [
+        "Jacobs welcomes hybrids while Paquet rejects any cross-sector collaboration",
+        "Jacobs stresses the dangers of mixing sectoral logics, whereas Paquet emphasizes virtuous collaboration and alignment across sectors as essential for competitiveness",
+        "Both argue that sectors should be merged into a single governance structure",
+        "Paquet denies the existence of distinct sectoral logics"
+      ],
+      "answer": 1,
+      "explanation": "Jacobs warns of \"monstrous hybrids\" when guardian and commercial syndromes are carelessly mixed. Paquet, while acknowledging sectoral differences, focuses on how coordinated, co-evolutionary relationships among state, market, and civil society can improve systemic performance."
+    },
+    {
+      "q": "Why does Roy argue it is \"impossible\" to examine business–government relations in Canada without placing them in a Canada–US context?",
+      "options": [
+        "Because Canada lacks its own domestic policies",
+        "Because the US directly governs Canadian provinces",
+        "Because Canada's economic structure, trade patterns, and many policy challenges are deeply intertwined with continental markets and US policy choices",
+        "Because Canada and the US share a single constitution"
+      ],
+      "answer": 2,
+      "explanation": "Canada is a small, trade-dependent, and integrated economy next to a dominant neighbor. Many sectors (airlines, finance, telecommunications) operate in continental markets, and Canadian security and economic policies respond to US actions, especially post-9/11."
+    },
+    {
+      "q": "Which of the following is NOT one of the five key challenges for Canada identified by Roy?",
+      "options": [
+        "Corporate governance",
+        "Lobbying and influence",
+        "Monetary policy independence",
+        "Public–private partnerships"
+      ],
+      "answer": 2,
+      "explanation": "Roy highlights corporate governance, lobbying and influence, security and privacy, public–private partnerships, and geography and development. Monetary policy independence is important but not one of his five focal governance challenges."
+    },
+    {
+      "q": "According to the lecture’s lobbying data, approximately how many organizations had lobbying activities registered in Canada in 2025?",
+      "options": [
+        "Fewer than 500",
+        "About 1,200",
+        "Over 3,700",
+        "Around 10,000"
+      ],
+      "answer": 2,
+      "explanation": "The lecture notes that over 3,700 organizations had registered lobbying efforts, with a surge partly attributed to tariff-related issues and a lowered threshold for registration."
+    },
+    {
+      "q": "What was the new threshold announced by the Commissioner of Lobbying in early 2026 for when an employee must register lobbying activity?",
+      "options": [
+        "Any contact with a public office holder",
+        "More than 1 hour per week over any period",
+        "Spending 8 hours over a 4-week period on lobbying activities",
+        "Only if the employee is a senior executive"
+      ],
+      "answer": 2,
+      "explanation": "The Commissioner lowered the registration threshold such that if an employee spends 8 hours over a 4-week period on lobbying, they must register. This change was intended to increase transparency."
+    },
+    {
+      "q": "Which sectors were among the largest based on number of lobbying registrants in Canada (Dec 2024–Nov 2025) according to the lecture slides?",
+      "options": [
+        "Technology, industry, and energy",
+        "Tourism, sports, and entertainment",
+        "Retail, construction, and hospitality",
+        "Education, judiciary, and policing"
+      ],
+      "answer": 0,
+      "explanation": "The slide lists Technology (13.5%), Industry (13.4%), and Energy (13.4%) among the top sectors by share of registrants, alongside Indigenous, telecommunications, agriculture, health, arts, defence, and environment."
+    },
+    {
+      "q": "Which federal institution received the highest number of lobbying communications in the data presented?",
+      "options": [
+        "Supreme Court of Canada",
+        "House of Commons",
+        "Privy Council Office",
+        "Office of the Governor General"
+      ],
+      "answer": 1,
+      "explanation": "The House of Commons was the most lobbied institution, with over 10,000 communications, reflecting its central role in legislation and political visibility."
+    },
+    {
+      "q": "Which issues were among the most frequently targeted by lobbying communication efforts, according to the lecture's bar chart?",
+      "options": [
+        "International trade, health, and environment",
+        "Sports policy, arts funding, and tourism",
+        "Judicial appointments, policing, and prisons",
+        "Municipal zoning, school boards, and local transit"
+      ],
+      "answer": 0,
+      "explanation": "The chart highlights international trade (~750 communications), health (~650), environment (~550), and telecommunications (~530), indicating where organized interests are most engaged."
+    },
+    {
+      "q": "In the World Economic Forum's assessment, what was identified as the most problematic factor for doing business in Canada?",
+      "options": [
+        "Corruption",
+        "Inflation",
+        "Inefficient government bureaucracy",
+        "Poor public health"
+      ],
+      "answer": 2,
+      "explanation": "The WEF data show inefficient government bureaucracy with the highest score (19.3) among problem factors, ahead of tax rates, insufficient innovation capacity, and infrastructure concerns."
+    },
+    {
+      "q": "Which pair of issues, taken together, accounted for over a quarter of the \"most problematic factors\" for doing business in Canada in the WEF survey?",
+      "options": [
+        "Corruption and crime",
+        "Tax rates and tax regulations",
+        "Inflation and foreign currency regulations",
+        "Public health and government instability"
+      ],
+      "answer": 1,
+      "explanation": "Tax rates (15.8) and tax regulations (9.1) together account for around 25% of respondents' concerns, indicating that the tax system is a major perceived barrier to business in Canada."
+    },
+    {
+      "q": "In the WEF ranking of countries' ability to facilitate \"markets of tomorrow\" that require public–private collaboration, where did Canada roughly stand relative to peers like Finland and the United States?",
+      "options": [
+        "Canada led the group with the highest score",
+        "Canada was roughly tied with Finland at the top",
+        "Canada ranked in the middle, below Finland and the US but above some others like Belgium",
+        "Canada was at the very bottom of the ranking"
+      ],
+      "answer": 2,
+      "explanation": "The chart shows Finland (~60) and the US (~58) at the top, with Canada around 47, above some but below these leaders. This suggests a respectable but not leading capacity for PPP-driven innovation."
+    },
+    {
+      "q": "Which of the following is an implication of Carney's 2026 budget directive (15% reduction and elimination of 40,000 public service jobs by 2029) for business–government relations?",
+      "options": [
+        "Dramatic expansion of bureaucratic capacity to process permits",
+        "Likely strain on administrative capacity, which may exacerbate concerns about bureaucratic inefficiency and affect service delivery to businesses",
+        "Complete privatization of all government services",
+        "Immediate abolition of all regulatory agencies"
+      ],
+      "answer": 1,
+      "explanation": "Reducing staff and budgets can create or worsen bottlenecks, delays, and capacity gaps in areas critical to businesses (e.g., permits, inspections, program delivery), even if intended to improve efficiency."
+    },
+    {
+      "q": "How does Wernick describe the relationship between political staff in ministers' offices and deputy ministers?",
+      "options": [
+        "They are entirely independent and do not interact",
+        "Political staff report only to Parliament, while deputy ministers report only to the prime minister",
+        "Both are in a dual accountability situation: political staff to the PMO and minister, deputy ministers to the PCO and minister, with incentives to make their minister succeed",
+        "Deputy ministers supervise political staff as part of the nonpartisan public service"
+      ],
+      "answer": 2,
+      "explanation": "Political staff owe loyalty to the PMO and minister, while deputy ministers answer to the PCO and minister. Both roles align around helping the minister succeed, creating complex but complementary lines of accountability."
+    },
+    {
+      "q": "According to Wernick, what misunderstanding often arises about removing partisanship from public service staffing and contracting?",
+      "options": [
+        "That it eliminates politics from governing altogether",
+        "That it makes the public service fully independent of ministers",
+        "That it forces public servants to run for office",
+        "That it requires ministers to be nonpartisan"
+      ],
+      "answer": 0,
+      "explanation": "Wernick notes that nonpartisanship in staffing and procurement does not mean an absence of politics. Governing remains inherently political; decisions still reflect electoral platforms and strategic choices, but the administrative machinery is insulated from partisan favoritism in hiring and contracting."
+    },
+    {
+      "q": "Which scenario best illustrates a confidence loss in a minority government under Canada's Westminster conventions?",
+      "options": [
+        "The government loses a free vote on a private member's bill",
+        "The government loses a budget vote after its coalition partner withdraws support",
+        "The government loses a non-binding opposition day motion",
+        "The speaker of the House resigns unexpectedly"
+      ],
+      "answer": 1,
+      "explanation": "Budgets are matters of confidence. In a minority, if a crucial partner withdraws support and the budget is defeated, the government is understood to have lost the confidence of the House and must resign or seek dissolution."
+    },
+    {
+      "q": "Under Canadian conventions, what should happen if a government loses confidence but another party (or coalition) can clearly command a majority in the existing House?",
+      "options": [
+        "An immediate election must be called",
+        "The governor general will usually invite the alternative leader to form a government without an election",
+        "The courts decide who should govern",
+        "Cabinet can ignore the vote and continue"
+      ],
+      "answer": 1,
+      "explanation": "One option under Westminster practice is to allow an alternative government to form from the existing House if it can demonstrate a viable majority, avoiding an immediate election. The governor general's role is guided by this logic."
+    },
+    {
+      "q": "In terms of Jacobs' moral syndromes, a regulatory agency that starts trading favorable decisions for direct financial gain from companies is an example of:",
+      "options": [
+        "A healthy guardian institution",
+        "A purely commercial organization",
+        "A \"monstrous hybrid\" mixing guardian coercive power with commercial self-dealing",
+        "A properly functioning market"
+      ],
+      "answer": 2,
+      "explanation": "When guardian institutions (with powers of coercion and regulation) use their authority for private financial gain, they blend incompatible logics in a corrupt way—Jacobs' \"monstrous hybrid.\""
+    },
+    {
+      "q": "From Paquet's interdependence perspective, what is a key risk if the market sector (economy) dominates the triangle to the exclusion of polity and civil society?",
+      "options": [
+        "Excessive democratic participation",
+        "Underinvestment in infrastructure, social cohesion, and public goods that require state and civic engagement",
+        "Elimination of corruption",
+        "Automatic achievement of optimal competitiveness"
+      ],
+      "answer": 1,
+      "explanation": "If market logic overwhelms political and civic functions, long-term public goods, social trust, and institutional capacity may be underprovided, undermining sustained competitiveness and legitimacy."
+    },
+    {
+      "q": "Which Canadian policy device mentioned in the lecture reflects an attempt to balance market forces with protective structures for domestic producers and consumers?",
+      "options": [
+        "The \"maple syrup solution\" via supply management and quota systems",
+        "The complete deregulation of telecommunications",
+        "Elimination of all agricultural tariffs",
+        "Privatization of the Supreme Court"
+      ],
+      "answer": 0,
+      "explanation": "The \"maple syrup solution\" refers to mechanisms like supply management and quotas designed to protect domestic producers (e.g., dairy, poultry) and, in the narrative, prevent consumers from being \"bullied\" by powerful financial centers."
+    },
+    {
+      "q": "In Roy's discussion, how does the rise of digital governance and broadband infrastructure reshape business–government relations?",
+      "options": [
+        "By eliminating the need for any regulation",
+        "By reducing the importance of physical infrastructure entirely",
+        "By creating new areas where public–private collaboration, privacy concerns, and security issues intersect, requiring more complex governance arrangements",
+        "By making lobbyists obsolete"
+      ],
+      "answer": 2,
+      "explanation": "Digital infrastructure and data-driven governance blur boundaries between sectors (e.g., tech companies and security agencies), raising new governance challenges around privacy, security, and competition that require collaborative yet accountable arrangements."
+    },
+    {
+      "q": "In the WEF data presented, which two factors scored the lowest as obstacles to doing business in Canada?",
+      "options": [
+        "Corruption and crime/theft",
+        "Tax rates and bureaucracy",
+        "Infrastructure and innovation capacity",
+        "Government instability and inflation"
+      ],
+      "answer": 0,
+      "explanation": "Corruption and crime/theft were near zero in the problem factor chart, indicating that, unlike in some countries, they are not perceived as major obstacles to doing business in Canada."
+    },
+    {
+      "q": "Which scenario best reflects Stanbury's observation that lobbying has both organizational-specific and systemic dimensions?",
+      "options": [
+        "A single firm lobbying for a tax break without any broader implications",
+        "Multiple firms and associations lobbying on an issue in ways that raise concerns about unequal access and fairness in the policy process",
+        "A grassroots movement with no organizational structure",
+        "A court case challenging a parking ticket"
+      ],
+      "answer": 1,
+      "explanation": "Stanbury notes that lobbying strategies affect individual firms (organizational-specific) but also raise systemic questions: which interests gain access, how ethical lobbying is, and whether public policy is skewed towards well-organized actors."
+    },
+    {
+      "q": "What is one reason Roy cites for the growing prominence of hybrid organizations such as airport authorities or certain PPPs in Canada's governance landscape?",
+      "options": [
+        "To completely remove government from all infrastructure projects",
+        "To avoid any form of public accountability",
+        "To manage complex projects that involve overlapping public, private, and civic interests and require new governance forms",
+        "To ensure that only private shareholders make decisions"
+      ],
+      "answer": 2,
+      "explanation": "Hybrid entities like airport authorities often blend funding sources, governance structures, and accountability relationships across sectors, reflecting Paquet's interdependence and the search for effective coordination in complex domains."
+    },
+    {
+      "q": "Why does Wernick caution against viewing prime ministerial power as unconstrained despite the appearance of centralization?",
+      "options": [
+        "Because the prime minister cannot appoint Cabinet ministers",
+        "Because prime ministers must constantly manage caucus, Cabinet, Senate, premiers, Indigenous leaders, courts, and public opinion, all of which impose practical limits",
+        "Because the Constitution directly elects Cabinet members",
+        "Because the governor general can veto all executive decisions at will"
+      ],
+      "answer": 1,
+      "explanation": "Wernick emphasizes that while prime ministers appear powerful, they must continually secure alignment from many actors. Conventions, political realities, and other institutions constrain arbitrary use of formal powers."
+    },
+    {
+      "q": "In a scenario where Canada wants to improve its WEF score on \"inefficient government bureaucracy\" without undermining accountability, which approach is most consistent with the course frameworks?",
+      "options": [
+        "Eliminating all regulatory review processes",
+        "Strengthening digital infrastructure and intersectoral coordination to streamline processes while maintaining oversight",
+        "Privatizing all government departments",
+        "Banning lobbying activities"
+      ],
+      "answer": 1,
+      "explanation": "Combining Paquet's interdependence (better coordination) with digital governance and process reform can reduce red tape while preserving necessary checks—aligning with both competitiveness and governance quality goals."
+    },
+    {
+      "q": "An NGO advocating for environmental protection wants to influence Canadian climate policy. From Stanbury's perspective, which strategy best leverages the existing policy arena?",
+      "options": [
+        "Avoiding any contact with elected officials to remain neutral",
+        "Using transparent lobbying, coalition-building, submissions to committees, and public campaigns to shape decisions",
+        "Focusing solely on international courts",
+        "Relying only on anonymous leaks to the media"
+      ],
+      "answer": 1,
+      "explanation": "Stanbury's policy arena includes both professional lobbyists and other organized actors using formal and informal channels—hearings, direct meetings, coalition advocacy, and public campaigns—to influence decision-makers."
+    },
+    {
+      "q": "In a Jacobs-inspired critique, which of the following arrangements would raise the greatest concern as a potential \"monstrous hybrid\" in Canada?",
+      "options": [
+        "A former civil servant taking a private-sector job years after retirement",
+        "A Crown corporation operating in a competitive market with clear oversight",
+        "A serving regulator holding a significant personal equity stake in the companies they regulate",
+        "An MP consulting experts from the private sector before drafting legislation"
+      ],
+      "answer": 2,
+      "explanation": "A regulator with a major equity stake in regulated firms blurs guardian responsibilities with commercial self-interest, creating a direct conflict that resonates with Jacobs' warning about corrupt hybrids."
+    },
+    {
+      "q": "How would Paquet's co-evolutionary perspective interpret an effective response to a major cyberattack on Canadian critical infrastructure?",
+      "options": [
+        "Leaving the response entirely to the private firms that own the infrastructure",
+        "Expecting government alone to develop all necessary defenses",
+        "Coordinated learning and joint action among government, firms, and civil society actors to adapt institutions, technologies, and norms",
+        "Relying exclusively on foreign intelligence agencies"
+      ],
+      "answer": 2,
+      "explanation": "Paquet emphasizes system-wide learning and adaptation across sectors. A major cyberattack requires shared information, joint strategies, and new governance arrangements among state, market, and civil society."
+    },
+    {
+      "q": "A firm considering whether to invest in Canada, France, or a Scandinavian country is concerned about how to best access policymakers. Based on the course, which is the most accurate generalization?",
+      "options": [
+        "Canada and the US rely heavily on formal lobbying, France historically on more opaque elite networks, and Scandinavia on relatively open, transparent policy processes with less need for professional lobbyists",
+        "All three regions use identical lobbying systems",
+        "Only France allows any lobbying",
+        "Scandinavian countries ban all business input into policymaking"
+      ],
+      "answer": 0,
+      "explanation": "Roy and Stanbury highlight these different models: North American lobbying, French secrecy networks, and Scandinavian transparency with more direct, open participation and relatively less professional lobbying."
+    },
+    {
+      "q": "Which of the following best reflects the idea of the \"competition state\" discussed in the slides (Keynesian Welfare State to Competition State)?",
+      "options": [
+        "A state that fully withdraws from markets and focuses only on redistribution",
+        "A state that uses market mechanisms and public–private tools to attract and retain capital and talent in global competition",
+        "A state that abolishes all taxes on corporations",
+        "A state that centralizes all economic planning"
+      ],
+      "answer": 1,
+      "explanation": "The competition state retains an active role but shifts from purely welfare and redistribution functions to facilitating competitiveness—using regulation, PPPs, innovation policy, and human capital strategies to vie for investment and talent."
+    },
+    {
+      "q": "In Wernick's narrative, what is a major risk for a prime minister who accumulates a great deal of political capital but then faces scandals involving ethics or basic competence?",
+      "options": [
+        "Political capital is unaffected by scandals",
+        "Their stock of political capital can be depleted rapidly, undermining their ability to govern and win re-election",
+        "Scandals automatically increase political capital due to media attention",
+        "They cannot legally be removed from office"
+      ],
+      "answer": 1,
+      "explanation": "Wernick notes that arrogance, entitlement, and ethical lapses act like \"kryptonite\"—they can quickly erode political capital that took years to build, making it harder to advance reforms and maintain support."
+    },
+    {
+      "q": "Why does the lecture highlight that \"sometimes, the point of winning elections is to be able to govern, not the other way around\"?",
+      "options": [
+        "To argue that elections are unnecessary in a democracy",
+        "To emphasize that governing has substantive purposes beyond tactical electoral advantage, and that serious governments use office to make real decisions and shape the country's direction",
+        "To suggest that parties should ignore public opinion",
+        "To recommend appointing technocrats instead of holding elections"
+      ],
+      "answer": 1,
+      "explanation": "The line underscores that while electoral considerations are ever-present, governing is not purely about winning the next election; it is about using power to pursue a program, make trade-offs, and sometimes take risks that may not be immediately popular."
+    }
+  ]
+}
