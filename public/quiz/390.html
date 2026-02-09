@@ -176,6 +176,13 @@
       border-radius: 8px;
     }
     .explanation.visible { display: block; }
+    .answer-feedback {
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .answer-feedback.correct { color: #28a745; }
+    .answer-feedback.incorrect { color: #dc3545; }
+    .answer-feedback.neutral { color: #666; }
 
     .btn {
       padding: 12px 20px;
@@ -268,6 +275,43 @@
     }
     .domain-name { font-weight: 600; color: #667eea; margin-bottom: 10px; }
     .domain-score { font-size: 1.5em; font-weight: bold; }
+    .review-actions {
+      margin-top: 30px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .review-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .review-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .review-count {
+      color: #666;
+      font-size: 0.95em;
+    }
+    .review-meta {
+      color: #666;
+      font-size: 0.95em;
+      margin-bottom: 10px;
+    }
+    .review-status {
+      margin-top: 10px;
+      font-weight: 600;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
     /* Loading */
     .loading {
@@ -434,6 +478,11 @@
     let currentExamQuestions = [];
     let currentQuestionIndex = 0;
     let userAnswers = [];
+    let currentDisplayedQuestions = [];
+    let browseAnswers = {};
+    let reviewQueue = [];
+    let reviewCursor = 0;
+    let reviewMode = 'all';
     let timerInterval = null;
     let timeRemaining = 0;
     let examHistory = JSON.parse(localStorage.getItem('examHistory') || '[]');
@@ -641,7 +690,12 @@
         });
       }
 
-      questionsToDisplay.forEach((q, globalIdx) => {
+      currentDisplayedQuestions = questionsToDisplay.map(q => ({
+        ...q,
+        _key: `${q.domain}||${q.number}||${q.q}`
+      }));
+
+      currentDisplayedQuestions.forEach((q, globalIdx) => {
         const card = createQuestionCard(q, globalIdx);
         container.appendChild(card);
       });
@@ -657,9 +711,10 @@
     function createQuestionCard(question, index) {
       const card = document.createElement('div');
       card.className = 'question-card';
+      const selectedIndex = browseAnswers[question._key];
 
       const optionsHTML = question.options.map((opt, i) =>
-        `<div class="option" onclick="selectOption(${index}, ${i})" id="option-${index}-${i}">${opt}</div>`
+        `<div class="option ${selectedIndex === i ? 'selected' : ''}" onclick="selectOption(${index}, ${i})" id="option-${index}-${i}">${opt}</div>`
       ).join('');
 
       card.innerHTML = `
@@ -668,6 +723,7 @@
         <div class="options">${optionsHTML}</div>
         <button class="show-answer-btn" onclick="showAnswer(${index})">Show Answer & Explanation</button>
         <div class="explanation" id="explanation-${index}">
+          <div class="answer-feedback" id="answer-feedback-${index}"></div>
           <strong>✅ Correct Answer: ${question.options[question.answer]}</strong><br><br>
           ${question.explanation}
         </div>
@@ -681,6 +737,9 @@
     }
 
     function selectOption(questionIndex, optionIndex) {
+      const question = currentDisplayedQuestions[questionIndex];
+      if (!question) return;
+      browseAnswers[question._key] = optionIndex;
       // Clear any previously selected option for this question
       document.querySelectorAll(`[id^="option-${questionIndex}-"]`).forEach(el => el.classList.remove('selected'));
       const selected = document.getElementById(`option-${questionIndex}-${optionIndex}`);
@@ -689,7 +748,42 @@
 
     function showAnswer(questionIndex) {
       const explanation = document.getElementById(`explanation-${questionIndex}`);
+      const feedback = document.getElementById(`answer-feedback-${questionIndex}`);
+      const question = currentDisplayedQuestions[questionIndex];
+      if (!question || !explanation) return;
+
       explanation.classList.toggle('visible');
+
+      const optionEls = document.querySelectorAll(`[id^="option-${questionIndex}-"]`);
+      optionEls.forEach(el => el.classList.remove('correct', 'wrong'));
+
+      if (!explanation.classList.contains('visible')) {
+        if (feedback) {
+          feedback.textContent = '';
+          feedback.className = 'answer-feedback';
+        }
+        return;
+      }
+
+      const chosen = browseAnswers[question._key];
+      const correctIndex = question.answer;
+      const correctEl = document.getElementById(`option-${questionIndex}-${correctIndex}`);
+      if (correctEl) correctEl.classList.add('correct');
+
+      if (feedback) {
+        if (chosen === null || chosen === undefined) {
+          feedback.textContent = 'No option selected yet.';
+          feedback.className = 'answer-feedback neutral';
+        } else if (chosen === correctIndex) {
+          feedback.textContent = 'Correct! You chose the right answer.';
+          feedback.className = 'answer-feedback correct';
+        } else {
+          feedback.textContent = 'Incorrect. Review the correct answer below.';
+          feedback.className = 'answer-feedback incorrect';
+          const chosenEl = document.getElementById(`option-${questionIndex}-${chosen}`);
+          if (chosenEl) chosenEl.classList.add('wrong');
+        }
+      }
     }
 
     function switchTab(tabName, btnEl) {
@@ -832,16 +926,20 @@
 
       let correct = 0;
       let domainScores = {};
+      let unanswered = 0;
 
       currentExamQuestions.forEach((question, i) => {
         const domain = question.domain;
         if (!domainScores[domain]) domainScores[domain] = { correct: 0, total: 0 };
         domainScores[domain].total++;
-        if (userAnswers[i] === question.answer) {
+        if (userAnswers[i] === null || userAnswers[i] === undefined) {
+          unanswered++;
+        } else if (userAnswers[i] === question.answer) {
           correct++;
           domainScores[domain].correct++;
         }
       });
+      const incorrect = currentExamQuestions.length - correct - unanswered;
 
       const score = Math.round((correct / currentExamQuestions.length) * 900);
       const passed = score >= 750;
@@ -870,6 +968,9 @@
           <p style="font-size: 1.5em; color: #666;">
             ${correct} out of ${currentExamQuestions.length} correct (${Math.round(correct/currentExamQuestions.length*100)}%)
           </p>
+          <p style="margin-top: 10px; color: #666;">
+            ${incorrect} incorrect · ${unanswered} unanswered
+          </p>
           <p style="margin-top: 20px; font-size: 1.2em;">
             ${passed ? 'You passed! Great job! 🎯' : 'Passing score is 750. Review weak areas and try again.'}
           </p>
@@ -877,7 +978,13 @@
           <h3 style="margin-top: 40px; color: #667eea;">Domain Breakdown</h3>
           <div class="domain-breakdown">${domainBreakdownHTML}</div>
 
-          <button class="btn btn-primary" onclick="resetExam()" style="margin-top: 40px;">Back to Setup</button>
+          <div class="review-actions">
+            <button class="btn btn-primary" onclick="startReview('all')">Review All</button>
+            <button class="btn btn-secondary" onclick="startReview('incorrect')" ${incorrect === 0 ? 'disabled' : ''}>Review Incorrect Only</button>
+            <button class="btn btn-secondary" onclick="startReview('unanswered')" ${unanswered === 0 ? 'disabled' : ''}>Review Unanswered Only</button>
+            <button class="btn btn-secondary" onclick="resetExam()">Back to Setup</button>
+          </div>
+          <div id="examReview" style="display: none; margin-top: 30px;"></div>
         </div>
       `;
 
@@ -885,6 +992,125 @@
       resultsContainer.style.display = 'block';
 
       updateStats();
+    }
+
+    function startReview(mode = 'all') {
+      reviewMode = mode;
+      reviewQueue = buildReviewQueue(mode);
+      reviewCursor = 0;
+      const reviewContainer = document.getElementById('examReview');
+      if (!reviewContainer) return;
+      reviewContainer.style.display = 'block';
+      renderReviewQuestion();
+      reviewContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function buildReviewQueue(mode) {
+      const queue = [];
+      currentExamQuestions.forEach((question, i) => {
+        const chosen = userAnswers[i];
+        const isUnanswered = chosen === null || chosen === undefined;
+        const isCorrect = chosen === question.answer;
+        if (mode === 'all') queue.push(i);
+        if (mode === 'incorrect' && !isUnanswered && !isCorrect) queue.push(i);
+        if (mode === 'unanswered' && isUnanswered) queue.push(i);
+      });
+      return queue;
+    }
+
+    function getReviewLabel(mode) {
+      if (mode === 'incorrect') return 'Incorrect';
+      if (mode === 'unanswered') return 'Unanswered';
+      return 'All';
+    }
+
+    function renderReviewQuestion() {
+      const reviewContainer = document.getElementById('examReview');
+      if (!reviewContainer) return;
+      if (reviewQueue.length === 0) {
+        reviewContainer.innerHTML = `
+          <div class="review-toolbar">
+            <div class="review-filters">
+              <button class="btn btn-secondary" onclick="startReview('all')">Review All</button>
+              <button class="btn btn-secondary" onclick="startReview('incorrect')">Review Incorrect Only</button>
+              <button class="btn btn-secondary" onclick="startReview('unanswered')">Review Unanswered Only</button>
+            </div>
+            <div class="review-count">Reviewing: ${getReviewLabel(reviewMode)} (0)</div>
+          </div>
+          <div class="exam-question">
+            <div class="question-text">No questions available for this filter.</div>
+            <div class="review-meta">Try another review filter.</div>
+          </div>
+        `;
+        return;
+      }
+
+      const questionIndex = reviewQueue[reviewCursor];
+      const question = currentExamQuestions[questionIndex];
+      const chosen = userAnswers[questionIndex];
+      const correctIndex = question.answer;
+
+      const optionsHTML = question.options.map((opt, i) => {
+        let cls = 'option';
+        if (chosen === i) cls += ' selected';
+        if (i === correctIndex) cls += ' correct';
+        if (chosen === i && i !== correctIndex) cls += ' wrong';
+        return `<div class="${cls}">${opt}</div>`;
+      }).join('');
+
+      let statusText = 'No answer selected.';
+      let statusClass = 'review-status';
+      if (chosen === correctIndex) {
+        statusText = 'Correct answer selected.';
+        statusClass += ' pass';
+      } else if (chosen !== null && chosen !== undefined) {
+        statusText = 'Incorrect answer selected.';
+        statusClass += ' fail';
+      }
+
+      const chosenText = (chosen === null || chosen === undefined)
+        ? 'No answer selected'
+        : question.options[chosen];
+
+      reviewContainer.innerHTML = `
+        <div class="review-toolbar">
+          <div class="review-filters">
+            <button class="btn btn-secondary" onclick="startReview('all')">Review All</button>
+            <button class="btn btn-secondary" onclick="startReview('incorrect')">Review Incorrect Only</button>
+            <button class="btn btn-secondary" onclick="startReview('unanswered')">Review Unanswered Only</button>
+          </div>
+          <div class="review-count">Reviewing: ${getReviewLabel(reviewMode)} (${reviewCursor + 1} of ${reviewQueue.length})</div>
+        </div>
+        <div class="exam-question">
+          <div class="question-number">Review ${reviewCursor + 1} of ${reviewQueue.length} · ${question.domain}</div>
+          <div class="question-text">${question.q}</div>
+          <div class="review-meta">Your answer: ${chosenText}</div>
+          <div class="options">${optionsHTML}</div>
+          <div class="explanation visible">
+            <strong>✅ Correct Answer: ${question.options[correctIndex]}</strong><br><br>
+            ${question.explanation}
+            <div class="${statusClass}">${statusText}</div>
+          </div>
+        </div>
+        <div class="exam-nav">
+          <button class="btn btn-secondary" onclick="previousReview()" ${reviewCursor === 0 ? 'disabled' : ''}>← Previous</button>
+          <button class="btn btn-primary" onclick="nextReview()" ${reviewCursor === reviewQueue.length - 1 ? 'disabled' : ''}>Next →</button>
+        </div>
+      `;
+    }
+
+    function previousReview() {
+      if (reviewCursor > 0) {
+        reviewCursor--;
+        renderReviewQuestion();
+      }
+    }
+
+    function nextReview() {
+      if (reviewCursor < reviewQueue.length - 1) {
+        reviewCursor++;
+        renderReviewQuestion();
+      }
     }
 
     function resetExam() {
