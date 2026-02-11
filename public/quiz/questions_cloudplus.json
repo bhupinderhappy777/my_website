@@ -4499,7 +4499,7 @@
     {
       "q": "A company uses Terraform to manage cloud infrastructure. An engineer runs terraform apply locally and accidentally destroys a production database. How can this be prevented?",
       "options": [
-        "Trust all engineers",
+        "No additional controls needed",
         "Require Terraform changes to go through a CI/CD pipeline with plan review and approval",
         "Don't use Terraform",
         "Only use the cloud console"
@@ -6494,11 +6494,11 @@
       "options": [
         "Optimize to under 29s, use async patterns, or ALB with longer timeouts",
         "Wait longer",
-        "Increase API GW timeout beyond 29s",
+        "Increase API Gateway timeout beyond 29s",
         "Disable timeouts"
       ],
       "answer": 0,
-      "explanation": "API GW max is 29s; use async or ALB. Objective 6.3"
+      "explanation": "API Gateway max is 29s; use async or ALB. Objective 6.3"
     },
     {
       "q": "Redis single node shows high CPU while others idle. What is the likely cause?",
