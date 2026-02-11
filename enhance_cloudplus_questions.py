@@ -562,8 +562,18 @@ def process_all_questions(input_file, output_file):
     return enhanced_data
 
 if __name__ == "__main__":
-    input_file = "/home/runner/work/my_website/my_website/public/quiz/questions_cloudplus.json"
-    output_file = "/home/runner/work/my_website/my_website/public/quiz/questions_cloudplus.json"
+    import os
+    import sys
+    
+    # Use relative paths from script location or allow command-line arguments
+    if len(sys.argv) > 1:
+        input_file = sys.argv[1]
+        output_file = sys.argv[2] if len(sys.argv) > 2 else input_file
+    else:
+        # Default to relative path from script location
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        input_file = os.path.join(script_dir, "public/quiz/questions_cloudplus.json")
+        output_file = input_file
     
     print("\n⚠️  WARNING: This will OVERWRITE the original questions file!")
     print(f"   File: {output_file}")
