@@ -9,6 +9,45 @@ A modern, beautiful, and responsive website built with React, Vite, and Tailwind
 - 🌓 **Dark Mode**: Beautiful dark mode implementation that respects user preferences and system settings
 - 🎨 **Modern Design**: Clean, professional aesthetic with rounded corners, generous spacing, and smooth animations
 - ♿ **Accessible**: High contrast ratios and proper semantic HTML for better accessibility
+- 📚 **Cloud+ Exam Prep**: Enhanced quiz platform with 615 challenging Cloud Plus questions
+
+## Cloud Plus Exam Preparation
+
+This repository includes a comprehensive Cloud+ exam preparation quiz with **615 enhanced questions** that are **harder than the actual CompTIA Cloud+ exam**. The questions have been transformed from simple, straightforward questions into complex, scenario-based questions requiring critical thinking.
+
+### Features
+- 🎯 **615 Enhanced Questions** across 6 Cloud+ domains
+- 💼 **Realistic Business Scenarios** (healthcare, finance, retail, government, etc.)
+- 📊 **Quantified Requirements** (latency, uptime, transactions, compliance)
+- 🧠 **Critical Thinking Required** - all options appear plausible
+- 📝 **CompTIA-Style Format** - wordy, detailed scenarios
+- ✅ **Comprehensive Explanations** for each answer
+
+### Question Categories
+1. **Cloud Architecture** (115 questions) - Service models, deployment models, shared responsibility
+2. **Deployment** (100 questions) - Multi-region, blue-green, canary, migration strategies
+3. **Security** (100 questions) - Encryption, compliance, access control, threat prevention
+4. **Operations** (100 questions) - Monitoring, backup/recovery, performance optimization
+5. **DevOps Fundamentals** (100 questions) - CI/CD, IaC, automation, containerization
+6. **Troubleshooting** (100 questions) - Root cause analysis, cascading failures, debugging
+
+### Enhancement Details
+See [CLOUD_PLUS_ENHANCEMENTS.md](./CLOUD_PLUS_ENHANCEMENTS.md) for complete documentation of enhancements.
+
+**Statistics:**
+- Average question length: **692 characters** (was 43 chars)
+- Content size: **1.3 MB** (was 265 KB)
+- Scenario-based: **81%** of questions
+- Difficulty: **Harder than actual exam**
+
+### Using the Quiz
+Open `public/quiz/cloud_plus.html` in a browser to access the quiz platform with:
+- Browse all questions by category
+- Take practice quizzes with randomized questions
+- Review mode with instant answer feedback
+- Progress tracking
+
+**Study Tip:** If you can answer these enhanced questions, the actual Cloud+ exam will be significantly easier!
 
 ## Tech Stack
 
