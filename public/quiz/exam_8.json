@@ -1,0 +1,1004 @@
+{
+  "Module 1: Cloud Architecture & Design": [
+    {
+      "q": "You are designing a new SaaS platform that must elastically scale during seasonal spikes while minimizing idle cost. Which design best meets the requirement?",
+      "options": [
+        "Overprovision fixed-size VMs to handle peak load and power them off during off-hours",
+        "Use stateless microservices behind an autoscaling group with queue-based decoupling",
+        "Deploy a single large monolith VM with vertical scaling and manual resize",
+        "Pin all traffic to a single active node with hot standby for failover"
+      ],
+      "answer": 1,
+      "explanation": "Stateless microservices behind autoscaling with asynchronous queues decouple producers/consumers and allow horizontal elasticity while controlling idle cost. Overprovisioning wastes cost; vertical scaling is slower and limits elasticity; single active node reduces resilience and scale."
+    },
+    {
+      "q": "A design requires five 9s (99.999%) availability for a read-heavy API. Which approach most directly improves *service availability* at the application layer?",
+      "options": [
+        "Deploy larger instance sizes in a single availability zone",
+        "Multi-AZ deployment with health-checked load balancing and read replicas",
+        "Use a CDN in front of the API to cache dynamic responses indefinitely",
+        "Increase disk IOPS on the database volume"
+      ],
+      "answer": 1,
+      "explanation": "Multi-AZ with load balancing removes single-AZ failures and enables failover. Read replicas offload read traffic and improve availability perception. Larger instances in one AZ remain a single point of failure; CDNs can't cache most dynamic API responses indefinitely; disk IOPS helps performance but not availability alone."
+    },
+    {
+      "q": "Your organization must meet an RPO of 5 minutes and RTO of 30 minutes for a critical service. Which design best aligns with these objectives?",
+      "options": [
+        "Nightly backups to cold storage with manual restore during outage",
+        "Asynchronous cross-region database replication and warm standby environment",
+        "Synchronous cross-region replication with active/active routing",
+        "Weekly snapshots and blue/green deployments in the primary region only"
+      ],
+      "answer": 1,
+      "explanation": "An RPO of 5 minutes implies near-real-time data replication; async cross-region replication typically meets minutes-level RPO. A warm standby can be promoted within a 30-minute RTO. Synchronous cross-region can meet even tighter RPO but adds significant latency and cost and isn't necessary for the stated objectives. Nightly/weekly backups cannot meet 5-minute RPO."
+    },
+    {
+      "q": "A multi-tenant application must provide strict tenant isolation at the compute layer. Which approach provides the *strongest* isolation?",
+      "options": [
+        "Separate containers per tenant in the same host",
+        "Separate VMs per tenant in a shared VPC/VNet",
+        "Separate VPCs/VNets per tenant with peering to shared services",
+        "Namespaces per tenant within a single Kubernetes cluster"
+      ],
+      "answer": 2,
+      "explanation": "Separate VPCs/VNets per tenant provide strong network isolation boundaries and blast-radius reduction, with controlled peering to shared services. VM-per-tenant in a shared VPC/VNet is weaker at the network boundary. Containers/namespaces are process-level isolation and weaker than VM/VPC isolation."
+    },
+    {
+      "q": "Which statement best describes *resource pooling* in cloud architecture?",
+      "options": [
+        "Allocating fixed resources to specific applications to ensure performance",
+        "Aggregating compute/storage/network to serve multiple consumers using a multi-tenant model",
+        "Purchasing reserved instances for predictable workloads",
+        "Using local storage on each VM for low-latency access"
+      ],
+      "answer": 1,
+      "explanation": "Resource pooling aggregates provider resources and serves multiple consumers via multi-tenancy with dynamic assignment. Reserved instances are a pricing model; local storage and fixed allocations are not the definition of resource pooling."
+    },
+    {
+      "q": "A workload needs to burst CPU for milliseconds but maintain low cost during idle periods. Which instance characteristic is most appropriate?",
+      "options": [
+        "Fixed performance general-purpose instances",
+        "Burstable credit-based instances",
+        "High-memory instances",
+        "GPU-accelerated instances"
+      ],
+      "answer": 1,
+      "explanation": "Burstable instances accumulate CPU credits during idle and spend them during short bursts, aligning with spiky CPU profiles at lower steady-state cost."
+    },
+    {
+      "q": "You must design a global API with minimal latency and regional failover. Which pattern best fits?",
+      "options": [
+        "Single-region deployment with global CDN",
+        "Geo-DNS with health-checked multi-regional active/active APIs",
+        "Anycast IP to a single origin region",
+        "Client-side hardcoded region endpoints"
+      ],
+      "answer": 1,
+      "explanation": "Geo-DNS with health checks directs clients to the nearest healthy region (active/active), minimizing latency and enabling regional failover. A single region cannot fail over; anycast to one origin still single-origin; hardcoded endpoints are brittle."
+    },
+    {
+      "q": "Which factor most strongly influences the decision between vertical vs. horizontal scaling for a stateful OLTP database?",
+      "options": [
+        "Availability of GPU instances",
+        "The database engine's support for read-write sharding and consistency requirements",
+        "The number of availability zones in the region",
+        "Whether the application uses microservices"
+      ],
+      "answer": 1,
+      "explanation": "Stateful OLTP databases are constrained by engine capabilities (e.g., sharding, partitioning, consistency). If the engine lacks easy horizontal scaling for writes, vertical scaling or read replicas may be required. GPUs/AZ count/microservices are not primary determinants."
+    },
+    {
+      "q": "A compliance mandate requires that all data remain within a specific country. Which architectural control most directly enforces this?",
+      "options": [
+        "Use reserved instances in any region",
+        "Select regions/data centers physically located in the country and restrict cross-region services",
+        "Enable autoscaling across continents",
+        "Use a global CDN without origin restrictions"
+      ],
+      "answer": 1,
+      "explanation": "Data residency is enforced by choosing in-country regions and preventing cross-border replication/services. Reserved instances, global autoscaling, and unconstrained CDNs do not ensure residency."
+    },
+    {
+      "q": "Which is the *best* use of edge computing in a hybrid cloud design?",
+      "options": [
+        "Running batch billing jobs closer to the CFO",
+        "Preprocessing sensor data near devices to reduce bandwidth and latency to the cloud",
+        "Hosting the primary transactional database at the edge for all users globally",
+        "Replacing the cloud with local servers to avoid egress fees"
+      ],
+      "answer": 1,
+      "explanation": "Edge excels at local preprocessing/aggregation to reduce latency/bandwidth before sending to cloud analytics. Hosting the primary DB at the edge globally is impractical; batch jobs don't benefit; replacing cloud is not the goal."
+    },
+    {
+      "q": "Your design must support blue/green releases with immediate rollback. Which component is most critical to switch traffic safely?",
+      "options": [
+        "Direct database writes to both environments",
+        "A version-aware traffic router (e.g., load balancer or service mesh) with health checks",
+        "A larger VM type for the green environment",
+        "Manual DNS edits to change A records during release"
+      ],
+      "answer": 1,
+      "explanation": "A version-aware router (LB/service mesh) can direct and drain traffic between blue and green with health checks, enabling rapid rollback. Dual writes are risky; larger VMs are irrelevant; manual DNS edits are slow and have TTL issues."
+    },
+    {
+      "q": "Which is the most appropriate way to estimate capacity for a lift-and-shift of a web app to cloud?",
+      "options": [
+        "Multiply current on-prem CPU by 1.5 to account for virtualization overhead",
+        "Baseline current utilization and performance metrics, then run right-sizing tests with cloud instance families",
+        "Choose the largest available instances to avoid performance issues",
+        "Use only vendor-recommended instance sizes without testing"
+      ],
+      "answer": 1,
+      "explanation": "Collecting baselines and right-sizing with tests ensures the closest match and cost efficiency. Blind multipliers, max sizing, or untested vendor defaults risk over/under-provisioning."
+    },
+    {
+      "q": "A content API must throttle abusive clients while maintaining availability for others. Which pattern best addresses this?",
+      "options": [
+        "Queue all requests system-wide",
+        "Implement per-client rate limiting and circuit breaking at the API gateway",
+        "Scale the database vertically",
+        "Disable retries in clients"
+      ],
+      "answer": 1,
+      "explanation": "Per-client rate limiting and circuit breakers protect the system from noisy neighbors while maintaining service for well-behaved clients. System-wide queuing penalizes all; vertical DB scaling doesn't address abusive clients; disabling retries alone is insufficient."
+    },
+    {
+      "q": "Which load-balancing algorithm is most suitable when backends have widely different capacities?",
+      "options": [
+        "Round-robin",
+        "Least connections",
+        "Weighted round-robin",
+        "IP hash"
+      ],
+      "answer": 2,
+      "explanation": "Weighted round-robin allocates more traffic to higher-capacity nodes. Plain round-robin and least connections ignore capacity differences; IP hash pins clients and can create imbalance."
+    },
+    {
+      "q": "In a three-tier cloud app, where should session state be stored to maximize horizontal scalability of the web tier?",
+      "options": [
+        "In-memory on each web server",
+        "On the client via cookies only",
+        "In a shared distributed cache or state store",
+        "In the database on the same table as user profiles"
+      ],
+      "answer": 2,
+      "explanation": "Externalizing session state to a distributed cache (e.g., Redis) avoids sticky sessions and enables stateless web servers to scale horizontally. Per-node memory breaks scale; client-only cookies can exceed limits and pose security concerns; DB tables may add latency and contention."
+    }
+  ],
+  "Module 2: Cloud Security": [
+    {
+      "q": "A security team mandates encryption of data at rest with customer-managed keys (CMK). Which control is most important to prevent accidental deletion of active keys?",
+      "options": [
+        "Rotate keys every 24 hours",
+        "Enable key deletion protection and enforce IAM least privilege on key management operations",
+        "Disable key usage logging to reduce noise",
+        "Use only provider-managed keys"
+      ],
+      "answer": 1,
+      "explanation": "Deletion protection and least privilege on key admin operations prevent destructive actions. Rotation cadence does not prevent deletion; disabling logs removes visibility; provider-managed keys don't meet CMK requirement."
+    },
+    {
+      "q": "You need to expose a web app to the internet while minimizing the attack surface. Which combination is most appropriate?",
+      "options": [
+        "Public IP on each VM and OS firewalls only",
+        "Private subnets for app servers, public load balancer, WAF, and security groups/NACLs",
+        "Place database in public subnet for ease of administration",
+        "Use a jump host with public IP for all traffic"
+      ],
+      "answer": 1,
+      "explanation": "App servers should be private; a public load balancer + WAF terminates internet traffic; SGs/NACLs restrict flows. Public IPs on VMs/databases increase exposure; a jump host is for admin, not app ingress."
+    },
+    {
+      "q": "Which IAM design most effectively implements least privilege for a CI/CD pipeline that deploys to production?",
+      "options": [
+        "Grant the pipeline administrator access to all services",
+        "Scoped, time-bound roles (just-in-time) with permissions limited to required resources and actions",
+        "Use a single shared root/API key across environments",
+        "Hardcode credentials in the pipeline config for faster access"
+      ],
+      "answer": 1,
+      "explanation": "Just-in-time, scoped roles with minimal permissions reduce standing privilege and blast radius. Shared/root keys and hardcoded credentials are insecure; broad admin access violates least privilege."
+    },
+    {
+      "q": "A developer stores database credentials in a container image. What is the most appropriate remediation?",
+      "options": [
+        "Base64-encode the credentials before storing",
+        "Move secrets to a managed secrets service with short-lived tokens injected at runtime",
+        "Encrypt the image and share the key with the team via email",
+        "Rely on obscurity of private registry"
+      ],
+      "answer": 1,
+      "explanation": "Secrets should be stored in a dedicated secrets manager and provided as ephemeral tokens or injected at runtime. Base64 is not encryption; emailing keys/obscurity are insecure."
+    },
+    {
+      "q": "Which control is most effective to mitigate lateral movement after a host compromise in a VPC/VNet?",
+      "options": [
+        "Flat network with broad allow rules",
+        "Microsegmentation with least-privilege security groups/NACLs and host-based firewalls",
+        "Use only perimeter firewalls",
+        "Disable logging to improve performance"
+      ],
+      "answer": 1,
+      "explanation": "Microsegmentation and host-based controls limit east-west movement. Perimeter-only and flat networks are insufficient; disabling logs removes detection capability."
+    },
+    {
+      "q": "Your org must detect public exposure of cloud object storage. Which is the BEST control?",
+      "options": [
+        "Manual monthly audits of bucket ACLs",
+        "Enable policy that blocks public ACLs and real-time monitoring for public access",
+        "Rely on default private setting forever",
+        "Place objects in different folders"
+      ],
+      "answer": 1,
+      "explanation": "Policy enforcement that denies public ACLs plus continuous monitoring provides prevention and detection. Defaults can be changed; folders are not access controls; manual audits are too slow."
+    },
+    {
+      "q": "A compliance audit requires evidence of who accessed production data and when. What is the most appropriate solution?",
+      "options": [
+        "Enable detailed data access logs with centralized, immutable storage and retention policies",
+        "Rely on OS syslog only",
+        "Collect only error logs",
+        "Disable logs to reduce storage cost"
+      ],
+      "answer": 0,
+      "explanation": "Access logs (e.g., object-level, database audit logs) with centralization and immutability provide evidence for compliance. OS logs/error-only are insufficient; disabling logs defeats auditability."
+    },
+    {
+      "q": "Which option BEST protects web apps from common injection and XSS attacks at the edge?",
+      "options": [
+        "Security group rules",
+        "A managed WAF with OWASP Core Rule Set and custom rules",
+        "Route tables",
+        "NACL egress rules"
+      ],
+      "answer": 1,
+      "explanation": "A WAF with OWASP rules addresses common web exploits. SGs/NACLs/route tables control network flows, not application-layer attacks."
+    },
+    {
+      "q": "To meet zero-trust principles, which practice is MOST aligned?",
+      "options": [
+        "Trust all traffic inside the VPC/VNet",
+        "Continuously verify identity and device posture; authorize per-request; minimize implicit trust",
+        "Rely solely on VPN for internal trust",
+        "Allow long-lived admin tokens"
+      ],
+      "answer": 1,
+      "explanation": "Zero trust requires continuous verification, least privilege, and minimizing implicit trust. Internal trust/VPN-only/long-lived tokens contradict zero-trust tenets."
+    },
+    {
+      "q": "Which method is BEST to manage TLS certificates for a public-facing app at scale?",
+      "options": [
+        "Manually generate and install certs on each VM",
+        "Use a managed certificate service integrated with the load balancer and automatic renewal",
+        "Self-sign certificates for production",
+        "Disable TLS termination at the edge"
+      ],
+      "answer": 1,
+      "explanation": "Managed certs at the load balancer simplify issuance, renewal, and rotation. Manual processes don't scale; self-signed is not trusted; disabling TLS is insecure."
+    },
+    {
+      "q": "A team needs to securely grant temporary S3/object storage access to a vendor for 24 hours. What is the most appropriate approach?",
+      "options": [
+        "Share a permanent access key",
+        "Create a time-bound role with external ID and least privilege, or use pre-signed URLs scoped to needed objects",
+        "Make the bucket public for a day",
+        "Send the objects via email attachments"
+      ],
+      "answer": 1,
+      "explanation": "Use time-bound least-privilege roles with external IDs to avoid confused deputy, or pre-signed URLs scoped to objects/time. Permanent keys/public buckets/email are insecure or non-auditable."
+    },
+    {
+      "q": "Which is MOST effective to prevent secret sprawl in IaC repositories?",
+      "options": [
+        "Rely on .gitignore",
+        "CI hooks that scan for secrets, enforce pre-commit checks, and centralize secrets in a vault",
+        "Store secrets in plaintext and rotate monthly",
+        "Use a shared spreadsheet for secrets"
+      ],
+      "answer": 1,
+      "explanation": "Automated scanning and pre-commit hooks detect leaks early; secrets should live in a vault, not the repo. .gitignore/spreadsheets/plaintext are insufficient."
+    },
+    {
+      "q": "Your database requires encryption in transit with mutual TLS (mTLS). Which prerequisite is essential?",
+      "options": [
+        "Wildcard DNS only",
+        "A private PKI or managed service to issue client and server certificates with trust chains",
+        "Self-signed cert on the server only",
+        "Disabling certificate revocation"
+      ],
+      "answer": 1,
+      "explanation": "mTLS requires both client and server certificates issued by a trusted CA, often via private PKI. Self-signed/server-only and disabling revocation break trust/security."
+    },
+    {
+      "q": "Which practice BEST reduces blast radius of compromised service account credentials?",
+      "options": [
+        "Grant admin privileges and monitor",
+        "Scope permissions narrowly, rotate credentials frequently, and apply resource-level conditions",
+        "Use the same credentials across environments",
+        "Never rotate to avoid outages"
+      ],
+      "answer": 1,
+      "explanation": "Least privilege with frequent rotation and resource conditions limits impact. Broad/admin/shared/non-rotated credentials increase risk."
+    },
+    {
+      "q": "A requirement states: \"Detect and block exfiltration of sensitive data to unsanctioned cloud apps.\" Which control aligns BEST?",
+      "options": [
+        "NTP servers",
+        "CASB with DLP policies integrated with identity and proxies",
+        "Bastion hosts",
+        "Autoscaling groups"
+      ],
+      "answer": 1,
+      "explanation": "A CASB with DLP and identity integration can detect/block unsanctioned app usage and exfiltration. NTP/bastions/autoscaling do not address this requirement."
+    }
+  ],
+  "Module 3: Cloud Deployment & Automation": [
+    {
+      "q": "You need consistent, repeatable infrastructure across dev/stage/prod with minimal drift. Which approach is BEST?",
+      "options": [
+        "Manual portal deployments with screenshots",
+        "Infrastructure as Code with version control, modules, and CI policy checks",
+        "Shell scripts run from a laptop",
+        "Golden images updated quarterly without code"
+      ],
+      "answer": 1,
+      "explanation": "IaC with VCS and CI policies ensures repeatability, reviewability, and drift detection. Manual scripts/images lack governance and reproducibility."
+    },
+    {
+      "q": "A team wants zero-downtime deployments with canary releases. Which combination is MOST appropriate?",
+      "options": [
+        "Immutable images, blue/green or canary routing at the load balancer/service mesh, automated rollback on health",
+        "In-place package upgrades on live servers",
+        "Stop-the-world deployments during low traffic",
+        "DNS cutover with long TTLs"
+      ],
+      "answer": 0,
+      "explanation": "Immutable deployments plus traffic-splitting and automated health-based rollback enable safe canaries. In-place upgrades and DNS cutovers are riskier; stop-the-world causes downtime."
+    },
+    {
+      "q": "Which statement is TRUE about container orchestration (e.g., Kubernetes) in cloud?",
+      "options": [
+        "It eliminates the need for monitoring",
+        "It automates scheduling, scaling, and self-healing but still requires robust CI/CD, observability, and security controls",
+        "It removes the need for load balancers",
+        "It guarantees zero downtime automatically"
+      ],
+      "answer": 1,
+      "explanation": "Orchestrators help with scheduling/scaling/self-healing but do not remove the need for CI/CD, monitoring, and security. Load balancers and careful rollout strategies are still necessary."
+    },
+    {
+      "q": "You must deploy per-tenant isolated stacks from a single codebase. What is the BEST IaC practice?",
+      "options": [
+        "Hardcode tenant IDs in templates",
+        "Use parameterized modules with separate state backends and tagging conventions",
+        "Duplicate the repo for each tenant",
+        "Apply changes directly in the cloud portal for speed"
+      ],
+      "answer": 1,
+      "explanation": "Parameterized modules promote reuse; separate state per tenant isolates lifecycle; tagging aids governance. Hardcoding/duplicating repos/portal changes cause drift and maintenance issues."
+    },
+    {
+      "q": "A pipeline must store artifacts (images/manifests) immutably and support provenance. Which tooling is MOST appropriate?",
+      "options": [
+        "Mutable artifact bucket with overwrite",
+        "OCI-compliant registry with content trust/signing and immutability, plus SBOM publishing",
+        "SCP files to a VM",
+        "Email artifacts to the release manager"
+      ],
+      "answer": 1,
+      "explanation": "An OCI registry with signing and immutability supports provenance and traceability. Buckets/VM copies/email are not robust artifact management."
+    },
+    {
+      "q": "Your Terraform plan will create production resources. What is the BEST control to prevent accidental destructive changes?",
+      "options": [
+        "Run apply from any developer laptop",
+        "Use policy-as-code (sentinel/OPA) and mandatory plan review + state locking in CI",
+        "Skip plan phase for speed",
+        "Allow drift to accumulate and fix later"
+      ],
+      "answer": 1,
+      "explanation": "Policy-as-code validates plans; peer review and state locking in CI prevent race conditions and destructive applies. Ad-hoc applies/skip plan/drift are risky."
+    },
+    {
+      "q": "A team uses serverless functions for event processing and wants to minimize cold starts. Which tactic helps MOST without overprovisioning?",
+      "options": [
+        "Schedule periodic warm-up invocations and keep package size small",
+        "Bundle large ML libraries into each function",
+        "Increase memory to maximum for all functions",
+        "Disable concurrency limits"
+      ],
+      "answer": 0,
+      "explanation": "Warm-ups and smaller packages reduce initialization latency. Large packages and max memory raise cost; removing concurrency limits risks throttling/back-pressure issues."
+    },
+    {
+      "q": "Which deployment strategy minimizes risk while validating real user traffic on a new release?",
+      "options": [
+        "Big bang",
+        "Canary with progressive traffic shifting based on SLOs",
+        "In-place upgrade on all nodes",
+        "Manual rsync of binaries"
+      ],
+      "answer": 1,
+      "explanation": "Canary gradually increases exposure while monitoring SLOs; if metrics degrade, rollback quickly. Big bang/in-place/manual rsync are riskier."
+    },
+    {
+      "q": "You need to input secrets into containers at deploy time without writing them to disk. Which method is MOST appropriate?",
+      "options": [
+        "Environment variables in compose files committed to git",
+        "Mount secrets from a secrets manager as tmpfs/in-memory volumes with rotation",
+        "Bake secrets into the image at build time",
+        "Store in plaintext config maps"
+      ],
+      "answer": 1,
+      "explanation": "Mounting secrets from a manager as in-memory volumes avoids persistence and supports rotation. Committing/baking/plaintext configs are insecure."
+    },
+    {
+      "q": "A global application uses infrastructure templates per region. To avoid drift, what should the CI system enforce?",
+      "options": [
+        "Different templates per region maintained manually",
+        "Single source templates with region parameters and policy checks in PR pipelines",
+        "No code review for hotfixes",
+        "State files stored locally on laptops"
+      ],
+      "answer": 1,
+      "explanation": "Single source with parameters avoids divergence; PR policies enforce consistency. Manual differences, no reviews, and local state promote drift and errors."
+    },
+    {
+      "q": "An app depends on a message queue. During deploys, you must avoid message loss. Which pattern is BEST?",
+      "options": [
+        "Drop messages during deploy and replay later",
+        "Use at-least-once semantics with idempotent consumers and DLQs",
+        "At-most-once delivery to prevent duplicates",
+        "Disable autoscaling for consumers"
+      ],
+      "answer": 1,
+      "explanation": "At-least-once + idempotency ensures no loss and tolerates duplicates; DLQs handle poison messages. At-most-once risks loss; dropping messages is unacceptable; scaling unrelated."
+    },
+    {
+      "q": "You need to provision baseline guardrails across all accounts/subscriptions. What is the BEST approach?",
+      "options": [
+        "Email guidelines to teams",
+        "Use organization-level policies/blueprints/landing zones applied programmatically",
+        "Let each team configure their own settings",
+        "Rely on manual audits quarterly"
+      ],
+      "answer": 1,
+      "explanation": "Org-level policies and landing zones enforce consistent guardrails at scale. Emails/manual audits are weak; decentralization without guardrails invites drift."
+    },
+    {
+      "q": "A containerized service needs zero-downtime DB schema changes. Which technique is MOST appropriate?",
+      "options": [
+        "Run destructive ALTERs in production during peak",
+        "Use expand/contract migrations with backward-compatible releases",
+        "Apply all changes after deploying the new code",
+        "Disable read replicas during migration"
+      ],
+      "answer": 1,
+      "explanation": "Expand/contract (add new structures, write dual, backfill, then remove old) supports rolling, backward-compatible changes without downtime."
+    },
+    {
+      "q": "Which method BEST ensures that a golden VM image remains compliant over time?",
+      "options": [
+        "Freeze the image forever",
+        "Image pipeline with CIS baseline hardening, automated patching, and continuous validation",
+        "Manual patching after deployment",
+        "Disable hardening to reduce failures"
+      ],
+      "answer": 1,
+      "explanation": "Automated image pipelines enforce hardening and patching with validation. Frozen images drift; manual patching is error-prone; disabling hardening violates compliance."
+    },
+    {
+      "q": "You must deploy to multiple clouds. What is the MOST portable abstraction for application packaging?",
+      "options": [
+        "Vendor-specific PaaS buildpacks only",
+        "OCI containers with standard runtime interfaces and IaC per cloud",
+        "Proprietary VM image formats",
+        "Cloud-specific serverless functions only"
+      ],
+      "answer": 1,
+      "explanation": "OCI containers are widely portable; IaC can adapt per cloud. Vendor-specific formats/functions reduce portability; proprietary images hinder migration."
+    }
+  ],
+  "Module 4: Operations, Monitoring & Reliability": [
+    {
+      "q": "A production SLO: availability >= 99.9% monthly, latency p95 < 200 ms. Which monitoring approach BEST supports this?",
+      "options": [
+        "Only infrastructure metrics",
+        "Black-box synthetic checks + white-box metrics/logs with alerting on error budgets",
+        "Manual ad-hoc testing weekly",
+        "Email alerts for every info log"
+      ],
+      "answer": 1,
+      "explanation": "Combining synthetic checks with white-box telemetry and error budget-based alerts aligns with SLOs and user experience. Infra-only/weekly/manual logging alerts are insufficient."
+    },
+    {
+      "q": "Your autoscaling policies oscillate (scale up/down repeatedly). What is the FIRST tuning step?",
+      "options": [
+        "Disable health checks",
+        "Increase cooldowns and use target-tracking with stable metrics",
+        "Double instance size",
+        "Remove scaling completely"
+      ],
+      "answer": 1,
+      "explanation": "Cooldowns and target-tracking reduce thrash; choose stable metrics (e.g., queue depth/p95 latency). Disabling health checks removes protection; doubling size may not fix oscillations; removing scaling hurts elasticity."
+    },
+    {
+      "q": "Backups complete successfully, but restores often fail validation. What process change is MOST important?",
+      "options": [
+        "Reduce backup frequency to save space",
+        "Implement regular restore testing and runbooks with success criteria",
+        "Encrypt backups",
+        "Switch to differential backups only"
+      ],
+      "answer": 1,
+      "explanation": "Backups are only as good as successful restores; regular test restores with documented runbooks ensure recoverability. Encryption is good but unrelated to validation; frequency/type changes don't fix restore failures."
+    },
+    {
+      "q": "A microservice shows increased error rate after a deployment, but infra metrics are normal. What should you check FIRST?",
+      "options": [
+        "DNS TTLs",
+        "Application logs and trace spans correlated to the release version",
+        "Disk IOPS",
+        "NTP configs"
+      ],
+      "answer": 1,
+      "explanation": "Correlate app logs/traces with the release to pinpoint code-level regressions. DNS/IOPS/NTP may matter, but release-correlated app telemetry is the fastest lead."
+    },
+    {
+      "q": "Which tagging strategy BEST supports cost allocation and operations?",
+      "options": [
+        "Optional tags defined by each team",
+        "Mandatory tags: owner, environment, application, cost-center, data-classification, with enforcement",
+        "Only environment tag",
+        "Use random tag names to avoid guessing"
+      ],
+      "answer": 1,
+      "explanation": "A mandatory, standardized tag set enables chargeback, ownership, and compliance. Optional or minimal tags reduce visibility; random tags prevent governance."
+    },
+    {
+      "q": "You observe a slow memory leak in a stateless service. What is the LEAST disruptive mitigation while a fix is developed?",
+      "options": [
+        "Disable autoscaling",
+        "Shorten instance/pod lifetimes with rolling restarts and memory-based health checks",
+        "Increase node size and ignore",
+        "Turn off monitoring to reduce noise"
+      ],
+      "answer": 1,
+      "explanation": "Proactive restarts and health checks contain leaks with minimal impact. Disabling autoscaling or ignoring the issue is risky; turning off monitoring hides problems."
+    },
+    {
+      "q": "A new region launch is planned. Which pre-production test MOST reduces deployment risk?",
+      "options": [
+        "Ping tests only",
+        "Load and failover tests simulating region isolation and traffic shifting",
+        "Manual spot checks",
+        "Check instance quotas only"
+      ],
+      "answer": 1,
+      "explanation": "Load/failover tests validate resilience and routing under failure. Pings/manual/quotas alone don't validate behavior under real conditions."
+    },
+    {
+      "q": "Which is the BEST indicator that a user-facing service breach of SLO is imminent?",
+      "options": [
+        "CPU utilization > 80%",
+        "Error budget burn rate spikes beyond threshold",
+        "Disk usage at 60%",
+        "Number of open tickets"
+      ],
+      "answer": 1,
+      "explanation": "Error budget burn rate directly reflects SLO consumption and impending breaches. CPU/disk usage are indirect; ticket count lags."
+    },
+    {
+      "q": "You must minimize storage cost for logs while maintaining 13 months of searchable data. What is the BEST approach?",
+      "options": [
+        "Keep all logs in hot storage",
+        "Tier recent logs to hot, older to warm/cold with index snapshots and on-demand restore",
+        "Delete logs after 30 days",
+        "Compress nothing to avoid CPU overhead"
+      ],
+      "answer": 1,
+      "explanation": "Lifecycle tiering balances cost and searchability by keeping recent logs hot and older logs in cheaper tiers with snapshot-based search/restore."
+    },
+    {
+      "q": "After a cloud provider incident, which post-incident action adds the MOST resilience?",
+      "options": [
+        "Document the outage only",
+        "Identify single-region dependencies and refactor to multi-AZ/region with automation tests",
+        "Increase instance sizes",
+        "Add more dashboards"
+      ],
+      "answer": 1,
+      "explanation": "Eliminating single-region dependencies and testing failover increases resilience. Documentation alone or bigger instances/dashboards don't address availability architecture."
+    },
+    {
+      "q": "A sudden cost spike is detected. What is the FIRST most effective operational response?",
+      "options": [
+        "Ignore until month end",
+        "Use anomaly detection alerts, identify top offenders by tag/account, and stop unintended resources",
+        "Delete all resources to be safe",
+        "Open a Sev-1 with the cloud provider"
+      ],
+      "answer": 1,
+      "explanation": "Anomaly alerts and tagged cost breakdowns quickly identify and remediate offenders (e.g., stop leaked resources). Deleting all is unsafe; ignoring delays; Sev-1 may not be provider-caused."
+    },
+    {
+      "q": "Your DR plan targets RTO 2 hours, RPO 15 minutes. Which test provides the BEST evidence of readiness?",
+      "options": [
+        "Tabletop review only",
+        "Full failover exercise with timing of recovery steps and data currency validation",
+        "Ping the DR site",
+        "Verify backup job success"
+      ],
+      "answer": 1,
+      "explanation": "A timed full failover with validation directly measures RTO/RPO compliance. Tabletop/pings/backup success don't verify end-to-end recovery."
+    },
+    {
+      "q": "Operations needs to reduce incident MTTR. Which practice helps MOST?",
+      "options": [
+        "Restrict access to logs",
+        "Standardize runbooks/playbooks with auto-remediation for known failure patterns",
+        "Disable alerting",
+        "Rely on tribal knowledge"
+      ],
+      "answer": 1,
+      "explanation": "Runbooks and auto-remediation reduce diagnosis/repair time. Restricting logs/disabled alerts/tribal knowledge increase MTTR."
+    },
+    {
+      "q": "A queue consumer occasionally falls behind during spikes. Which SENSIBLE scaling metric should drive autoscaling?",
+      "options": [
+        "Average CPU of nodes",
+        "Queue depth and message age (oldest) combined with processing rate",
+        "Disk free space",
+        "Number of pods only"
+      ],
+      "answer": 1,
+      "explanation": "Queue depth/age with throughput reflect back-pressure and service ability to catch up; CPU/disk/pod count are indirect."
+    },
+    {
+      "q": "Authentication requests intermittently fail with 'token expired' errors immediately after login across multiple services. No code changes occurred, and infrastructure metrics look normal. What is the MOST likely root cause?",
+      "options": [
+        "Network ACL blocking outbound TCP 443 intermittently",
+        "Clock skew on nodes due to NTP misconfiguration causing JWT/OAuth token validation failures",
+        "Insufficient disk space on the logging server",
+        "CPU spikes on the bastion host"
+      ],
+      "answer": 1,
+      "explanation": "Many auth systems (JWT/OAuth/OIDC) validate tokens against issued-at/expiry times. Significant clock skew between services and IdP causes tokens to appear expired or not yet valid. Ensuring proper NTP synchronization resolves the issue. NACLs, disk space, or bastion CPU would not systematically cause immediate 'token expired' across services."
+    }
+  ],
+  "Module 5: Troubleshooting & Performance": [
+    {
+      "q": "Users report intermittent 502 errors through a load balancer after a new deployment. Instances pass basic health checks. What is the MOST likely cause?",
+      "options": [
+        "DNS propagation delay",
+        "Application-level health checks not covering critical dependencies",
+        "Incorrect route table",
+        "Expired TLS certificate on the load balancer"
+      ],
+      "answer": 1,
+      "explanation": "If instances pass basic checks but 502s occur, app health checks may be insufficient (e.g., DB/cache dependency failing). Enhance health endpoints to validate critical paths. DNS/route/TLS issues would present differently and consistently."
+    },
+    {
+      "q": "A VM cannot reach the internet. It is in a public subnet with route to an IGW and has a public IP. Security group allows egress. What else could block it?",
+      "options": [
+        "NTP misconfiguration",
+        "Network ACL outbound rule denying traffic",
+        "CPU throttle",
+        "Disk encryption enabled"
+      ],
+      "answer": 1,
+      "explanation": "A deny rule in the NACL can block egress even if SG allows it. NTP/CPU/disk encryption do not directly block outbound connectivity."
+    },
+    {
+      "q": "Your container app shows \"CrashLoopBackOff\". Which FIRST step is most effective?",
+      "options": [
+        "Scale to zero",
+        "Inspect container logs and describe events to identify readiness/liveness probe failures or config errors",
+        "Delete the namespace",
+        "Increase node count"
+      ],
+      "answer": 1,
+      "explanation": "Logs and events reveal the root cause (probe failures, env/config). Scaling/deleting/increasing nodes doesn't address immediate cause."
+    },
+    {
+      "q": "Latency to a database increased after enabling encryption in transit. What tuning is MOST appropriate?",
+      "options": [
+        "Disable TLS",
+        "Enable TLS session reuse/keep-alives and ensure hardware acceleration where available",
+        "Reduce max connections",
+        "Move DB to a smaller instance"
+      ],
+      "answer": 1,
+      "explanation": "TLS adds handshake overhead; session reuse/keep-alives and hardware acceleration reduce latency without sacrificing security. Disabling TLS violates security; other options are counterproductive."
+    },
+    {
+      "q": "A web app behind a CDN returns stale content after a hotfix. Which is the BEST immediate action?",
+      "options": [
+        "Increase instance size",
+        "Purge/invalidate CDN cache for affected paths and review cache-control headers",
+        "Switch to HTTP",
+        "Reboot all origin servers"
+      ],
+      "answer": 1,
+      "explanation": "Purging the CDN cache and fixing cache-control headers ensures fresh content. Instance size/protocol/reboots won't address stale caches."
+    },
+    {
+      "q": "Developers cannot assume an IAM role from the CI system, receiving \"AccessDenied\". Which is the MOST likely misconfiguration?",
+      "options": [
+        "Wrong region",
+        "Trust policy missing the CI principal or external ID condition",
+        "Insufficient disk space on runner",
+        "Expired TLS cert"
+      ],
+      "answer": 1,
+      "explanation": "Assume-role failures often stem from trust policy not allowing the principal/external ID. Region/disk/TLS generally don't cause AccessDenied on STS assume role."
+    },
+    {
+      "q": "After migrating to microservices, inter-service latency increased. What is the MOST impactful optimization?",
+      "options": [
+        "Disable retries globally",
+        "Introduce async messaging for non-critical calls and apply connection pooling with timeouts",
+        "Increase log verbosity",
+        "Merge services back into a monolith"
+      ],
+      "answer": 1,
+      "explanation": "Async messaging reduces synchronous hops; connection pooling/timeouts improve efficiency. Removing retries may hurt reliability; logging volume doesn’t fix latency; re-monolith is drastic."
+    },
+    {
+      "q": "Users in one geography report slow downloads from object storage. What is the BEST remediation?",
+      "options": [
+        "Move bucket to a random region",
+        "Enable geo-replication and serve via CDN with regional edge caches",
+        "Disable versioning",
+        "Compress images more on the server"
+      ],
+      "answer": 1,
+      "explanation": "Geo-replication plus CDN edges reduces distance/latency. Random moves may worsen; versioning and image compression are unrelated to network distance."
+    },
+    {
+      "q": "An API experiences intermittent 429 responses. Which root cause is MOST plausible?",
+      "options": [
+        "Excessive TLS version",
+        "Rate limiting thresholds being exceeded by certain clients",
+        "High disk queue length",
+        "Expired DNS TTL"
+      ],
+      "answer": 1,
+      "explanation": "429 indicates too many requests; likely rate limit enforcement. TLS version/disk/DNS TTL are unrelated to 429s."
+    },
+    {
+      "q": "Kubernetes pods cannot reach an external database allowed by security groups. Nodes have outbound internet. What else can block?",
+      "options": [
+        "CNI network policy denying egress from the namespace",
+        "Insufficient CPU limits",
+        "Wrong timezone",
+        "Too many replicas"
+      ],
+      "answer": 0,
+      "explanation": "K8s network policies can block egress at the pod level despite node-level connectivity. CPU/timezone/replica count do not block external egress by themselves."
+    },
+    {
+      "q": "After rotating a server certificate, clients fail TLS handshake with \"unknown CA\". What is the MOST likely cause?",
+      "options": [
+        "Cipher suites are too strong",
+        "Intermediate CA not provided in the server certificate chain",
+        "Time sync is perfect",
+        "HSTS enabled"
+      ],
+      "answer": 1,
+      "explanation": "Missing intermediate CA breaks trust chain and leads to unknown CA errors. Cipher strength/HSTS/time sync wouldn't cause this specific error."
+    },
+    {
+      "q": "A VM shows high iowait and slow response under load. Which is the MOST appropriate remediation?",
+      "options": [
+        "Lower instance size",
+        "Move to provisioned IOPS/storage class with higher throughput and optimize query patterns",
+        "Disable swap",
+        "Increase DNS TTL"
+      ],
+      "answer": 1,
+      "explanation": "High iowait points to storage bottlenecks; moving to higher IOPS/throughput storage and optimizing IO patterns target the root cause."
+    },
+    {
+      "q": "DNS resolution intermittently fails from private subnets. Instances use custom DNS forwarders. What should you check FIRST?",
+      "options": [
+        "CPU on database",
+        "Security groups/NACLs allowing UDP/TCP 53 to forwarders and forwarder health",
+        "TLS policies on ALB",
+        "Disk encryption keys"
+      ],
+      "answer": 1,
+      "explanation": "Ensure network rules permit DNS traffic to forwarders and verify forwarder health. Other options are unrelated to DNS resolution."
+    },
+    {
+      "q": "A queue shows growing backlog; consumers scale but throughput stagnates. Which bottleneck is MOST likely?",
+      "options": [
+        "Excess log retention",
+        "Downstream dependency saturation (e.g., database limits) preventing faster consumption",
+        "Too many tags on resources",
+        "Short DNS TTLs"
+      ],
+      "answer": 1,
+      "explanation": "If consumers scale but throughput doesn't improve, a downstream dependency (DB/external API) is saturated. Tags/logs/DNS TTLs don't directly cap consumption throughput."
+    },
+    {
+      "q": "After enabling connection pooling in the application, the database begins returning 'too many connections' during traffic bursts and APIs respond 500. Which remediation is MOST appropriate?",
+      "options": [
+        "Increase DNS TTL to reduce lookups",
+        "Right-size per-instance pool limits, enable connection reuse/keep-alives, add backoff with jitter, and enforce circuit breaking",
+        "Move the database to a smaller instance to reduce contention",
+        "Disable health checks on the load balancer"
+      ],
+      "answer": 1,
+      "explanation": "Connection pools must be sized to avoid amplifying total concurrent connections across scaled app instances. Proper pool limits, reuse, and client-side backoff/circuit breaking prevent DB overload. DNS TTL, smaller DB instances, or disabling health checks do not address connection exhaustion."
+    }
+  ],
+  "Module 6: Governance, Risk, Compliance & Cost Management": [
+    {
+      "q": "Finance requests monthly chargeback to business units with anomaly detection. What foundational control is REQUIRED?",
+      "options": [
+        "Default tags only",
+        "Enforced tagging/labeling policy with cost allocation tags and org structure alignment",
+        "One shared account/subscription for all workloads without tags",
+        "Manual spreadsheets from invoices"
+      ],
+      "answer": 1,
+      "explanation": "Chargeback/showback depend on consistent cost allocation tags and an org hierarchy. Shared untagged resources and manual spreadsheets lack fidelity and automation."
+    },
+    {
+      "q": "Legal requires data residency in the EU with subject erasure under GDPR. Which design aligns BEST?",
+      "options": [
+        "Store PII globally and cache in EU",
+        "Restrict PII storage and processing to EU regions, with deletion workflows and audit trails",
+        "Send backups to non-EU for safety",
+        "Rely on CDN only"
+      ],
+      "answer": 1,
+      "explanation": "GDPR residency and erasure require EU-only storage/processing and robust deletion workflows with auditable evidence. Global storage/non-EU backups/CDN don't satisfy residency."
+    },
+    {
+      "q": "A vendor offers a proprietary managed database that locks data into a non-exportable format. What is the MOST significant risk?",
+      "options": [
+        "Slightly higher latency",
+        "Vendor lock-in reducing portability and increasing exit costs",
+        "More tags required",
+        "Extra TLS setup"
+      ],
+      "answer": 1,
+      "explanation": "Non-exportable formats create lock-in, raising migration/exit cost and strategic risk. Latency/tags/TLS are comparatively minor."
+    },
+    {
+      "q": "Your org must enforce minimum TLS version and block public storage. What mechanism provides PREVENTIVE control at scale?",
+      "options": [
+        "Email reminders to engineers",
+        "Organization policies/guardrails (policy-as-code) that deny noncompliant configurations",
+        "Monthly manual audits",
+        "Chat channel warnings only"
+      ],
+      "answer": 1,
+      "explanation": "Org-level policies (e.g., SCPs/organization policy/blueprints) prevent creation of noncompliant resources. Emails/audits/warnings are detective at best."
+    },
+    {
+      "q": "A business unit wants to disable MFA for convenience. How should governance respond?",
+      "options": [
+        "Approve for speed",
+        "Deny and enforce conditional access/MFA as baseline with exceptions only via risk acceptance",
+        "Allow only for admins",
+        "Ignore the request"
+      ],
+      "answer": 1,
+      "explanation": "MFA is a baseline control; governance should enforce it via conditional access. Exceptions require formal risk acceptance. Allowing disablement undermines security posture."
+    },
+    {
+      "q": "To control spend, which practice is MOST effective across environments?",
+      "options": [
+        "Single shared production account",
+        "Budget alerts with automated stop/scale-down actions and scheduled off-hours",
+        "No caps to avoid service interruption",
+        "Rely on end-of-month invoice review"
+      ],
+      "answer": 1,
+      "explanation": "Budgets with automated actions and schedules prevent runaway cost. Shared accounts and reactive reviews are weaker; no caps invites overruns."
+    },
+    {
+      "q": "A regulator asks for evidence of change control for production resources. What is the BEST source of truth?",
+      "options": [
+        "Verbal approvals",
+        "VCS history + CI/CD audit logs linked to change requests with approvals",
+        "Email threads only",
+        "Terminal history from engineer laptops"
+      ],
+      "answer": 1,
+      "explanation": "Version control and CI/CD logs tied to change tickets provide authoritative, auditable change control evidence. Emails/terminal history/verbal approvals are insufficient."
+    },
+    {
+      "q": "Which KPI BEST reflects cloud financial efficiency?",
+      "options": [
+        "Total spend only",
+        "Unit cost (e.g., cost per transaction/GB) with utilization and reservation coverage",
+        "Number of instances",
+        "CPU percentage"
+      ],
+      "answer": 1,
+      "explanation": "Unit economics contextualize spend vs. value; reservation coverage/utilization indicate efficiency. Raw spend/instance counts/CPU% lack business context."
+    },
+    {
+      "q": "You must ensure least-privilege access requests are reviewed and time-bound. Which control aligns BEST?",
+      "options": [
+        "Standing admin access for on-call",
+        "Privileged Access Management (PAM) with JIT elevation and approvals",
+        "Shared admin credentials",
+        "Grant access permanently to reduce toil"
+      ],
+      "answer": 1,
+      "explanation": "PAM with JIT enforces time-bound, approved access, aligning with least privilege. Standing/shared/permanent access increases risk."
+    },
+    {
+      "q": "A DR policy mandates quarterly tests. Which measurement is MOST important to record each time?",
+      "options": [
+        "Number of participants",
+        "Measured RTO/RPO vs. targets and identified gaps with action items",
+        "Refreshments provided",
+        "Count of emails sent"
+      ],
+      "answer": 1,
+      "explanation": "Recording actual RTO/RPO against targets with remediation tasks provides evidence of readiness and continuous improvement."
+    },
+    {
+      "q": "Your security team requires centralized, immutable logs. Which storage characteristic is MOST critical?",
+      "options": [
+        "Writable by everyone",
+        "WORM/immutability policies with restricted deletes and retention enforcement",
+        "Publicly readable",
+        "No encryption to simplify access"
+      ],
+      "answer": 1,
+      "explanation": "WORM/immutability ensures logs cannot be altered/deleted before retention expiry. Public access and no encryption are security risks; broad write access invites tampering."
+    },
+    {
+      "q": "A workload has predictable baseline usage with daily peaks. Which commitment strategy minimizes cost while maintaining flexibility?",
+      "options": [
+        "All on-demand",
+        "Mix of reserved/savings plans for baseline + autoscaling on-demand/spot for peaks",
+        "All spot instances",
+        "Only free tier"
+      ],
+      "answer": 1,
+      "explanation": "Reserve baseline for discounts; burst with on-demand/spot for flexibility. All on-demand is costly; all spot risks interruptions; free tier is insufficient."
+    },
+    {
+      "q": "A policy mandates that PII datasets are tagged and access-reviewed quarterly. Which mechanism BEST enforces this?",
+      "options": [
+        "Honor system",
+        "Automated data classification with tag propagation + access review workflows",
+        "CSV trackers updated monthly",
+        "Verbal confirmation by owners"
+      ],
+      "answer": 1,
+      "explanation": "Automated classification and tag propagation ensure consistency, and review workflows enforce periodic access validation. Manual/verbals lack rigor."
+    },
+    {
+      "q": "An external audit requests proof of least privilege in IAM. What evidence is MOST convincing?",
+      "options": [
+        "Architecture diagram only",
+        "IAM policy diffs showing denied-by-default stance, role scopes, last-accessed data, and access reviews",
+        "Anecdotes from engineers",
+        "A list of usernames"
+      ],
+      "answer": 1,
+      "explanation": "Concrete IAM artifacts (policies, last-accessed analytics, access review records) demonstrate least privilege. Diagrams/anecdotes/username lists don't."
+    },
+    {
+      "q": "To reduce change risk, the CAB wants objective gating for production deploys. Which gating signal is MOST appropriate?",
+      "options": [
+        "Developer confidence",
+        "Canary metrics meeting SLO-based quality gates (error rate/latency) with automated rollback on failure",
+        "Email approval",
+        "Manual smoke test only"
+      ],
+      "answer": 1,
+      "explanation": "SLO-based canary gates provide objective, automated signals tied to user experience, enabling safe rollout or rollback. Subjective/manual gates are weaker."
+    }
+  ]
+}

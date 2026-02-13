@@ -1,0 +1,1004 @@
+{
+  "Module 1: Cloud Architecture and Design": [
+    {
+      "q": "A company is migrating its three-tier web application to the cloud. The application currently runs on a single physical server with web, application, and database components. The company wants to improve reliability and scalability without rewriting the application. Which cloud architecture design is MOST appropriate?",
+      "options": [
+        "Lift-and-shift the server into a single large IaaS VM instance",
+        "Refactor the application into microservices and containers before migration",
+        "Separate tiers into multiple VMs with a load balancer in front of the web tier",
+        "Migrate directly to a PaaS serverless model for all tiers"
+      ],
+      "answer": 2,
+      "explanation": "Separating tiers into multiple VMs with a load balancer in front of the web tier preserves the existing application architecture while improving scalability and reliability. Web servers can be scaled horizontally behind the load balancer, and the database can be placed on a dedicated instance. Simply lifting and shifting to one large VM (option 0) does not address scalability or resiliency. Refactoring into microservices (option 1) or fully serverless (option 3) would require significant reengineering, which the scenario does not mandate."
+    },
+    {
+      "q": "A cloud architect is designing a solution that must support multiple tenants on the same underlying infrastructure while ensuring strict isolation of data and network traffic. Which cloud characteristic BEST addresses this requirement?",
+      "options": [
+        "Elasticity",
+        "Resource pooling",
+        "Measured service",
+        "Broad network access"
+      ],
+      "answer": 1,
+      "explanation": "Resource pooling allows the provider to serve multiple tenants using a shared pool of compute, storage, and network resources while logically isolating each tenant's environment. This is fundamental to a multitenant cloud architecture. Elasticity (option 0) relates to scaling up and down, measured service (option 2) to usage-based billing and monitoring, and broad network access (option 3) to ubiquitous connectivity, none of which directly address tenant isolation."
+    },
+    {
+      "q": "An organization wants to move a latency-sensitive financial trading application to the cloud. The application requires sub-millisecond latency to a stock exchange's systems. Which deployment approach is MOST appropriate?",
+      "options": [
+        "Host the application in a public cloud region closest to the users",
+        "Use a hybrid deployment with on-premises hosting and cloud-based backup",
+        "Deploy to a cloud provider's edge/colocation site near the exchange",
+        "Use a multi-cloud deployment across multiple regions for redundancy"
+      ],
+      "answer": 2,
+      "explanation": "Deploying to a cloud provider's edge or colocation site near the stock exchange minimizes physical distance and round-trip time, best meeting the sub-millisecond latency requirement. A public cloud region 'closest to users' (option 0) may still be too far from the exchange. A hybrid model (option 1) does not guarantee proximity to the exchange and adds complexity. Multi-cloud across multiple regions (option 3) adds redundancy but generally increases latency and complexity, not ideal for ultra-low-latency trading."
+    },
+    {
+      "q": "A company must comply with strict data residency laws that require customer data to remain within a specific country. They also want to leverage a public cloud provider. Which design consideration is MOST critical when selecting regions and services?",
+      "options": [
+        "Choosing regions that support high availability SLAs",
+        "Ensuring the provider offers a local support center",
+        "Selecting regions physically located in the required country",
+        "Using only serverless services to abstract data location"
+      ],
+      "answer": 2,
+      "explanation": "For data residency compliance, the most critical factor is ensuring the selected regions are physically located within the required country so that customer data does not leave that jurisdiction. High availability SLAs (option 0) and local support (option 1) are valuable but do not ensure legal compliance. Serverless services (option 3) may still store data in other regions depending on the provider's implementation."
+    },
+    {
+      "q": "An enterprise needs to design a disaster recovery strategy for a critical HR application hosted in the cloud. The RTO is 4 hours and the RPO is 15 minutes. Which design MOST closely meets these requirements while balancing cost?",
+      "options": [
+        "Active-active deployment across two regions with synchronous replication",
+        "Active-passive deployment with asynchronous replication and automated failover",
+        "Nightly backups to object storage in another region",
+        "Weekly snapshots of the database and VM images"
+      ],
+      "answer": 1,
+      "explanation": "An active-passive deployment with asynchronous replication and automated failover can typically achieve an RTO of a few hours and an RPO of minutes, providing a good cost–benefit balance. Active-active with synchronous replication (option 0) offers near-zero RPO/RTO but at much higher cost and complexity. Nightly backups (option 2) and weekly snapshots (option 3) cannot meet a 15-minute RPO and 4-hour RTO."
+    },
+    {
+      "q": "A workload experiences highly variable traffic with unpredictable spikes. The business wants to minimize cost while ensuring the application remains responsive. Which cloud capability is MOST important to meet this requirement?",
+      "options": [
+        "Vertical scaling",
+        "Horizontal scaling with auto scaling policies",
+        "Dedicated host allocation",
+        "Reserved capacity for baseline usage"
+      ],
+      "answer": 1,
+      "explanation": "Horizontal scaling with auto scaling policies allows the system to add or remove instances based on demand, effectively handling unpredictable spikes while minimizing cost when demand is low. Vertical scaling (option 0) requires manual resizing and usually involves downtime. Dedicated hosts (option 2) are more expensive and less flexible. Reserved capacity (option 3) can optimize cost for predictable baseline load but does not solve unpredictable spikes alone."
+    },
+    {
+      "q": "A cloud architect is comparing monolithic and microservices architectures for a new application. The team wants independent deployment of features and rapid scaling of individual components. Which statement BEST supports choosing a microservices architecture?",
+      "options": [
+        "Microservices make it easier to enforce a single, centralized database schema",
+        "Microservices allow each service to scale and be deployed independently",
+        "Microservices require fewer network communications than monoliths",
+        "Microservices eliminate the need for orchestration platforms"
+      ],
+      "answer": 1,
+      "explanation": "Microservices architectures allow each service to be developed, deployed, and scaled independently, which directly supports the requirement for independent feature deployment and granular scaling. Centralized schemas (option 0) are more natural with monoliths. Microservices typically increase network communications (option 2) and often require orchestration platforms (option 3) such as Kubernetes for management."
+    },
+    {
+      "q": "A company wants to minimize vendor lock-in while using multiple cloud providers. Which approach to application design BEST supports this objective?",
+      "options": [
+        "Rely on provider-specific PaaS services for faster development",
+        "Use open standards and container-based deployment across providers",
+        "Leverage proprietary serverless functions in each cloud",
+        "Use a single provider for compute and another for storage"
+      ],
+      "answer": 1,
+      "explanation": "Using open standards and container-based deployment promotes portability across cloud providers, reducing vendor lock-in. Relying heavily on provider-specific PaaS (option 0) or proprietary serverless functions (option 2) deepens lock-in. Splitting services arbitrarily between providers (option 3) does not inherently reduce lock-in and can increase complexity without portability guarantees."
+    },
+    {
+      "q": "An architect is designing a multi-tier application in the cloud. The application layer needs to communicate with the database layer securely over the network. Which design choice BEST follows the principle of least privilege?",
+      "options": [
+        "Allow all traffic between the application and database subnets",
+        "Allow application servers to connect to database servers only on required ports",
+        "Place application and database servers in the same security group",
+        "Use a public IP on the database and restrict by application IP"
+      ],
+      "answer": 1,
+      "explanation": "Allowing application servers to connect to database servers only on the necessary ports enforces least privilege by limiting access to what is required. Allowing all traffic (option 0) is overly permissive. Placing all servers in the same security group (option 2) may inadvertently broaden access. Exposing the database with a public IP (option 3) increases the attack surface and is not recommended."
+    },
+    {
+      "q": "A global SaaS provider must serve customers in multiple continents with low latency and high availability. Which architectural pattern BEST addresses this requirement?",
+      "options": [
+        "Single-region deployment with large instances and auto scaling",
+        "Multi-region active-active deployment with global load balancing",
+        "Multi-region active-passive deployment with manual failover",
+        "On-premises hosting with a CDN in front of the application"
+      ],
+      "answer": 1,
+      "explanation": "A multi-region active-active deployment with global load balancing directs users to the nearest healthy region, improving latency and resiliency. A single-region deployment (option 0) cannot provide global low latency or regional fault tolerance. Active-passive (option 2) improves disaster recovery but not normal user latency. A CDN in front of an on-prem application (option 3) helps for static content but not as effectively for dynamic SaaS workloads requiring global compute distribution."
+    },
+    {
+      "q": "An organization wants to move its batch data processing jobs to the cloud. These jobs run overnight and are not latency sensitive. The company wants to minimize cost while still meeting deadlines. Which resource consumption model is MOST appropriate?",
+      "options": [
+        "On-demand instances for all jobs",
+        "Reserved instances sized for peak demand",
+        "Spot/preemptible instances with job retry logic",
+        "Dedicated hosts for exclusive hardware access"
+      ],
+      "answer": 2,
+      "explanation": "Spot or preemptible instances offer significant cost savings and are suitable for fault-tolerant, non-latency-sensitive batch jobs, especially when combined with retry logic and flexible scheduling. On-demand (option 0) and reserved instances (option 1) are more expensive for transient workloads. Dedicated hosts (option 3) are usually the most expensive and intended for compliance or licensing needs, not cost-optimized batch processing."
+    },
+    {
+      "q": "A company is evaluating private, public, and hybrid cloud deployment models. They have stringent regulatory requirements, but also want to offload non-sensitive workloads to reduce costs. Which model BEST fits these requirements?",
+      "options": [
+        "Public cloud only",
+        "Private cloud only",
+        "Hybrid cloud combining private and public resources",
+        "Community cloud managed by a third party"
+      ],
+      "answer": 2,
+      "explanation": "A hybrid cloud model allows the organization to keep sensitive, regulated workloads in a private cloud while moving non-sensitive workloads to a public cloud, balancing compliance and cost efficiency. Public cloud only (option 0) may violate regulatory restrictions. Private cloud only (option 1) misses cost savings from public cloud. A community cloud (option 3) could help with shared compliance standards but does not directly address the need to offload non-sensitive workloads to a cost-effective public environment."
+    },
+    {
+      "q": "During capacity planning, a cloud architect is asked to ensure the design can handle a 3x increase in traffic during seasonal events without performance degradation. Which is the BEST metric to focus on when validating the design?",
+      "options": [
+        "Average CPU utilization across all instances",
+        "Maximum connections per load balancer",
+        "Throughput and latency under peak load in performance tests",
+        "Number of virtual machines deployed in the environment"
+      ],
+      "answer": 2,
+      "explanation": "Throughput and latency under peak load are the key performance indicators that determine whether the system can handle a 3x traffic increase without degradation. Average CPU utilization (option 0) may hide bottlenecks. The maximum connections per load balancer (option 1) is relevant but only one part of the end-to-end performance story. The number of VMs (option 3) does not directly indicate performance under load."
+    },
+    {
+      "q": "An organization wants a highly available database solution in the cloud that can automatically fail over within the same region if the primary instance fails. Which design is MOST appropriate?",
+      "options": [
+        "Single database instance with regular backups to object storage",
+        "Database cluster with read replicas in the same subnet",
+        "Managed database service with multi-AZ or zone-redundant deployment",
+        "Two standalone databases with manual data synchronization"
+      ],
+      "answer": 2,
+      "explanation": "A managed database service with multi-AZ or zone-redundant deployment provides built-in high availability and automatic failover within a region, which directly addresses the requirement. A single instance with backups (option 0) supports recovery but not automatic HA. Read replicas (option 1) are typically designed for read scaling and may not be configured for automatic failover. Two standalone databases with manual sync (option 3) increase operational complexity and risk."
+    },
+    {
+      "q": "A cloud solutions architect must design an application that can gracefully handle the failure of any single component without affecting the user experience. Which design principle is MOST relevant?",
+      "options": [
+        "Design for scale-up",
+        "Design for failure and redundancy",
+        "Use of monolithic architecture",
+        "Centralized stateful session management"
+      ],
+      "answer": 1,
+      "explanation": "Designing for failure and redundancy means assuming that components will fail and building in redundancy, fault tolerance, and graceful degradation. This directly supports the requirement. Scaling up (option 0) focuses on capacity, not resilience. A monolithic architecture (option 2) can increase the blast radius of failures. Centralized stateful sessions (option 3) create single points of failure and can complicate failover."
+    }
+  ],
+  "Module 2: Cloud Deployment and Configuration": [
+    {
+      "q": "A systems administrator is deploying a new web application using an infrastructure-as-code (IaC) tool. The goal is to ensure environments (dev, test, prod) are consistent and reproducible. Which practice BEST supports this goal?",
+      "options": [
+        "Manually configuring each environment and saving screenshots",
+        "Using the same IaC templates with environment-specific variables",
+        "Creating separate, unrelated IaC templates for each environment",
+        "Deploying to production first and then cloning back to dev and test"
+      ],
+      "answer": 1,
+      "explanation": "Using the same IaC templates with environment-specific variables ensures that infrastructure definitions are consistent while allowing for differences such as instance sizes or network ranges. Manual configuration (option 0) introduces drift and inconsistency. Separate unrelated templates (option 2) undermine standardization. Cloning from production (option 3) is risky and does not guarantee version-controlled reproducibility."
+    },
+    {
+      "q": "An organization wants to automate the deployment of a multi-tier application in the cloud. They want each deployment to create networking, compute, and storage components in a predictable way. Which technology is MOST appropriate?",
+      "options": [
+        "Configuration management tools such as Ansible or Chef only",
+        "Infrastructure-as-code templates provided by the cloud provider",
+        "Manual scripts executed from an administrator's workstation",
+        "Container images stored in a private registry"
+      ],
+      "answer": 1,
+      "explanation": "Infrastructure-as-code templates (such as CloudFormation, ARM templates, or Deployment Manager) define and provision cloud resources in a predictable and repeatable manner, matching the requirement. Configuration management tools (option 0) focus more on OS and application configuration, not entire stacks. Manual scripts (option 2) are error-prone and less standardized. Container images (option 3) package applications but do not orchestrate full environment deployment by themselves."
+    },
+    {
+      "q": "During a deployment, a new version of an application is rolled out to all instances at once. Some users report errors, and the team wants a safer approach next time that exposes only a subset of users to the new version initially. Which deployment strategy should be used?",
+      "options": [
+        "Blue-green deployment",
+        "Canary deployment",
+        "Rolling back immediately after deployment",
+        "Lift-and-shift deployment"
+      ],
+      "answer": 1,
+      "explanation": "A canary deployment releases the new version to a small subset of users or instances first, allowing issues to be detected before full rollout. Blue-green deployment (option 0) switches traffic between two complete environments, but when switched, all users hit the new version. Rolling back (option 2) is a remediation, not a proactive strategy. Lift-and-shift (option 3) refers to migration style, not version rollout."
+    },
+    {
+      "q": "A team is deploying containers to a managed Kubernetes service. They want to ensure that deployments are automatically rolled back if health checks fail after a new version is released. Which Kubernetes feature should be configured?",
+      "options": [
+        "DaemonSets with static pods",
+        "ReplicaSets with manual scaling",
+        "Deployments with readiness and liveness probes",
+        "StatefulSets with persistent volumes"
+      ],
+      "answer": 2,
+      "explanation": "Kubernetes Deployments support rolling updates and rollbacks, and when combined with readiness and liveness probes, they can automatically roll back if the new version fails health checks. DaemonSets (option 0) are for node-level pods, ReplicaSets (option 1) do not directly manage rollouts, and StatefulSets (option 3) are for stateful workloads, not specifically for rollout rollback logic."
+    },
+    {
+      "q": "A company must deploy a new application to multiple cloud providers for resilience. The deployment should use a single pipeline that can target different providers with minimal changes. Which approach BEST meets this requirement?",
+      "options": [
+        "Use provider-specific deployment scripts for each cloud",
+        "Adopt a multi-cloud capable IaC tool and parameterize providers",
+        "Deploy only to the primary cloud and use backups in others",
+        "Use manual console deployments for secondary providers"
+      ],
+      "answer": 1,
+      "explanation": "A multi-cloud capable IaC tool (such as Terraform) that accepts provider parameters allows a single pipeline to deploy to various clouds with minimal changes. Provider-specific scripts (option 0) complicate the pipeline. Deploying only to the primary cloud (option 2) does not meet the requirement of multiple providers. Manual console deployments (option 3) are error-prone and not suitable for pipelines."
+    },
+    {
+      "q": "An administrator is configuring a virtual network in the cloud and needs to allow instances in a private subnet to access the internet for updates, without exposing them directly to inbound internet connections. Which component should be configured?",
+      "options": [
+        "Internet gateway attached directly to the private subnet",
+        "NAT gateway or NAT instance in a public subnet",
+        "VPN gateway connected to an on-premises network",
+        "Public IP addresses assigned to all private instances"
+      ],
+      "answer": 1,
+      "explanation": "A NAT gateway or NAT instance in a public subnet enables instances in private subnets to initiate outbound connections to the internet while remaining unreachable from the internet. Attaching an internet gateway directly (option 0) or assigning public IPs (option 3) would expose them. A VPN gateway (option 2) provides private connectivity to on-premises networks, not general internet egress."
+    },
+    {
+      "q": "A cloud engineer must ensure that all new virtual machines are deployed with the latest hardened OS image approved by security. Which method BEST enforces this standard?",
+      "options": [
+        "Documenting the required image and emailing the team",
+        "Creating a custom image and restricting permissions to use other images",
+        "Allowing any marketplace image but scanning them post-deployment",
+        "Manually patching all deployed instances weekly"
+      ],
+      "answer": 1,
+      "explanation": "Creating an approved custom image and using IAM or RBAC controls to restrict deployment to that image enforces the hardened baseline at deployment time. Documentation (option 0) relies on manual compliance. Scanning post-deployment (option 2) is reactive and may leave gaps. Manually patching instances (option 3) is labor-intensive and does not control the initial image content."
+    },
+    {
+      "q": "A developer is deploying a serverless function that processes messages from a queue. The function sometimes times out during heavy load. Which configuration change is MOST likely to improve reliability?",
+      "options": [
+        "Reduce the function timeout setting",
+        "Increase the function memory and timeout limits",
+        "Change the function to run on a smaller instance size",
+        "Disable concurrency to process messages one at a time"
+      ],
+      "answer": 1,
+      "explanation": "Increasing the memory and timeout limits allows the function to handle heavier processing and longer execution times, improving reliability under load. Reducing timeout (option 0) worsens the problem. Changing to a smaller instance (option 2) reduces compute capacity. Disabling concurrency (option 3) may cause backlog growth and delays."
+    },
+    {
+      "q": "During deployment, an engineer must ensure that application configuration values (such as database passwords and API keys) are not hard-coded in templates or code repositories. Which practice is MOST appropriate?",
+      "options": [
+        "Store secrets in plain text configuration files on VMs",
+        "Use environment variables checked into source control",
+        "Use a managed secrets management service integrated with the deployment pipeline",
+        "Embed secrets directly in container images and push to the registry"
+      ],
+      "answer": 2,
+      "explanation": "Using a managed secrets management service allows secure storage, rotation, and controlled access of sensitive values, and integrates well with deployment pipelines without exposing secrets in code. Plain text files (option 0), environment variables in source control (option 1), and embedding secrets in images (option 3) all risk credential exposure."
+    },
+    {
+      "q": "A team is deploying an application that requires persistent storage for uploaded files. The application servers will be in an auto scaling group. Which storage option is MOST appropriate?",
+      "options": [
+        "Local ephemeral disks attached to each instance",
+        "Network-attached shared file storage service",
+        "Object storage accessible only from a single instance",
+        "Temporary in-memory storage on each VM"
+      ],
+      "answer": 1,
+      "explanation": "A network-attached shared file storage service allows all instances in the auto scaling group to access the same persistent data, supporting horizontal scaling and resilience. Local ephemeral disks (option 0) and in-memory storage (option 3) are lost if instances terminate. Object storage tied to a single instance (option 2) undermines scalability and resilience."
+    },
+    {
+      "q": "An application stack is deployed using IaC. The last deployment failed halfway due to a misconfigured network rule. The engineer wants to ensure that partial deployments are automatically rolled back to the previous working state. Which feature is MOST relevant?",
+      "options": [
+        "Idempotency of IaC scripts",
+        "Atomic deployments with rollback support",
+        "Manual execution of destroy commands",
+        "Use of blue-green deployments only"
+      ],
+      "answer": 1,
+      "explanation": "Atomic deployments with rollback support ensure that if a deployment fails, changes are rolled back to the previous known-good state, preventing half-applied infrastructure. Idempotency (option 0) ensures consistent results when re-running scripts but does not guarantee rollback. Manually destroying resources (option 2) is error-prone. Blue-green (option 3) applies more to applications than the entire infrastructure stack."
+    },
+    {
+      "q": "A company is automating VM deployments and wants each VM to register with a configuration management system and install required software on first boot. Which mechanism is MOST appropriate?",
+      "options": [
+        "Use of cloud-init or custom data scripts",
+        "Manual SSH into each VM after deployment",
+        "Snapshots of VMs during runtime",
+        "Assigning static IP addresses to all VMs"
+      ],
+      "answer": 0,
+      "explanation": "Cloud-init or custom data scripts allow initialization tasks, such as registering with configuration management and installing software, to be executed automatically on first boot. Manual SSH (option 1) does not scale. Snapshots (option 2) capture current state but do not handle dynamic initialization workflow. Static IPs (option 3) are unrelated to boot-time provisioning tasks."
+    },
+    {
+      "q": "A cloud engineer is tasked with creating a repeatable deployment pipeline that includes building, testing, and deploying a containerized application to a staging environment, then to production upon approval. Which combination is MOST appropriate?",
+      "options": [
+        "Use a CI/CD tool, container registry, and IaC templates",
+        "Build images manually, upload them via FTP, and start containers",
+        "Use only a configuration management tool to deploy containers",
+        "Deploy containers directly from developer laptops to production"
+      ],
+      "answer": 0,
+      "explanation": "A CI/CD tool orchestrates the pipeline, a container registry stores built images, and IaC templates provision the infrastructure, together enabling a repeatable and automated deployment workflow. Manual builds and FTP (option 1) are not scalable or auditable. Configuration management alone (option 2) does not handle image building and full pipeline logic. Deploying from laptops (option 3) bypasses version control and governance."
+    },
+    {
+      "q": "An organization needs to deploy a multi-VM application that must always keep at least two instances running during updates. They want to avoid downtime while rolling out a new version. Which deployment strategy is MOST suitable?",
+      "options": [
+        "In-place upgrade of all instances simultaneously",
+        "Blue-green deployment with traffic switching",
+        "Rolling deployment with a configured minimum healthy instance count",
+        "Recreate deployment where all instances are replaced at once"
+      ],
+      "answer": 2,
+      "explanation": "A rolling deployment allows instances to be updated in batches while maintaining a minimum number of healthy instances, meeting the requirement of always having at least two running. Blue-green (option 1) is effective but requires duplicating the entire environment, which may be more complex or costly. In-place upgrades of all instances (option 0) and recreate deployments (option 3) risk downtime."
+    }
+  ],
+  "Module 3: Cloud Security": [
+    {
+      "q": "A security engineer is implementing identity and access management (IAM) in a cloud environment. The goal is to ensure that administrators have only the permissions necessary to perform their tasks. Which principle should guide the design?",
+      "options": [
+        "Defense in depth",
+        "Separation of duties",
+        "Least privilege",
+        "Implicit trust"
+      ],
+      "answer": 2,
+      "explanation": "The principle of least privilege states that users should be granted the minimum level of access required to perform their job functions. This directly matches the goal. Defense in depth (option 0) refers to layered controls, separation of duties (option 1) divides responsibilities, and implicit trust (option 3) is contrary to security best practice."
+    },
+    {
+      "q": "An auditor discovers that a cloud storage bucket containing customer reports is publicly accessible via the internet. The organization wants to prevent accidental public exposure of sensitive data in the future. Which control is MOST effective?",
+      "options": [
+        "Enable bucket-level public access blocks and require explicit exceptions",
+        "Encrypt all objects at rest with provider-managed keys only",
+        "Require multi-factor authentication (MFA) for all users",
+        "Move all reports to an on-premises file server"
+      ],
+      "answer": 0,
+      "explanation": "Enabling public access blocks at the bucket level (or equivalent controls) prevents buckets and objects from being made public unless explicitly allowed, directly mitigating accidental exposure. Encryption at rest (option 1) is important but does not prevent public access. MFA (option 2) secures user logins, not public ACLs. Moving data on-premises (option 3) is disruptive and may not address root causes of misconfiguration."
+    },
+    {
+      "q": "A company needs to store highly sensitive keys used to decrypt customer data. The security team requires hardware-based protection and strict access controls. Which cloud service is MOST appropriate?",
+      "options": [
+        "Standard object storage with server-side encryption",
+        "Database with column-level encryption",
+        "Hardware security module (HSM) or managed key management service",
+        "Local encrypted file system on a VM"
+      ],
+      "answer": 2,
+      "explanation": "A hardware security module (HSM) or a managed key management service (KMS) that leverages HSMs is designed to protect cryptographic keys with hardware-backed security and fine-grained access controls. Object storage encryption (option 0) and database encryption (option 1) use keys that must themselves be secured. Local encrypted file systems (option 3) do not provide centralized, hardened key management."
+    },
+    {
+      "q": "An organization has implemented SSO (single sign-on) to access multiple SaaS applications. They want to reduce the risk of credential theft even if a password is compromised. Which control should be added?",
+      "options": [
+        "Increase password complexity requirements only",
+        "Implement multi-factor authentication (MFA)",
+        "Disable account lockout policies",
+        "Allow users to reuse passwords across services"
+      ],
+      "answer": 1,
+      "explanation": "Multi-factor authentication adds an additional factor (such as a token or biometric) on top of the password, significantly reducing risk if a password is compromised. Increasing complexity alone (option 0) is not sufficient. Disabling lockout (option 2) and allowing reuse of passwords (option 3) weaken security."
+    },
+    {
+      "q": "A security team wants to detect anomalous login activity in the cloud environment, such as logins from unusual locations or impossible travel between logins. Which capability is MOST appropriate?",
+      "options": [
+        "Static firewall rules on perimeter firewalls",
+        "Manual weekly review of access logs",
+        "Cloud-native security analytics and UEBA features",
+        "Network address translation (NAT) logging"
+      ],
+      "answer": 2,
+      "explanation": "Cloud-native security analytics and user and entity behavior analytics (UEBA) can analyze login patterns, detect anomalies, and generate alerts, addressing the requirement. Static firewall rules (option 0) cannot detect behavioral anomalies. Manual log review (option 1) is slow and error-prone. NAT logging (option 3) captures IP translations but does not provide behavioral analysis."
+    },
+    {
+      "q": "A developer stores API keys in plain text within a source code repository for a cloud-hosted application. Which is the PRIMARY security risk of this practice?",
+      "options": [
+        "Performance degradation due to large repository size",
+        "Increased risk of key exposure and unauthorized access",
+        "Inability to debug production issues",
+        "Violation of backup retention policies"
+      ],
+      "answer": 1,
+      "explanation": "Storing secrets in plain text in source control greatly increases the risk of credential exposure, which can lead to unauthorized access to systems and data. Repository size (option 0) is not the main issue. Debugging (option 2) is unrelated. Backup retention policies (option 3) are not directly impacted by where secrets are stored in code."
+    },
+    {
+      "q": "A cloud administrator wants to ensure that if an IAM user's access key is compromised, it cannot be used indefinitely. Which measure is MOST effective?",
+      "options": [
+        "Disable password complexity rules",
+        "Rotate access keys regularly and enforce expiration policies",
+        "Disable logging for IAM operations",
+        "Assign full admin rights to all users"
+      ],
+      "answer": 1,
+      "explanation": "Regular rotation of access keys and enforcing expiration policies limit the useful lifetime of any given key, reducing risk from compromised credentials. Disabling complexity rules (option 0) and IAM logging (option 2) weaken security. Assigning full admin rights (option 3) worsens the impact of compromise."
+    },
+    {
+      "q": "An organization uses a cloud provider's managed database service. According to the shared responsibility model, which task is typically the customer's responsibility?",
+      "options": [
+        "Patching the underlying database engine OS",
+        "Configuring database network access controls and encryption settings",
+        "Ensuring physical security of the data center",
+        "Maintaining hypervisor security"
+      ],
+      "answer": 1,
+      "explanation": "In a managed database service, the provider generally handles underlying OS and database engine patching, physical security, and hypervisor security. Customers are responsible for configuration aspects such as network access controls (e.g., security groups), authorization, and encryption settings that determine who can access and how. Therefore, option 1 is correct."
+    },
+    {
+      "q": "A compliance officer requires that all data stored in cloud object storage be encrypted and that keys can be rotated and centrally managed. Which configuration BEST meets these needs?",
+      "options": [
+        "Client-side encryption with keys stored on user devices only",
+        "Server-side encryption with customer-managed keys in a KMS",
+        "Unencrypted storage with strict IAM policies",
+        "Compression of objects before upload without encryption"
+      ],
+      "answer": 1,
+      "explanation": "Server-side encryption using customer-managed keys in a key management service allows central control of keys, including rotation and revocation, while ensuring data at rest is encrypted. Client-side encryption with device-stored keys (option 0) complicates key management. Unencrypted storage (option 2) does not meet the encryption requirement. Compression (option 3) is not a security control."
+    },
+    {
+      "q": "A security engineer needs to restrict SSH access to Linux VMs in a cloud environment. Only administrators from the corporate office network should be able to connect. Which two layers of controls should be implemented for defense in depth?",
+      "options": [
+        "Security group rules restricting SSH to the office IP range and OS firewall rules mirroring that",
+        "Allow SSH from any IP in security groups but restrict using OS firewall only",
+        "Disable SSH entirely and rely only on RDP",
+        "Open SSH to the internet but enforce long passwords"
+      ],
+      "answer": 0,
+      "explanation": "Implementing both network-level restrictions via security groups and host-level OS firewall rules to allow SSH only from the corporate IP range provides layered security (defense in depth). Relying only on host firewalls (option 1) is weaker. Disabling SSH entirely (option 2) is not practical for Linux admin access. Opening SSH to the internet with long passwords (option 3) leaves a large attack surface."
+    },
+    {
+      "q": "An incident response team discovers that an attacker used stolen cloud console credentials to create several high-powered compute instances for cryptocurrency mining. Which control would MOST likely have limited the damage?",
+      "options": [
+        "Stronger password length requirements",
+        "Multi-factor authentication (MFA) and least-privilege IAM roles",
+        "More generous rate limits on API calls",
+        "Disabling all security logs to reduce storage costs"
+      ],
+      "answer": 1,
+      "explanation": "MFA would have made credential theft less effective, and least-privilege IAM roles would limit the ability to provision new instances even if credentials were stolen. Stronger passwords (option 0) help but can still be compromised. Looser rate limits (option 2) would worsen the issue. Disabling logs (option 3) would hinder detection and investigation."
+    },
+    {
+      "q": "A company must ensure that only approved container images are deployed to the production cluster. Which control is MOST appropriate?",
+      "options": [
+        "Enable image signing and enforce admission control policies",
+        "Allow developers to pull any public images for flexibility",
+        "Scan images only after deployment to production",
+        "Disable RBAC controls in the cluster for simplicity"
+      ],
+      "answer": 0,
+      "explanation": "Enabling image signing and enforcing admission control policies ensures that only signed, approved images can be deployed to the cluster. Allowing any public images (option 1) introduces risk. Scanning only after deployment (option 2) is reactive and too late. Disabling RBAC (option 3) weakens security controls further."
+    },
+    {
+      "q": "An organization needs to log all administrative actions in its cloud environment for forensic and compliance purposes. Which type of logging is MOST important?",
+      "options": [
+        "Application debug logs",
+        "System performance metrics",
+        "Cloud provider audit and control plane logs",
+        "End-user web access logs only"
+      ],
+      "answer": 2,
+      "explanation": "Cloud provider audit and control plane logs capture actions such as create, modify, and delete operations on resources and IAM changes, which are critical for forensic analysis and compliance. Application debug logs (option 0) and system metrics (option 1) are useful but not focused on administrative actions. End-user web access logs (option 3) capture client access, not administrative control-plane operations."
+    },
+    {
+      "q": "A security architect wants to minimize the exposure of a web application to direct internet traffic. The application runs on VMs in a private subnet. Which design BEST supports this objective?",
+      "options": [
+        "Expose VMs directly with public IPs and host firewalls",
+        "Use a managed web application firewall (WAF) and reverse proxy in a public subnet",
+        "Place the database in a public subnet with restricted access",
+        "Terminate SSL on each backend VM only"
+      ],
+      "answer": 1,
+      "explanation": "Using a WAF and reverse proxy in a public subnet to terminate external traffic and then forward to VMs in private subnets limits direct internet exposure and adds an inspection layer. Exposing VMs with public IPs (option 0) increases risk. Placing the database in a public subnet (option 2) is a bad practice. Terminating SSL on each VM (option 3) does not inherently reduce exposure."
+    },
+    {
+      "q": "A security team mandates that all data transmitted between application components in the cloud must be encrypted in transit, even within the same virtual network. Which configuration change BEST addresses this?",
+      "options": [
+        "Enable HTTPS/TLS on all service endpoints and internal APIs",
+        "Rely on the provider's physical network isolation only",
+        "Disable encryption to improve performance",
+        "Use only private IP addresses without TLS"
+      ],
+      "answer": 0,
+      "explanation": "Enabling HTTPS/TLS on all service endpoints and internal APIs ensures encryption in transit, meeting the requirement. Relying on network isolation (option 1) does not provide encryption. Disabling encryption (option 2) is the opposite of the requirement. Private IPs without TLS (option 3) do not ensure confidentiality against certain threats."
+    }
+  ],
+  "Module 4: Cloud Operations and Maintenance": [
+    {
+      "q": "An operations team notices that a critical web application experiences periodic slowdowns during business hours. They want to identify the root cause. Which initial approach is MOST effective?",
+      "options": [
+        "Increase all VM sizes immediately to avoid performance issues",
+        "Implement comprehensive monitoring of CPU, memory, disk, and application metrics",
+        "Reboot all servers daily to clear potential memory leaks",
+        "Disable logging to improve performance"
+      ],
+      "answer": 1,
+      "explanation": "Implementing comprehensive monitoring across infrastructure and application layers provides the data needed to diagnose performance bottlenecks. Blindly increasing VM sizes (option 0) may mask issues and waste money. Rebooting daily (option 2) is a workaround, not a root cause fix. Disabling logging (option 3) removes valuable diagnostic information."
+    },
+    {
+      "q": "An organization wants to optimize cloud costs while maintaining performance. Which operational practice is MOST effective?",
+      "options": [
+        "Ignoring untagged resources to avoid confusion",
+        "Implementing resource tagging and regular cost reviews",
+        "Always choosing the largest instance type to avoid resizing",
+        "Manually tracking costs in a spreadsheet only"
+      ],
+      "answer": 1,
+      "explanation": "Resource tagging combined with regular cost reviews allows the organization to understand where cloud spend is going (by project, owner, environment) and take optimization actions. Ignoring untagged resources (option 0) makes costs opaque. Choosing the largest instances (option 2) usually increases costs. Manual spreadsheets alone (option 3) are error-prone and lack integration with actual usage data."
+    },
+    {
+      "q": "A cloud administrator needs to ensure that production, staging, and development environments remain consistent over time and that configuration drift is minimized. Which practice BEST supports this?",
+      "options": [
+        "Manual configuration changes using remote desktop",
+        "Treating infrastructure as code and using version control",
+        "Allowing each engineer to configure resources manually as needed",
+        "Applying ad hoc hotfixes directly to production servers only"
+      ],
+      "answer": 1,
+      "explanation": "Treating infrastructure as code and storing definitions in version control ensures configurations are consistent, traceable, and repeatable, reducing drift. Manual remote changes (option 0) and ad hoc hotfixes (option 3) increase drift. Allowing every engineer to configure resources arbitrarily (option 2) leads to inconsistency and potential issues."
+    },
+    {
+      "q": "An operations team wants to be alerted automatically when CPU usage on any production VM exceeds 80% for more than 5 minutes. Which feature is MOST appropriate?",
+      "options": [
+        "Static firewall rule configuration",
+        "Metric-based alarms in the monitoring system",
+        "Manual log review at the end of each day",
+        "Increasing instance sizes preemptively"
+      ],
+      "answer": 1,
+      "explanation": "Metric-based alarms in the monitoring system can watch CPU metrics and trigger alerts when thresholds are exceeded. Firewall rules (option 0) are for network traffic. Manual log review (option 2) is too slow. Preemptively increasing sizes (option 3) does not provide alerting and may be wasteful."
+    },
+    {
+      "q": "A company must ensure that its cloud resources comply with internal policies, such as mandatory encryption and specific instance types for certain workloads. They want continuous assurance rather than one-time checks. Which solution is MOST suitable?",
+      "options": [
+        "One-time manual audit using a checklist",
+        "Automated compliance scanning and policy-as-code",
+        "Rely on yearly external compliance assessments only",
+        "Increase password complexity requirements"
+      ],
+      "answer": 1,
+      "explanation": "Automated compliance scanning tools and policy-as-code allow continuous validation of resources against defined rules, with alerts or auto-remediation for non-compliant items. Manual audits (option 0) and yearly assessments (option 2) are periodic and cannot ensure continuous compliance. Password complexity (option 3) addresses only one narrow aspect of security."
+    },
+    {
+      "q": "An application running in the cloud must be updated monthly with new features. The operations team wants to minimize downtime and user impact during releases. Which operational approach is MOST effective?",
+      "options": [
+        "Perform updates during peak hours for better testing",
+        "Use rolling updates or blue-green deployments",
+        "Stop all instances, update them, then start them again",
+        "Avoid applying updates to maintain stability"
+      ],
+      "answer": 1,
+      "explanation": "Rolling updates and blue-green deployments are standard strategies to minimize downtime and user disruption by keeping old and new versions running simultaneously or updating in small batches. Updating during peak hours (option 0) maximizes impact. Stopping all instances (option 2) causes downtime. Avoiding updates (option 3) leads to security and feature issues."
+    },
+    {
+      "q": "A cloud operations engineer must respond quickly to incidents and view key dashboards while on-call outside the office. Which capability is MOST important?",
+      "options": [
+        "Mobile access to monitoring dashboards and alert notifications",
+        "Disabling alerts after business hours",
+        "Using only on-premises monitoring tools with no remote access",
+        "Requiring paper logs to be printed for each incident"
+      ],
+      "answer": 0,
+      "explanation": "Mobile access to dashboards and alerting ensures that on-call engineers can respond promptly from anywhere. Disabling alerts after hours (option 1) delays response. On-prem-only tools without remote access (option 2) hinder timely response. Paper logs (option 3) are impractical in modern operations."
+    },
+    {
+      "q": "An organization has frequent issues where development teams spin up resources for testing and forget to delete them, leading to unnecessary costs. Which operational control is MOST effective in addressing this?",
+      "options": [
+        "Prohibit developers from creating any resources",
+        "Implement resource TTL (time-to-live) policies and scheduled cleanup jobs",
+        "Increase instance sizes so fewer are needed",
+        "Disable logging and monitoring to reduce noise"
+      ],
+      "answer": 1,
+      "explanation": "Resource TTL policies and scheduled cleanup jobs can automatically identify and remove stale or unused resources, reducing waste. Prohibiting developers from creating resources (option 0) inhibits agility. Increasing sizes (option 2) does not address forgotten resources. Disabling logging (option 3) removes visibility."
+    },
+    {
+      "q": "A cloud administrator wants to ensure backups of critical databases are performed regularly and can meet a 1-hour RPO. Which operational approach is BEST?",
+      "options": [
+        "Configure automated incremental backups every 30 minutes",
+        "Perform full backups manually once per week",
+        "Rely on snapshots taken whenever engineers remember",
+        "Disable backups to improve performance"
+      ],
+      "answer": 0,
+      "explanation": "Automated incremental backups every 30 minutes can meet a 1-hour RPO while balancing performance and storage. Weekly manual backups (option 1) cannot meet the RPO. Ad hoc snapshots (option 2) are unreliable. Disabling backups (option 3) is unacceptable."
+    },
+    {
+      "q": "A cloud operations team observes inconsistent application behavior after manual changes are applied to production servers. They want to reduce human error and standardize changes. Which practice is MOST appropriate?",
+      "options": [
+        "Apply all changes directly in production using remote access",
+        "Enforce change management, peer review, and automated deployments",
+        "Allow emergency changes with no documentation",
+        "Rely on tribal knowledge of experienced admins"
+      ],
+      "answer": 1,
+      "explanation": "Formal change management, peer review, and automated deployments reduce the risk of human error and ensure consistency. Direct manual changes (option 0) and undocumented emergency changes (option 2) increase risk. Tribal knowledge (option 3) is not reliable or scalable."
+    },
+    {
+      "q": "An operations engineer must ensure that logs from cloud infrastructure and applications are retained for at least one year for audit purposes but wants to minimize storage costs. Which approach is BEST?",
+      "options": [
+        "Store all logs in high-performance storage indefinitely",
+        "Use log aggregation with tiered storage and lifecycle policies",
+        "Delete logs older than 30 days",
+        "Store logs only on local VM disks"
+      ],
+      "answer": 1,
+      "explanation": "Using centralized log aggregation with tiered storage and lifecycle policies allows recent logs to be kept in faster storage and older logs moved to cheaper archival tiers, satisfying retention requirements while controlling costs. Keeping everything in high-performance storage (option 0) is expensive. Deleting logs after 30 days (option 2) violates requirements. Local VM disks (option 3) are not durable or centralized."
+    },
+    {
+      "q": "A cloud environment uses auto scaling heavily. The operations team notices that monitoring dashboards become cluttered as instances are frequently created and terminated. They want to maintain observability. Which practice is MOST helpful?",
+      "options": [
+        "Assign consistent tags and use them for dashboard grouping",
+        "Disable metrics collection for auto-scaled instances",
+        "Use instance IDs as the only way to filter data",
+        "Avoid auto scaling and use fixed capacity"
+      ],
+      "answer": 0,
+      "explanation": "Consistent tagging allows grouping metrics by logical constructs such as application, environment, or role, which remains stable even as individual instances change. Disabling metrics (option 1) harms observability. Relying on instance IDs only (option 2) is not scalable. Avoiding auto scaling (option 3) undermines cloud benefits."
+    },
+    {
+      "q": "An operations team must ensure that OS patches are applied to all cloud VMs in a timely manner. They also want to avoid service disruptions. Which strategy is MOST appropriate?",
+      "options": [
+        "Manual patching via SSH during business hours",
+        "Use a patch management tool combined with maintenance windows and rolling restarts",
+        "Disable patching on critical servers to avoid downtime",
+        "Rebuild the environment from scratch for every patch"
+      ],
+      "answer": 1,
+      "explanation": "Patch management tools with defined maintenance windows and rolling restarts automate and coordinate patching while minimizing service impact. Manual patching (option 0) is error-prone. Disabling patching (option 2) is a security risk. Rebuilding everything for each patch (option 3) is often impractical for many organizations."
+    },
+    {
+      "q": "A cloud administrator notices that several VMs are consistently under 5% CPU utilization over months. What is the BEST operational action?",
+      "options": [
+        "Do nothing; low utilization is always good",
+        "Downsize or decommission underutilized resources after verification",
+        "Increase their instance size to handle potential spikes",
+        "Disable monitoring to avoid alerts about low CPU"
+      ],
+      "answer": 1,
+      "explanation": "Downsizing or decommissioning underutilized resources, after verifying they are not critical, reduces waste and optimizes costs. Doing nothing (option 0) wastes money. Increasing size (option 2) makes waste worse. Disabling monitoring (option 3) hides useful information."
+    },
+    {
+      "q": "An operations engineer needs to quickly restore service after a deployment causes a major outage. Which capability is MOST important to recover rapidly?",
+      "options": [
+        "A well-documented and tested rollback procedure",
+        "Increased password length requirements",
+        "A larger support team on call",
+        "Disabling all monitoring alerts during deployments"
+      ],
+      "answer": 0,
+      "explanation": "A well-documented and tested rollback procedure enables rapid reversal of problematic changes and swift service restoration. Password policies (option 1) are unrelated. A larger team (option 2) helps but without an effective rollback process, recovery is still slow. Disabling alerts (option 3) hides problems."
+    }
+  ],
+  "Module 5: Cloud Troubleshooting": [
+    {
+      "q": "Users report that a web application hosted behind a load balancer is intermittently unavailable. Monitoring shows that some backend instances are failing health checks. What should the cloud engineer check FIRST?",
+      "options": [
+        "Whether the application instances are listening on the correct port and responding to health check URLs",
+        "Whether the database is using encryption at rest",
+        "Whether auto scaling policies are configured for CPU usage",
+        "Whether backups are configured for the application"
+      ],
+      "answer": 0,
+      "explanation": "If instances are failing health checks, the first step is to verify that the application is correctly listening on the expected port and responding to the health check path defined in the load balancer. Encryption at rest (option 1), auto scaling (option 2), and backups (option 3) are important but not directly related to health check failures."
+    },
+    {
+      "q": "A newly deployed VM cannot reach the internet, but other VMs in the same subnet can. The VM has a private IP only. Which is the MOST likely cause?",
+      "options": [
+        "The instance is missing a default route to the NAT gateway",
+        "The cloud provider is experiencing a global outage",
+        "The VM size is too small",
+        "The storage volume is not encrypted"
+      ],
+      "answer": 0,
+      "explanation": "If other VMs in the same subnet have internet access via a NAT gateway, but this one does not, a common cause is a missing or misconfigured default route or association to the correct route table. A global outage (option 1) would affect all VMs. VM size (option 2) and volume encryption (option 3) do not directly affect connectivity."
+    },
+    {
+      "q": "A database performance issue is reported: queries are taking significantly longer than usual. CPU utilization on the database server is low, but disk I/O is very high. What is the MOST likely bottleneck?",
+      "options": [
+        "CPU saturation",
+        "Network bandwidth limits",
+        "Storage performance constraints",
+        "DNS resolution failure"
+      ],
+      "answer": 2,
+      "explanation": "High disk I/O with low CPU utilization typically indicates a storage performance bottleneck, such as slow disks or insufficient IOPS. CPU saturation (option 0) is contradicted by the metrics. Network limits (option 1) affect data transfer, not necessarily query disk reads. DNS failures (option 3) would prevent connections entirely rather than slow queries."
+    },
+    {
+      "q": "After applying a new firewall rule in the cloud, an application becomes unreachable from the internet. Which step should be taken FIRST to troubleshoot?",
+      "options": [
+        "Immediately roll back all infrastructure to the previous version",
+        "Check security group or firewall rules associated with the application's instances",
+        "Resize all instances to a larger type",
+        "Restore from last night's backup"
+      ],
+      "answer": 1,
+      "explanation": "Since the issue began after a firewall rule change, the first step is to verify the security group or firewall configurations for the application instances and confirm they still allow required inbound traffic. Rolling back all infrastructure (option 0) is heavy-handed without verifying the direct cause. Resizing instances (option 2) and restoring backups (option 3) do not address connectivity."
+    },
+    {
+      "q": "An application hosted in the cloud is experiencing increased latency for some users in a specific geographic region. Other regions are unaffected. Which is the MOST likely cause?",
+      "options": [
+        "Global CPU shortage on all instances",
+        "Regional network congestion or issues with that region's edge locations",
+        "Database schema changes affecting all users",
+        "Incorrect IAM roles assigned to administrators"
+      ],
+      "answer": 1,
+      "explanation": "Latency affecting users in a specific geographic region often points to regional network issues, such as congestion or routing problems at that region's edge. Global CPU shortage (option 0) or database schema changes (option 2) would affect all users. IAM roles (option 3) pertain to access control, not latency."
+    },
+    {
+      "q": "A cloud-hosted application returns an HTTP 503 Service Unavailable error during peak times. Auto scaling is configured based on CPU utilization, which is averaging 40%. What is the BEST next step?",
+      "options": [
+        "Increase the CPU threshold for auto scaling",
+        "Investigate other metrics such as connection counts, memory, and application thread pools",
+        "Disable health checks on the load balancer",
+        "Turn off auto scaling to stabilize capacity"
+      ],
+      "answer": 1,
+      "explanation": "HTTP 503 errors at moderate CPU usage suggest other resource constraints (connections, memory, thread pools, downstream dependencies). Investigating these metrics helps identify the real bottleneck. Increasing CPU thresholds (option 0) is unrelated. Disabling health checks (option 2) can hide issues. Turning off auto scaling (option 3) reduces elasticity."
+    },
+    {
+      "q": "A VM in the cloud suddenly becomes unreachable over SSH after a security patch reboot. Other services on the VM are also inaccessible, but the VM is running. What is the MOST likely cause?",
+      "options": [
+        "The VM's local firewall or iptables rules were reset or changed",
+        "The provider deleted the VM's disk",
+        "The VM's CPU is over 100% utilization",
+        "The VM's hostname changed"
+      ],
+      "answer": 0,
+      "explanation": "Patching and rebooting can sometimes modify local firewall/iptables rules or disable network services, blocking SSH and other access. Disk deletion (option 1) would likely prevent the VM from booting. CPU overutilization (option 2) may cause slowness but not necessarily complete network inaccessibility. Hostname changes (option 3) do not usually break SSH if IPs remain the same."
+    },
+    {
+      "q": "A company's on-premises network is connected to its cloud environment via a site-to-site VPN. Users report that they cannot reach certain cloud subnets, but other subnets are reachable. What is the MOST likely misconfiguration?",
+      "options": [
+        "Incorrect routing or missing routes for the unreachable subnets",
+        "Expired TLS certificates on the web servers",
+        "Incorrect instance sizes in the unreachable subnets",
+        "Disk space full on the VPN device"
+      ],
+      "answer": 0,
+      "explanation": "If only certain subnets are unreachable over a VPN, the likely cause is missing or incorrect routes for those subnets on the on-premises or cloud side. TLS certificates (option 1) affect HTTPS, not routing. Instance sizes (option 2) do not affect reachability. Full disk on the VPN device (option 3) might cause broader issues, not just specific subnets."
+    },
+    {
+      "q": "Developers report that deployments to a cloud-based Kubernetes cluster sometimes hang during rollout. On inspection, some pods remain in a 'Pending' state indefinitely. What is the MOST likely cause?",
+      "options": [
+        "Insufficient cluster resources (CPU/memory) to schedule new pods",
+        "Incorrect DNS records for the application domain",
+        "Expired TLS certificate on the API server",
+        "Too many completed pods in the history"
+      ],
+      "answer": 0,
+      "explanation": "Pods stuck in 'Pending' state are typically waiting for resources because the cluster does not have enough CPU or memory to schedule them, or there are scheduling constraints. DNS records (option 1) and TLS certificates (option 2) affect connectivity, not scheduling. Completed pods (option 3) do not directly cause pods to remain pending."
+    },
+    {
+      "q": "A storage administrator notices that latency on a cloud block storage volume has increased significantly after enabling encryption. Other configuration variables have not changed. What is the BEST interpretation?",
+      "options": [
+        "Encryption overhead may be causing additional latency",
+        "Encryption has no impact on storage performance",
+        "The hypervisor must have failed",
+        "The instance's public IP changed"
+      ],
+      "answer": 0,
+      "explanation": "Enabling encryption can introduce computational overhead for encrypting and decrypting data, potentially increasing latency, especially on lower-performance instances. Saying encryption has no impact (option 1) is incorrect. Hypervisor failure (option 2) would cause more severe issues. Public IP changes (option 3) are unrelated to storage latency."
+    },
+    {
+      "q": "An application cannot resolve DNS names for external services from within a cloud VPC. Pinging IP addresses works. What is the MOST likely root cause?",
+      "options": [
+        "Security group does not allow outbound ICMP",
+        "DNS server address or resolver configuration is incorrect",
+        "Storage IOPS are too low",
+        "The instance is using too large a VM size"
+      ],
+      "answer": 1,
+      "explanation": "If IP connectivity works but DNS name resolution fails, the likely issue is incorrect DNS configuration (e.g., wrong DNS server address, misconfigured resolver). ICMP rules (option 0) affect ping, which works here. Storage IOPS (option 2) and VM size (option 3) are unrelated."
+    },
+    {
+      "q": "A cloud database cluster experiences frequent failovers between primary and replica nodes. Application logs show intermittent connection drops. What is the BEST next step in troubleshooting?",
+      "options": [
+        "Disable high availability to prevent failovers",
+        "Review network stability, latency, and packet loss between cluster nodes",
+        "Increase the size of all cluster nodes",
+        "Turn off database logging to improve performance"
+      ],
+      "answer": 1,
+      "explanation": "Frequent failovers and connection drops can be caused by network instability between nodes, so investigating latency, jitter, and packet loss is a logical next step. Disabling HA (option 0) removes resilience. Increasing node size (option 2) may not fix connectivity issues. Disabling logging (option 3) removes visibility."
+    },
+    {
+      "q": "A new version of an application was deployed, and now certain API calls are returning HTTP 401 Unauthorized errors. No IAM policy changes were made. What is the MOST likely cause?",
+      "options": [
+        "The deployment introduced a bug in authentication or token handling",
+        "The cloud provider changed the shared responsibility model",
+        "The network ACLs were modified to block all traffic",
+        "The database schema was rolled back to a previous version"
+      ],
+      "answer": 0,
+      "explanation": "HTTP 401 errors after a deployment, without IAM changes, strongly suggest an application bug in authentication logic or token handling introduced by the new version. Changes in shared responsibility (option 1) are irrelevant. Network ACLs blocking all traffic (option 2) would cause different errors. Database schema rollbacks (option 3) would likely cause different failures."
+    },
+    {
+      "q": "A VM consistently runs out of disk space due to log files filling up the root volume. What is the BEST long-term fix?",
+      "options": [
+        "Periodically SSH in and delete log files manually",
+        "Configure log rotation and ship logs to a centralized logging service",
+        "Disable all logging on the VM",
+        "Resize the root volume indefinitely"
+      ],
+      "answer": 1,
+      "explanation": "Configuring log rotation and forwarding logs to a centralized service ensures logs are retained appropriately without filling local storage, providing a sustainable solution. Manual deletion (option 0) is not scalable. Disabling logging (option 2) jeopardizes observability. Resizing the root volume repeatedly (option 3) postpones but does not solve the underlying issue."
+    },
+    {
+      "q": "An application hosted on multiple instances behind a load balancer exhibits 'sticky' session behavior where some users lose their session when an instance is terminated. What is the MOST likely cause?",
+      "options": [
+        "Sessions are stored in-memory on individual instances",
+        "The load balancer is using round-robin distribution",
+        "The instances are too large",
+        "The database has an incorrect index"
+      ],
+      "answer": 0,
+      "explanation": "Storing sessions in-memory on individual instances means that when an instance terminates (for scaling or failure), sessions stored there are lost. The load balancer algorithm (option 1) does not inherently cause loss. Instance size (option 2) and database indexing (option 3) are unrelated to session persistence."
+    },
+    {
+      "q": "A cloud engineer receives alerts that the number of 5xx HTTP errors is increasing on an API gateway. Backend services show no errors in their logs. What is the BEST next troubleshooting step?",
+      "options": [
+        "Check API gateway configurations, such as request/response mapping, throttling, and timeouts",
+        "Assume the alerts are false positives and ignore them",
+        "Immediately redeploy the backend services",
+        "Increase instance sizes of backend services"
+      ],
+      "answer": 0,
+      "explanation": "If 5xx errors originate at the API gateway but are not reflected in backend logs, the likely cause is misconfiguration or throttling at the gateway layer, so reviewing those settings is appropriate. Ignoring alerts (option 1) is unsafe. Redeploying backends (option 2) and increasing their size (option 3) may not address the actual problem."
+    }
+  ],
+  "Module 6: DevOps and Automation Fundamentals": [
+    {
+      "q": "A DevOps team wants every code change to be automatically built, tested, and, if tests pass, deployed to a staging environment. Which practice does this describe?",
+      "options": [
+        "Continuous integration",
+        "Continuous deployment",
+        "Continuous delivery to staging",
+        "Blue-green deployment"
+      ],
+      "answer": 2,
+      "explanation": "Automatically building, testing, and deploying changes to a staging environment after tests pass is an example of continuous delivery to a non-production environment. Continuous integration (option 0) focuses on integrating and testing code but not necessarily deploying. Continuous deployment (option 1) usually implies automatic deployment to production. Blue-green (option 3) is a deployment strategy, not the overall pipeline practice."
+    },
+    {
+      "q": "In a CI/CD pipeline, which stage is MOST appropriate for running automated security scans on application code and dependencies?",
+      "options": [
+        "After deployment to production only",
+        "During the build and test stages before deployment",
+        "Only during manual QA testing",
+        "Never, to avoid slowing down releases"
+      ],
+      "answer": 1,
+      "explanation": "Running security scans during the build and test stages integrates security early into the pipeline (shift-left), allowing vulnerabilities to be detected and remediated before deployment. Waiting until production (option 0) or manual QA only (option 2) delays detection. Skipping security scans (option 3) is inappropriate."
+    },
+    {
+      "q": "A team uses an infrastructure-as-code tool to define cloud networks, instances, and security groups. They want to ensure that any change is reviewed and approved before being applied. Which practice BEST supports this?",
+      "options": [
+        "Applying changes directly from engineer workstations",
+        "Storing IaC templates in version control with pull request reviews",
+        "Running IaC code without version control",
+        "Allowing production changes without approvals"
+      ],
+      "answer": 1,
+      "explanation": "Storing IaC code in version control and using pull requests enables peer review and approval workflows before changes are merged and applied. Applying changes directly (option 0) and running without version control (option 2) lack governance. Allowing changes without approvals (option 3) increases risk."
+    },
+    {
+      "q": "A DevOps engineer is designing a blue-green deployment pipeline for a cloud-hosted web application. What is the PRIMARY advantage of this approach?",
+      "options": [
+        "It eliminates the need for testing",
+        "It allows instant rollback by switching traffic back to the previous environment",
+        "It requires only a single environment, reducing cost",
+        "It prevents the need for load balancers"
+      ],
+      "answer": 1,
+      "explanation": "Blue-green deployment maintains two identical environments (blue and green). Traffic can be switched between them, allowing quick rollback by directing traffic back to the previous environment if issues arise. Testing is still required (option 0). It typically doubles environments (option 2), not reduces them. Load balancers or routing (option 3) are usually needed to switch traffic."
+    },
+    {
+      "q": "A development team wants to ensure that all application and infrastructure configurations are documented, versioned, and can be rolled back if necessary. Which concept BEST addresses this?",
+      "options": [
+        "Runbooks stored only on local machines",
+        "Configuration as code stored in a VCS",
+        "Manual documentation in word processing files",
+        "Relying on memory of senior engineers"
+      ],
+      "answer": 1,
+      "explanation": "Configuration as code stored in a version control system provides documentation, history, and rollback capabilities. Local runbooks (option 0) and manual documents (option 2) are less controlled and not easily versioned. Relying on memory (option 3) is risky."
+    },
+    {
+      "q": "A team uses containers extensively and wants to ensure that builds are identical and reproducible across environments. Which practice is MOST important?",
+      "options": [
+        "Using mutable container images and updating them in place",
+        "Using versioned Dockerfiles and building images from a CI system",
+        "Manually building images on developer workstations",
+        "Storing container images only locally on each host"
+      ],
+      "answer": 1,
+      "explanation": "Versioned Dockerfiles in a CI system ensure consistent, reproducible builds driven by source control. Mutable images (option 0), manual builds on workstations (option 2), and local-only images (option 3) undermine reproducibility and traceability."
+    },
+    {
+      "q": "A DevOps team is adopting a 'shift-left' approach to quality and security. Which change BEST reflects this?",
+      "options": [
+        "Performing most testing and security checks only in production",
+        "Integrating unit, integration, and security tests earlier in the development pipeline",
+        "Relying solely on manual testing before releases",
+        "Reducing the number of automated tests to speed up deployments"
+      ],
+      "answer": 1,
+      "explanation": "Shift-left means moving testing and security activities earlier in the development lifecycle, integrating them into the CI/CD pipeline. Performing checks only in production (option 0) is the opposite. Relying solely on manual testing (option 2) and reducing tests (option 3) undermines quality."
+    },
+    {
+      "q": "An operations team wants to ensure that their cloud environment can be recreated from scratch in a new region in case of a regional outage. Which practice MOST directly supports this objective?",
+      "options": [
+        "Maintaining manual runbooks only",
+        "Using IaC to define all resources and storing templates centrally",
+        "Creating VMs manually via the cloud console",
+        "Relying on daily snapshots alone"
+      ],
+      "answer": 1,
+      "explanation": "Defining all resources via infrastructure-as-code and storing templates centrally allows automated recreation of the environment in another region. Manual runbooks (option 0) are slower and error-prone. Creating VMs via console (option 2) is not reproducible. Snapshots alone (option 3) do not define full networking and configuration."
+    },
+    {
+      "q": "A developer accidentally pushes hard-coded credentials to a public repository. What is the MOST appropriate remediation in a DevOps workflow?",
+      "options": [
+        "Delete the commit and assume the credentials are safe",
+        "Rotate the exposed credentials immediately and add secret scanning to the pipeline",
+        "Change only the repository URL",
+        "Ignore the issue if no one has reported misuse"
+      ],
+      "answer": 1,
+      "explanation": "Credentials exposed in a public repo must be rotated immediately, and adding automated secret scanning to the pipeline can prevent or detect future exposures. Deleting commits (option 0) does not guarantee secrets are not copied. Changing repo URLs (option 2) is irrelevant. Ignoring the issue (option 3) is unsafe."
+    },
+    {
+      "q": "A CI/CD pipeline deploys infrastructure changes using an IaC tool. Occasionally, changes applied in production do not match what is in the repository. What is the MOST likely cause?",
+      "options": [
+        "Engineers are making manual changes directly in the cloud console",
+        "The version control system is not functioning",
+        "The IaC tool does not support production environments",
+        "The cloud provider automatically optimizes resources"
+      ],
+      "answer": 0,
+      "explanation": "If production diverges from the IaC repository, a likely cause is manual changes made outside of the pipeline, such as through the console. Issues with version control (option 1) would be more obvious. IaC tools usually support production (option 2). Automatic optimization (option 3) is unlikely to silently change resources significantly."
+    },
+    {
+      "q": "A team wants to deploy changes multiple times per day with minimal manual intervention. Releases should occur automatically once changes pass all tests. Which practice does this describe?",
+      "options": [
+        "Continuous integration only",
+        "Continuous deployment to production",
+        "Manual release management",
+        "Nightly batch deployments"
+      ],
+      "answer": 1,
+      "explanation": "Continuous deployment automatically releases every change that passes the entire pipeline (including tests) to production with minimal manual intervention. Continuous integration (option 0) covers build and test integration but not automatic production releases. Manual release management (option 2) and nightly batches (option 3) reduce deployment frequency and automation."
+    },
+    {
+      "q": "A DevOps engineer wants to reduce the risk that a single misconfiguration in IaC will impact all environments. Which approach is MOST appropriate?",
+      "options": [
+        "Apply changes directly to production first to test",
+        "Use separate environment-specific configuration files and test in non-production first",
+        "Never use IaC in production",
+        "Allow any engineer to modify production directly without review"
+      ],
+      "answer": 1,
+      "explanation": "Using separate environment-specific configurations and thoroughly testing in non-production before promoting changes helps catch issues before they reach production. Testing in production first (option 0) is dangerous. Avoiding IaC in production (option 2) loses benefits. Allowing direct changes without review (option 3) increases risk."
+    },
+    {
+      "q": "In a DevOps culture, who is typically responsible for ensuring application reliability in production?",
+      "options": [
+        "Only the operations team",
+        "Only the development team",
+        "Both development and operations teams collaboratively",
+        "Only the security team"
+      ],
+      "answer": 2,
+      "explanation": "DevOps emphasizes shared responsibility and collaboration between development and operations for reliability, performance, and quality. Assigning responsibility solely to ops (option 0), dev (option 1), or security (option 3) contradicts this principle."
+    },
+    {
+      "q": "A team wants to automatically enforce coding standards and detect simple security issues on each commit. Which tool type is MOST appropriate?",
+      "options": [
+        "Static code analysis and linting tools integrated into the CI pipeline",
+        "Manual code review only before release",
+        "Firewalls at the perimeter only",
+        "Database indexing tools"
+      ],
+      "answer": 0,
+      "explanation": "Static code analysis and linting tools integrated into CI can automatically check coding standards and detect certain security issues on each commit. Manual reviews (option 1) are important but not automated per commit. Firewalls (option 2) and database indexing tools (option 3) do not address code quality."
+    },
+    {
+      "q": "A DevOps team is designing observability for a microservices-based cloud application. Which combination BEST supports rapid troubleshooting?",
+      "options": [
+        "Centralized logging, distributed tracing, and metrics collection",
+        "Only system-level CPU metrics",
+        "Logs stored locally on each container only",
+        "Manual log inspection on each VM"
+      ],
+      "answer": 0,
+      "explanation": "Centralized logging, distributed tracing, and metrics together provide holistic observability across microservices, enabling quick troubleshooting. Solely CPU metrics (option 1) are insufficient. Local-only logs (option 2) and manual inspection (option 3) are inefficient and do not provide cross-service visibility."
+    }
+  ]
+}

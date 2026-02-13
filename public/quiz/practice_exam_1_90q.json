@@ -1,0 +1,1004 @@
+{
+  "1. Cloud Architecture": [
+    {
+      "q": "A company needs to ensure their multi-tier application can withstand the failure of an entire data center. The application consists of web servers, application servers, and a database cluster. Which architectural approach BEST meets this requirement?",
+      "options": [
+        "Deploy all tiers in a single availability zone with auto-scaling",
+        "Distribute application components across multiple availability zones with load balancing",
+        "Use larger instance types for increased reliability",
+        "Implement read replicas in the same zone as the primary database"
+      ],
+      "answer": 1,
+      "explanation": "Multi-AZ deployment with load balancing provides high availability by distributing components across physically separate data centers. If one AZ fails, the application continues operating from remaining zones. Single AZ deployment creates a single point of failure regardless of auto-scaling or instance size. Objective 1.2"
+    },
+    {
+      "q": "An organization is experiencing performance degradation during end-of-month processing when batch jobs run simultaneously with regular workloads. The current architecture uses a single RDS instance and EC2 instances in an auto-scaling group. What architectural change would BEST address this issue while optimizing costs?",
+      "options": [
+        "Increase RDS instance size permanently",
+        "Create read replicas and route batch queries to replicas while maintaining writes on primary",
+        "Move all workloads to larger EC2 instances",
+        "Disable auto-scaling during batch processing"
+      ],
+      "answer": 1,
+      "explanation": "Read replicas offload read-heavy batch queries from the primary database while allowing normal transactions to continue on the primary. This separates workloads without permanently oversizing the primary instance. Simply increasing instance sizes incurs unnecessary costs during normal operations, and disabling auto-scaling reduces availability. Objective 1.3"
+    },
+    {
+      "q": "A financial services application requires encryption of data at rest and in transit, with the organization maintaining complete control over encryption keys. Which approach satisfies these requirements?",
+      "options": [
+        "Use provider-managed encryption keys (SSE-S3)",
+        "Implement customer-managed keys (CMK) with key management service and TLS/SSL",
+        "Rely on network encryption only",
+        "Use instance store volumes with application-level encryption"
+      ],
+      "answer": 1,
+      "explanation": "Customer-managed keys (CMK) provide complete control over encryption keys through a key management service (KMS), while TLS/SSL encrypts data in transit. Provider-managed keys don't give customer control. Network encryption alone doesn't protect data at rest. Instance store is ephemeral and unsuitable for persistent data requiring encryption. Objective 1.4"
+    },
+    {
+      "q": "A SaaS company's application experiences unpredictable traffic spikes ranging from 100 to 10,000 concurrent users within minutes. The application is stateless and containerized. Which combination provides the MOST cost-effective and responsive scaling solution?",
+      "options": [
+        "Kubernetes cluster with cluster autoscaler and horizontal pod autoscaler",
+        "EC2 instances with scheduled scaling policies",
+        "Large, always-on EC2 instances to handle maximum load",
+        "Lambda functions with reserved concurrency"
+      ],
+      "answer": 0,
+      "explanation": "Kubernetes with cluster autoscaler (adds nodes) and horizontal pod autoscaler (adds pods) provides rapid, automated scaling for containerized applications. It scales both the infrastructure and application layers efficiently. Scheduled scaling doesn't handle unpredictable spikes. Provisioning for maximum load wastes resources. Lambda with reserved concurrency is costly for sustained high concurrency. Objective 1.5"
+    },
+    {
+      "q": "An e-commerce company wants to reduce latency for their global customer base. Static assets are served from origin servers causing slow page loads for international users. What solution would MOST effectively reduce latency?",
+      "options": [
+        "Increase origin server capacity",
+        "Deploy CDN with edge locations worldwide caching static content",
+        "Use larger instance types for origin servers",
+        "Implement regional load balancers"
+      ],
+      "answer": 1,
+      "explanation": "CDN caches static content at geographically distributed edge locations, serving users from nearby servers and dramatically reducing latency. Increasing origin server capacity or size doesn't address geographic distance. Regional load balancers distribute traffic but don't cache content closer to users. Objective 1.6"
+    },
+    {
+      "q": "A healthcare application must ensure data sovereignty, keeping patient data within country borders, while providing disaster recovery capabilities. The application runs in a single region. What architectural approach BEST meets these requirements?",
+      "options": [
+        "Replicate data to another region in a different country for DR",
+        "Implement multi-AZ deployment within the country with backup replication to another in-country region",
+        "Use a single availability zone with local backups",
+        "Deploy to multiple countries and restrict access by user location"
+      ],
+      "answer": 1,
+      "explanation": "Multi-AZ provides high availability while keeping data in-country. Replicating to another region within the same country provides DR without violating data sovereignty. Cross-border replication violates sovereignty requirements. Single AZ lacks resilience. Multi-country deployment doesn't prevent data from crossing borders. Objective 1.2"
+    },
+    {
+      "q": "A company is migrating a monolithic application to the cloud and wants to improve deployment agility and fault isolation. The application has distinct modules for user management, payment processing, and inventory. What architectural pattern would BEST achieve these goals?",
+      "options": [
+        "Migrate the monolith as-is to virtual machines",
+        "Decompose into microservices with separate deployments and API gateway",
+        "Split into two large services (frontend and backend)",
+        "Use containers but keep monolithic architecture"
+      ],
+      "answer": 1,
+      "explanation": "Microservices architecture separates modules into independent services enabling separate deployment cycles, technology choices, and fault isolation. Each service can scale independently. Migrating monolith as-is doesn't improve agility. Splitting into two services provides limited benefits. Containerizing monolith improves deployment but not fault isolation or deployment independence. Objective 1.1"
+    },
+    {
+      "q": "An application experiences database performance degradation as data volume grows. Queries on recent data are frequent, while historical data (>2 years old) is rarely accessed but must remain available. What strategy BEST optimizes performance and cost?",
+      "options": [
+        "Increase database instance size to handle all data",
+        "Implement data lifecycle management archiving old data to object storage with query federation",
+        "Delete historical data after 2 years",
+        "Create multiple read replicas for all data"
+      ],
+      "answer": 1,
+      "explanation": "Data lifecycle management moves infrequently accessed data to cost-effective object storage while keeping recent data in high-performance database. Query federation enables querying archived data when needed. Simply scaling up the database is expensive. Deleting data violates retention requirements. Read replicas don't address data volume issues. Objective 1.3"
+    },
+    {
+      "q": "A video streaming service needs to handle encoding of uploaded videos. Encoding jobs take 10-60 minutes and are triggered by user uploads. Usage varies significantly by time of day. Which compute option is MOST cost-effective?",
+      "options": [
+        "Always-on EC2 instances sized for peak capacity",
+        "Spot instances in auto-scaling groups with queue-based scaling",
+        "Lambda functions for video encoding",
+        "Reserved instances for predictable capacity"
+      ],
+      "answer": 1,
+      "explanation": "Spot instances provide significant cost savings (up to 90%) for interruptible workloads like video encoding. Queue-based scaling adds workers when job backlog grows. Auto-scaling handles variable demand. Always-on peak capacity is wasteful. Lambda's 15-minute limit is too short for encoding. Reserved instances don't scale with variable demand. Objective 1.5"
+    },
+    {
+      "q": "A multi-tier application's database becomes a bottleneck during traffic spikes despite adequate compute resources. Analysis shows 80% of database queries are reads for product catalog data that updates hourly. What architectural change would MOST effectively alleviate this bottleneck?",
+      "options": [
+        "Vertically scale the database instance",
+        "Implement Redis/Memcached caching layer for read queries with 1-hour TTL",
+        "Add more application servers",
+        "Switch to NoSQL database"
+      ],
+      "answer": 1,
+      "explanation": "Caching frequently read data that changes infrequently (hourly) dramatically reduces database load by serving most reads from cache. 1-hour TTL ensures reasonable freshness. Vertical scaling is expensive and has limits. More app servers increase database load. Switching databases is complex and may not solve the problem. Objective 1.3"
+    },
+    {
+      "q": "A company needs to implement disaster recovery with RPO of 15 minutes and RTO of 1 hour. The application uses EC2 instances and RDS databases. Which DR strategy BEST meets these requirements?",
+      "options": [
+        "Daily backups with manual restoration (backup and restore)",
+        "Pilot light with minimal resources running and automated scaling upon failover",
+        "Warm standby with scaled-down environment and automated scaling",
+        "Multi-site active-active deployment"
+      ],
+      "answer": 2,
+      "explanation": "Warm standby runs a scaled-down version continuously, enabling RTO of ~1 hour through automated scaling. Continuous replication achieves 15-minute RPO. Pilot light takes longer to start. Backup/restore has longer RTO. Multi-site active-active is expensive and exceeds requirements. Objective 1.2"
+    },
+    {
+      "q": "An API gateway receives requests that trigger Lambda functions calling multiple downstream services. Occasionally, downstream services become slow, causing Lambda timeout errors and degraded user experience. What architectural pattern BEST improves resilience?",
+      "options": [
+        "Increase Lambda timeout values",
+        "Implement circuit breaker pattern with fallback responses",
+        "Add more Lambda concurrent executions",
+        "Cache all downstream service responses indefinitely"
+      ],
+      "answer": 1,
+      "explanation": "Circuit breaker detects failing downstream services and prevents cascading failures by returning cached or default responses instead of waiting for timeouts. Simply increasing timeout makes problems worse. More concurrency doesn't fix slow services. Indefinite caching provides stale data. Objective 1.1"
+    },
+    {
+      "q": "A data analytics application processes large datasets uploaded to object storage. Processing takes 2-4 hours per file and must start within 5 minutes of upload. What architecture BEST handles this requirement cost-effectively?",
+      "options": [
+        "Always-on EC2 instances polling for new files",
+        "Event-driven architecture with object storage events triggering batch processing",
+        "Scheduled Lambda functions checking for new files every minute",
+        "Manual processing initiation by operators"
+      ],
+      "answer": 1,
+      "explanation": "Event-driven architecture triggers processing immediately upon file upload using object storage events (S3 events), eliminating polling overhead. Events can trigger containers or EC2 instances for long-running jobs. Polling wastes resources. Lambda's 15-minute limit is too short. Manual processing doesn't meet 5-minute requirement. Objective 1.1"
+    },
+    {
+      "q": "A financial application requires sub-millisecond read latency for user session data accessed on every request. Session data is 1-5KB per user with 100,000 concurrent users. Which storage solution BEST meets these requirements?",
+      "options": [
+        "RDS with read replicas",
+        "In-memory cache (Redis/Memcached) with database backup",
+        "Object storage with CDN",
+        "NoSQL database with provisioned throughput"
+      ],
+      "answer": 1,
+      "explanation": "In-memory caches provide sub-millisecond latency perfect for session data with frequent access. Database backup ensures persistence. RDS is too slow even with replicas. Object storage isn't designed for sub-millisecond key-value access. NoSQL databases typically have single-digit millisecond latency. Objective 1.3"
+    },
+    {
+      "q": "A SaaS application uses multi-tenancy with shared infrastructure. Some enterprise customers require dedicated resources for compliance and performance guarantees. How should the architecture accommodate both requirements cost-effectively?",
+      "options": [
+        "Move all customers to dedicated infrastructure",
+        "Implement tiered architecture with shared resources for standard tier and dedicated VPCs/resources for enterprise tier",
+        "Keep all customers on shared infrastructure",
+        "Create separate accounts for each enterprise customer"
+      ],
+      "answer": 1,
+      "explanation": "Tiered architecture allows cost-effective shared infrastructure for most customers while providing dedicated resources (separate VPCs, instances, databases) for enterprise customers requiring isolation. Moving all to dedicated is expensive. Shared-only doesn't meet enterprise needs. Separate accounts create management complexity. Objective 1.1"
+    },
+    {
+      "q": "An IoT application receives telemetry from 100,000 devices sending data every 10 seconds. Data must be processed in near real-time and stored for analysis. Peak ingestion rate is 10,000 messages/second. What architecture BEST handles this ingestion pattern?",
+      "options": [
+        "Direct writes to RDS database from devices",
+        "Message queue or streaming service with auto-scaling consumers writing to data warehouse",
+        "Lambda functions called directly by each device",
+        "API Gateway with synchronous processing"
+      ],
+      "answer": 1,
+      "explanation": "Message queue/streaming service (Kinesis, Kafka, SQS) buffers high-volume ingestion, preventing overwhelmed backends. Auto-scaling consumers process messages at sustainable rate. Direct database writes don't scale. Lambda invocations for each message are costly. Synchronous API processing creates backpressure. Objective 1.1"
+    },
+    {
+      "q": "A mobile app backend must support offline-first operation, syncing user data when connectivity returns. The app has 1 million users with individual datasets under 50MB. What architecture BEST supports this pattern?",
+      "options": [
+        "Traditional relational database with application-managed sync",
+        "Mobile sync service with conflict resolution and per-user data partitioning",
+        "Object storage with client-side sync logic",
+        "NoSQL database with manual conflict resolution"
+      ],
+      "answer": 1,
+      "explanation": "Mobile sync services (AWS AppSync, Azure Mobile Apps) provide built-in offline sync, conflict resolution, and automatic data synchronization. They handle per-user data partitioning and scale automatically. Manual sync implementation is complex and error-prone. Object storage lacks sync capabilities. Manual conflict resolution doesn't scale. Objective 1.1"
+    },
+    {
+      "q": "A company runs a batch processing job nightly that must complete within 4 hours but currently takes 6 hours. The job processes files sequentially on a single large instance. What architectural approach would MOST effectively reduce processing time?",
+      "options": [
+        "Use an even larger instance type",
+        "Implement parallel processing with distributed task queue and multiple workers",
+        "Run the job during lower-traffic periods",
+        "Compress data files to reduce processing time"
+      ],
+      "answer": 1,
+      "explanation": "Parallel processing with multiple workers dramatically reduces time by processing files concurrently. Task queue distributes work across auto-scaled workers. Simply using larger instance has diminishing returns and cost impacts. Running at different times doesn't reduce actual processing time. Compression adds overhead. Objective 1.5"
+    },
+    {
+      "q": "An application must maintain active-passive database configuration across two regions for disaster recovery. The passive region must have data no more than 5 minutes old. What replication approach meets this requirement?",
+      "options": [
+        "Hourly backup and restore to passive region",
+        "Asynchronous replication with monitoring of replication lag",
+        "Synchronous replication across regions",
+        "Manual data synchronization daily"
+      ],
+      "answer": 1,
+      "explanation": "Asynchronous replication provides near real-time data transfer across regions while monitoring ensures lag stays within 5-minute target. Synchronous replication across regions creates unacceptable latency. Hourly backup provides 1-hour old data. Manual sync doesn't meet requirements. Objective 1.2"
+    },
+    {
+      "q": "A microservices application has 20 services making inter-service calls. Debugging issues is difficult due to distributed tracing complexity. Network latency between services varies unpredictably. What architectural component would MOST improve observability and reliability?",
+      "options": [
+        "Larger instance types for all services",
+        "Service mesh providing distributed tracing, traffic management, and circuit breaking",
+        "Centralized API gateway only",
+        "Manual correlation IDs in each service"
+      ],
+      "answer": 1,
+      "explanation": "Service mesh (Istio, Linkerd) provides automatic distributed tracing, traffic management, circuit breaking, retry logic, and observability across all services without code changes. Larger instances don't address observability. API gateway doesn't handle service-to-service calls. Manual correlation IDs are error-prone and don't provide automatic retry/circuit breaking. Objective 1.1"
+    },
+    {
+      "q": "A company's application experiences seasonal traffic with 10x increase during holidays. Current architecture uses reserved EC2 instances. How should they optimize cost while maintaining performance during peaks?",
+      "options": [
+        "Purchase more reserved instances for peak capacity",
+        "Use reserved instances for baseline with auto-scaling on-demand/spot instances for peaks",
+        "Switch entirely to on-demand instances",
+        "Manually scale instances before each holiday"
+      ],
+      "answer": 1,
+      "explanation": "Reserved instances provide cost savings for consistent baseline load. Auto-scaling on-demand or spot instances handles seasonal peaks cost-effectively without paying for unused reserved capacity year-round. All reserved for peak wastes money. All on-demand increases costs. Manual scaling risks capacity and human error. Objective 1.5"
+    }
+  ],
+  "2. Deployment": [
+    {
+      "q": "A company is deploying a new version of their application using blue-green deployment. After switching traffic to the green environment, users report intermittent errors. What is the MOST likely cause and appropriate action?",
+      "options": [
+        "Insufficient capacity in green; scale up immediately",
+        "Database migrations incomplete or incompatible; rollback to blue environment",
+        "Load balancer misconfiguration; restart load balancer",
+        "Network connectivity issues; redeploy application"
+      ],
+      "answer": 1,
+      "explanation": "Blue-green deployments commonly fail due to database schema changes incompatible with new code or incomplete migrations. Immediate rollback to blue environment restores service. Capacity issues would cause consistent errors, not intermittent. Load balancer restart causes downtime. Redeployment wastes time when rollback is instant. Objective 2.3"
+    },
+    {
+      "q": "An application uses canary deployment releasing to 5% of users. After 30 minutes, error rate increased from 0.1% to 0.3% in canary while remaining 0.1% for main deployment. Application owners consider this acceptable. What should be done?",
+      "options": [
+        "Immediately rollback the canary deployment",
+        "Continue monitoring as increase might be acceptable; assess business impact and user feedback",
+        "Increase canary to 50% to gather more data",
+        "Deploy to 100% immediately as 0.3% is low"
+      ],
+      "answer": 0,
+      "explanation": "3x increase in error rate (0.1% to 0.3%), even if seemingly small, indicates problems with new version affecting users. Canary deployments should rollback at first sign of degradation to minimize impact. Continuing risks more users. Increasing canary exposes more users to errors. Full deployment would impact entire user base. Objective 2.3"
+    },
+    {
+      "q": "A DevOps team needs to migrate a legacy application from on-premises to cloud. The application has no documentation, uses proprietary protocols, and cannot be modified. What migration strategy is MOST appropriate?",
+      "options": [
+        "Re-architect the application for cloud-native services",
+        "Rehost (lift-and-shift) to virtual machines as-is",
+        "Replatform with minor modifications for managed services",
+        "Retire the application and replace with SaaS"
+      ],
+      "answer": 1,
+      "explanation": "Rehosting is the only viable option when applications cannot be modified and lack documentation. It moves the application as-is to VMs. Re-architecting requires code changes. Replatforming requires some modification. Retiring may not be feasible if application is business-critical. Objective 2.1"
+    },
+    {
+      "q": "During rolling deployment updating 25% of instances at a time, the second batch fails health checks after update. First batch (25%) passed all checks. What is the BEST course of action?",
+      "options": [
+        "Continue rolling deployment to remaining instances",
+        "Halt deployment, rollback second batch, investigate before continuing",
+        "Increase batch size to speed up deployment",
+        "Disable health checks and complete deployment"
+      ],
+      "answer": 1,
+      "explanation": "Failed health checks in second batch indicate version-specific issues. Halt deployment immediately to prevent further failures, rollback failed batch to restore capacity, then investigate. Continuing risks more failures. Increasing batch size amplifies impact. Disabling health checks removes safety mechanism. Objective 2.3"
+    },
+    {
+      "q": "A company wants to migrate their SQL Server database from on-premises to cloud. The database is 5TB with high transaction volume requiring minimal downtime. What migration approach is MOST appropriate?",
+      "options": [
+        "Backup, transfer backup files to cloud, restore (offline migration)",
+        "Database replication with initial seed then cutover during maintenance window",
+        "Export to CSV files, transfer, import to cloud database",
+        "Manually recreate schema and reenter data"
+      ],
+      "answer": 1,
+      "explanation": "Database replication establishes initial copy then continuously syncs changes, enabling cutover with minimal downtime (minutes). Full backup/restore requires extended downtime for 5TB. CSV export/import is slow and error-prone. Manual recreation is impractical for 5TB database. Objective 2.1"
+    },
+    {
+      "q": "A Terraform template deploys infrastructure across multiple regions. During deployment, one region succeeds but another fails due to quota limits. What is the MOST appropriate action to maintain consistency?",
+      "options": [
+        "Leave successful region deployed and manually fix failed region",
+        "Destroy successful region deployment to maintain consistency, resolve quota issue, redeploy",
+        "Continue with partial deployment and document the issue",
+        "Ignore the failed region and use successful region only"
+      ],
+      "answer": 1,
+      "explanation": "Infrastructure as Code requires consistency. Partial deployment creates drift and complexity. Destroy successful deployment, resolve quota (request increase), then redeploy to all regions atomically. Leaving partial deployments creates inconsistent state difficult to manage. Objective 2.2"
+    },
+    {
+      "q": "An organization is migrating 100 applications to cloud over 18 months. What migration approach minimizes risk while maintaining business operations?",
+      "options": [
+        "Migrate all applications simultaneously (big bang)",
+        "Phased migration starting with low-risk applications, building expertise before complex apps",
+        "Migrate largest applications first",
+        "Random selection of applications each month"
+      ],
+      "answer": 1,
+      "explanation": "Phased migration starting with low-risk, simple applications allows teams to build cloud expertise and refine processes before tackling complex, mission-critical applications. Big bang creates massive risk. Starting with largest is risky without experience. Random selection doesn't build skills systematically. Objective 2.1"
+    },
+    {
+      "q": "A container deployment to Kubernetes fails with 'ImagePullBackOff' error. Developers confirm the image exists and was successfully pushed to the registry. What is the MOST likely cause?",
+      "options": [
+        "Container image is corrupted",
+        "Kubernetes cluster lacks credentials or access to private container registry",
+        "Insufficient cluster resources",
+        "Network connectivity is down"
+      ],
+      "answer": 1,
+      "explanation": "ImagePullBackOff typically indicates authentication/authorization issues accessing private registry. Kubernetes needs credentials (imagePullSecrets) to pull from private registries. Corrupted images cause different errors. Resource issues cause scheduling failures, not pull errors. Complete network failure prevents cluster operation. Objective 2.2"
+    },
+    {
+      "q": "A deployment automation pipeline includes build, test, security scan, and deploy stages. Security scans take 45 minutes causing deployment delays. How can this be optimized while maintaining security?",
+      "options": [
+        "Remove security scans to speed deployment",
+        "Run security scans in parallel with tests and fail pipeline if issues found",
+        "Only scan production deployments, skip dev/test",
+        "Schedule security scans overnight separately"
+      ],
+      "answer": 1,
+      "explanation": "Parallel execution of security scans and tests reduces overall pipeline time while maintaining security checks. Pipeline fails if either finds issues. Removing scans creates security risks. Skipping dev/test allows vulnerabilities to reach production. Separate overnight scans delay issue detection. Objective 2.3"
+    },
+    {
+      "q": "An application deployed via IaC template succeeds in development but fails in production with different resource names and configurations. Both use the same template. What is the BEST practice to resolve this?",
+      "options": [
+        "Create separate templates for each environment",
+        "Parameterize template with environment-specific variable files",
+        "Hard-code production values in template",
+        "Manually modify resources after deployment"
+      ],
+      "answer": 1,
+      "explanation": "Template parameterization with environment-specific variable files maintains single source of truth while customizing deployments. Separate templates create maintenance burden and drift. Hard-coding limits reusability. Manual modifications defeat IaC purpose and create drift. Objective 2.2"
+    },
+    {
+      "q": "A cloud migration assessment identifies an application with tightly coupled components, shared file system, and local session storage. What factor makes this application DIFFICULT to migrate?",
+      "options": [
+        "Large application size",
+        "Application architecture not designed for distributed cloud environment",
+        "Old programming language",
+        "High resource requirements"
+      ],
+      "answer": 1,
+      "explanation": "Tight coupling, shared file systems, and local sessions create dependencies on specific infrastructure making cloud migration challenging. Applications need refactoring or careful infrastructure design (shared storage, session stores). Size, language, and resources are less significant barriers. Objective 2.1"
+    },
+    {
+      "q": "A rolling deployment updates instances sequentially. After 50% are updated, total application capacity drops below minimum required, causing performance degradation. What deployment configuration should be adjusted?",
+      "options": [
+        "Increase deployment speed",
+        "Reduce batch size or increase minimum healthy percentage during deployment",
+        "Use blue-green deployment instead",
+        "Add more instances before starting deployment"
+      ],
+      "answer": 1,
+      "explanation": "Rolling deployments must maintain minimum capacity. Smaller batch sizes (fewer instances updating simultaneously) or higher minimum healthy percentage (e.g., 75%) ensures adequate capacity throughout deployment. Speed increase worsens problem. Blue-green requires double infrastructure. Pre-adding instances is temporary workaround, not solution. Objective 2.3"
+    },
+    {
+      "q": "A database migration requires schema changes that new application code depends on but old code doesn't support. The deployment uses rolling updates. How should this be handled?",
+      "options": [
+        "Deploy code and schema simultaneously",
+        "Use backward-compatible schema changes deployed before code, then cleanup after",
+        "Take application offline during migration",
+        "Deploy new code first, then schema"
+      ],
+      "answer": 1,
+      "explanation": "Backward-compatible schemas work with both old and new code. Deploy schema first (old code ignores new columns/tables), then roll out new code, finally remove compatibility layer. Simultaneous deployment fails during rolling update when mixed versions exist. Offline migration causes downtime. Code-first fails if schema missing. Objective 2.3"
+    },
+    {
+      "q": "An IaC template creates resources in correct order locally but fails in CI/CD pipeline with dependency errors. What is the MOST likely cause?",
+      "options": [
+        "Different cloud provider regions",
+        "Parallel execution in pipeline not respecting resource dependencies",
+        "Network latency differences",
+        "Insufficient permissions in pipeline"
+      ],
+      "answer": 1,
+      "explanation": "CI/CD pipelines may parallelize IaC execution for speed, breaking dependencies (e.g., creating instances before network). Templates must explicitly define dependencies or use sequential execution. Region differences don't cause dependency issues. Network latency doesn't affect ordering. Permission errors show different symptoms. Objective 2.2"
+    },
+    {
+      "q": "A company uses feature flags to control new functionality in production. A flag controlling major feature should be evaluated. What metrics indicate the feature is ready for full release?",
+      "options": [
+        "Code is deployed without errors",
+        "Error rates, performance metrics, and user engagement match or exceed baseline",
+        "Development team approval",
+        "Feature has been enabled for 24 hours"
+      ],
+      "answer": 1,
+      "explanation": "Feature flag evaluation requires objective metrics: error rates shouldn't increase, performance should be acceptable, and user engagement should meet expectations. Successful deployment doesn't indicate feature quality. Team approval is subjective. Time alone doesn't validate functionality. Objective 2.3"
+    },
+    {
+      "q": "A multi-region deployment requires identical infrastructure in each region. Deployments occasionally fail in some regions while succeeding in others due to regional feature availability. How should this be addressed?",
+      "options": [
+        "Accept inconsistent deployments",
+        "Implement pre-deployment validation checking feature availability in all regions",
+        "Use different infrastructure per region based on availability",
+        "Deploy to working regions only"
+      ],
+      "answer": 1,
+      "explanation": "Pre-deployment validation scripts check feature/service availability in target regions before deployment, failing early if requirements aren't met. Accepting inconsistency creates operational complexity. Different per-region infrastructure creates drift. Partial deployment defeats multi-region purpose. Objective 2.2"
+    },
+    {
+      "q": "A deployment pipeline successfully deploys to staging but frequently fails when promoting to production with permission errors. Staging and production use separate accounts. What is the BEST solution?",
+      "options": [
+        "Use same credentials for both environments",
+        "Implement cross-account IAM roles with appropriate permissions for production deployments",
+        "Manually deploy to production",
+        "Copy staging permissions to production"
+      ],
+      "answer": 1,
+      "explanation": "Cross-account IAM roles enable secure automated deployment to separate accounts while maintaining security boundaries. Shared credentials violate security. Manual deployment introduces errors and delays. Copying permissions may grant excessive access. Objective 2.3"
+    }
+  ],
+  "3. Security": [
+    {
+      "q": "A security audit reveals that EC2 instances in public subnets allow SSH access from 0.0.0.0/0. What is the BEST remediation approach?",
+      "options": [
+        "Remove SSH access completely",
+        "Restrict SSH to bastion host IP or corporate VPN ranges",
+        "Change SSH to non-standard port",
+        "Implement rate limiting on SSH"
+      ],
+      "answer": 1,
+      "explanation": "Restricting SSH to specific trusted sources (bastion host, VPN) limits attack surface while maintaining necessary access. Removing SSH prevents legitimate administration. Changing ports provides security through obscurity (ineffective). Rate limiting helps but doesn't prevent exposed access. Objective 3.2"
+    },
+    {
+      "q": "An application requires rotating database credentials every 90 days across 50 application servers. Credentials are currently stored in configuration files. What solution BEST automates rotation and secure storage?",
+      "options": [
+        "Store credentials in environment variables",
+        "Use secrets manager with automatic rotation and application retrieval at runtime",
+        "Encrypt configuration files with KMS",
+        "Store credentials in version control with encryption"
+      ],
+      "answer": 1,
+      "explanation": "Secrets manager provides automatic rotation, versioning, encryption, and centralized management. Applications retrieve current secrets at runtime. Environment variables still require manual updates. Encrypted configs still need rotation and distribution. Version control shouldn't store secrets even encrypted. Objective 3.4"
+    },
+    {
+      "q": "A company must comply with PCI DSS for credit card processing. Their application stores encrypted credit card numbers in a database. What additional requirement must be met?",
+      "options": [
+        "Encryption alone is sufficient",
+        "Implement network segmentation isolating cardholder data environment with strict access controls",
+        "Increase encryption key length",
+        "Replicate data to multiple regions"
+      ],
+      "answer": 1,
+      "explanation": "PCI DSS requires network segmentation separating cardholder data environment (CDE) from other systems with firewall rules and access controls. Encryption alone is insufficient. Key length requirements are already in standards. Replication doesn't address PCI requirements. Objective 3.1"
+    },
+    {
+      "q": "A vulnerability scan identifies critical CVE in application dependencies but no patch is available. The application handles sensitive customer data. What is the MOST appropriate immediate action?",
+      "options": [
+        "Continue operating and wait for patch",
+        "Implement compensating controls (WAF rules, network segmentation, IPS) and enhanced monitoring",
+        "Take application offline",
+        "Switch to alternative dependency immediately"
+      ],
+      "answer": 1,
+      "explanation": "Compensating controls mitigate risk when patches unavailable: WAF blocks exploitation attempts, segmentation limits access, IPS detects attacks, monitoring provides visibility. Continuing without mitigation is risky. Offline causes business impact. Switching dependencies requires extensive testing. Objective 3.3"
+    },
+    {
+      "q": "An organization wants to prevent data exfiltration from employee workstations accessing cloud applications. What security control is MOST effective?",
+      "options": [
+        "Implement stronger firewalls",
+        "Deploy DLP solution monitoring and blocking unauthorized data transfers",
+        "Disable USB ports on workstations",
+        "Encrypt all files at rest"
+      ],
+      "answer": 1,
+      "explanation": "DLP solutions detect sensitive data patterns and block unauthorized transfers via email, web upload, cloud sync, etc. Firewalls control network access but don't inspect content. USB is only one vector. Encryption at rest doesn't prevent authorized users from transferring data. Objective 3.5"
+    },
+    {
+      "q": "A company implements SAML-based SSO for cloud access. Users report being able to access applications after their accounts were disabled in Active Directory. What is the MOST likely cause?",
+      "options": [
+        "SAML tokens have long validity period and aren't revoked when account disabled",
+        "Active Directory synchronization delay",
+        "Application doesn't support SAML",
+        "DNS caching issue"
+      ],
+      "answer": 0,
+      "explanation": "SAML tokens remain valid until expiration even if account disabled. Short token lifetime (minutes/hours) and token revocation checking with identity provider solve this. Sync delay would resolve quickly. App must support SAML if SSO working. DNS doesn't affect authentication. Objective 3.6"
+    },
+    {
+      "q": "An API endpoint experiences unusual spike in failed authentication attempts from multiple IP addresses worldwide. What type of attack is this MOST likely?",
+      "options": [
+        "DDoS attack",
+        "Distributed brute force/credential stuffing attack",
+        "SQL injection",
+        "Man-in-the-middle attack"
+      ],
+      "answer": 1,
+      "explanation": "Failed auth from multiple IPs indicates distributed brute force or credential stuffing (using stolen credentials). DDoS aims for availability, not authentication. SQL injection targets database queries. MitM intercepts traffic but doesn't cause auth failures from multiple sources. Objective 3.3"
+    },
+    {
+      "q": "A security team wants to ensure container images don't contain known vulnerabilities before deployment. Where should scanning be integrated?",
+      "options": [
+        "Only in production after deployment",
+        "In CI/CD pipeline before image pushed to registry and registry periodic rescanning",
+        "Only when developers manually request",
+        "During container runtime only"
+      ],
+      "answer": 1,
+      "explanation": "Shift-left security scans images during build (before registry push) preventing vulnerable images from ever reaching registry/production. Registry rescanning catches newly discovered CVEs in existing images. Production scanning is too late. Manual is unreliable. Runtime scanning is last line of defense. Objective 3.3"
+    },
+    {
+      "q": "An application uses API keys for authentication embedded in mobile app code. Security review flags this as vulnerability. What is the BEST alternative?",
+      "options": [
+        "Obfuscate API keys in code",
+        "Implement OAuth 2.0 with user authentication obtaining short-lived tokens",
+        "Use longer, more complex API keys",
+        "Store keys in device secure storage"
+      ],
+      "answer": 1,
+      "explanation": "OAuth 2.0 with user auth provides user-specific tokens that expire, can be revoked, and aren't shared. Embedded keys can be extracted regardless of obfuscation. Longer keys don't prevent extraction. Device storage helps but doesn't solve key sharing problem. Objective 3.6"
+    },
+    {
+      "q": "A company must ensure encryption keys never exist unencrypted outside HSM. They need to encrypt data at application tier before storage. What approach meets this requirement?",
+      "options": [
+        "Application retrieves keys from KMS and encrypts data",
+        "Use envelope encryption: HSM encrypts data keys, application uses data keys in memory only",
+        "Store encrypted keys in database",
+        "Use client-side encryption libraries"
+      ],
+      "answer": 1,
+      "explanation": "Envelope encryption uses HSM to encrypt data encryption keys (DEK) that never leave HSM unencrypted. Application encrypts data with DEK in memory, stores encrypted data and HSM-encrypted DEK. Retrieving keys from KMS exposes them. DB storage doesn't ensure HSM protection. Client libraries alone don't guarantee HSM usage. Objective 3.4"
+    },
+    {
+      "q": "A web application is vulnerable to SQL injection. What is the MOST effective mitigation?",
+      "options": [
+        "Input validation only",
+        "Parameterized queries/prepared statements for all database operations",
+        "Web application firewall rules",
+        "Encrypt database connections"
+      ],
+      "answer": 1,
+      "explanation": "Parameterized queries/prepared statements separate SQL code from data, preventing injection by treating user input as data never executable code. Input validation helps but can be bypassed. WAF is defense-in-depth but not primary fix. Encryption protects data in transit, not injection. Objective 3.3"
+    },
+    {
+      "q": "An organization implements network microsegmentation for their containerized microservices. Communication between services fails. What is the MOST likely cause?",
+      "options": [
+        "Insufficient container resources",
+        "Network policies blocking required service-to-service communication",
+        "DNS resolution failure",
+        "Load balancer misconfiguration"
+      ],
+      "answer": 1,
+      "explanation": "Microsegmentation uses network policies restricting communication between pods/services. Overly restrictive policies block legitimate traffic. Policies must explicitly allow required service-to-service paths. Resources affect performance not connectivity. DNS failure shows different symptoms. LB affects external access not inter-service. Objective 3.2"
+    },
+    {
+      "q": "A company must demonstrate GDPR compliance for customer data in cloud storage. What capability is ESSENTIAL?",
+      "options": [
+        "Data replication across regions",
+        "Ability to locate, export, and delete specific customer data on request",
+        "Encryption at rest",
+        "Access logging"
+      ],
+      "answer": 1,
+      "explanation": "GDPR requires data portability (export) and right to erasure (deletion) capabilities. Systems must track customer data and respond to requests. Replication isn't required. Encryption helps security but isn't sufficient for GDPR. Logging helps but doesn't fulfill core requirements. Objective 3.1"
+    },
+    {
+      "q": "A security incident investigation finds an attacker gained access through compromised IAM user credentials and created additional backdoor access. What should be done FIRST?",
+      "options": [
+        "Delete the compromised user account",
+        "Rotate credentials, revoke sessions, audit all actions, remove unauthorized access",
+        "Enable MFA on the account",
+        "Change account password"
+      ],
+      "answer": 1,
+      "explanation": "Comprehensive response required: rotate all credentials, revoke active sessions, audit actions to find backdoors (keys, users, roles), remove unauthorized access, THEN delete account. Simply deleting account leaves backdoors. MFA doesn't help if account already compromised. Password change alone insufficient. Objective 3.3"
+    },
+    {
+      "q": "An application logs sensitive data including passwords and credit card numbers. Security audit requires remediation. What is the BEST approach?",
+      "options": [
+        "Encrypt log files",
+        "Sanitize logs removing or masking sensitive data before logging",
+        "Restrict log access to administrators only",
+        "Store logs in secure database"
+      ],
+      "answer": 1,
+      "explanation": "Never log sensitive data; sanitize at source masking/removing PII, passwords, card numbers before logging. Encrypted logs still contain sensitive data. Access restriction helps but data shouldn't exist in logs. Secure storage doesn't eliminate fundamental problem. Objective 3.5"
+    },
+    {
+      "q": "A cloud security assessment identifies overly permissive IAM policies granting 'Admin' access to multiple users. Applications use these credentials. What is the BEST remediation strategy?",
+      "options": [
+        "Keep current permissions but enable MFA",
+        "Implement least privilege: audit actual permissions needed, create specific roles, migrate applications",
+        "Create single shared service account with admin access",
+        "Document current permissions and accept risk"
+      ],
+      "answer": 1,
+      "explanation": "Least privilege requires auditing actual needs, creating narrow-scoped roles with only required permissions, then migrating applications. MFA doesn't fix excessive permissions. Shared accounts reduce accountability. Documenting doesn't remediate risk. Objective 3.2"
+    },
+    {
+      "q": "A company wants to prevent accidental public exposure of storage buckets. What control is MOST effective?",
+      "options": [
+        "Manual review of all bucket permissions",
+        "Service Control Policies or organization-wide policies blocking public access by default",
+        "Periodic security scanning",
+        "Training for developers"
+      ],
+      "answer": 1,
+      "explanation": "Organization-wide policies preventing public access unless explicitly overridden provide technical control preventing accidental exposure. Manual review doesn't scale and has gaps. Periodic scanning finds issues after exposure. Training helps but humans err. Objective 3.2"
+    }
+  ],
+  "4. Operations": [
+    {
+      "q": "Application logs show increasing response times but CPU and memory metrics appear normal. Database queries are slow. What is the MOST likely bottleneck?",
+      "options": [
+        "Application code inefficiency",
+        "Disk I/O saturation or insufficient IOPS",
+        "Network bandwidth limitation",
+        "Memory leak"
+      ],
+      "answer": 1,
+      "explanation": "Slow queries with normal CPU/memory strongly indicate storage bottleneck. Database performance heavily depends on disk IOPS. Check disk queue depth, IOPS utilization, and latency metrics. Application code affects CPU. Network affects all operations. Memory leak shows in memory metrics. Objective 4.1"
+    },
+    {
+      "q": "A company implements auto-scaling based on CPU utilization (target: 70%). Despite scaling, users experience slow performance during peaks. CloudWatch shows CPU at 65-70% but application response times are degraded. What is the MOST likely issue?",
+      "options": [
+        "CPU threshold is too high",
+        "Wrong scaling metric; database or memory may be bottleneck",
+        "Auto-scaling cooldown too long",
+        "Insufficient maximum instance count"
+      ],
+      "answer": 1,
+      "explanation": "CPU alone doesn't indicate application health. Database connections, memory, or external dependencies may bottleneck despite adequate CPU. Monitor application-specific metrics (response time, error rate). CPU threshold is reasonable. Cooldown affects scaling speed not metric choice. Max count only matters if reached. Objective 4.2"
+    },
+    {
+      "q": "A backup strategy uses full backups weekly and incremental daily. RTO is 4 hours and RPO is 24 hours. After Saturday failure, how long would complete restoration take?",
+      "options": [
+        "Under 1 hour with latest incremental",
+        "4+ hours: restore Friday full backup plus all incrementals through Saturday",
+        "24 hours based on RPO",
+        "Instant with replication"
+      ],
+      "answer": 1,
+      "explanation": "Incremental restoration requires full backup plus ALL incremental backups since. Saturday failure needs Friday full + Saturday incrementals, taking longer than single full restore. RPO defines acceptable data loss (24hrs), not restoration time. Simple incremental is fast but this scenario needs full first. Objective 4.3"
+    },
+    {
+      "q": "Monitoring shows 95th percentile API response time of 200ms but 99th percentile is 5000ms. Average is 250ms. What does this indicate?",
+      "options": [
+        "Consistent good performance across all requests",
+        "Tail latency problem: small percentage of requests very slow",
+        "System is overloaded",
+        "Monitoring is broken"
+      ],
+      "answer": 1,
+      "explanation": "Large gap between p95 and p99 indicates tail latency: most requests fast but slowest 1% extremely slow. Affects user experience despite good average. Investigate slow database queries, cold starts, or resource contention. Consistent performance shows similar percentiles. Overload affects all requests. Objective 4.1"
+    },
+    {
+      "q": "A web application's CloudWatch dashboard shows error rate increased from 0.1% to 2% suddenly at 3 AM with no deployments. What should be the FIRST troubleshooting step?",
+      "options": [
+        "Restart all application servers",
+        "Check logs around 3 AM for error patterns and external dependency status",
+        "Roll back to previous version",
+        "Scale up resources"
+      ],
+      "answer": 1,
+      "explanation": "Investigate before acting. Check logs for error types, external API failures, database issues, or certificate expiration. Restarting may temporarily mask issues. No deployment means rollback inappropriate. Scaling doesn't fix errors. Understanding root cause enables proper resolution. Objective 4.1"
+    },
+    {
+      "q": "A company's RDS instance shows increasing connection count approaching max connections (1000). Application uses connection pooling with pool size 50 per server and 25 servers. What is the MOST likely cause?",
+      "options": [
+        "Too many application servers",
+        "Connection leaks: application not releasing connections back to pool",
+        "Database overload",
+        "Max connections too low"
+      ],
+      "answer": 1,
+      "explanation": "25 servers × 50 pool size = 1250 theoretical max, but pooling reuses connections. Approaching 1000 active suggests connection leaks where app opens but never closes connections. Proper pooling should keep active connections much lower. Server count is reasonable. DB overload shows different symptoms. Max connections appropriate for instance size. Objective 4.1"
+    },
+    {
+      "q": "A critical production application has RTO of 1 hour. Backups are stored in same region. What additional backup strategy component is ESSENTIAL to meet RTO during regional outage?",
+      "options": [
+        "More frequent backups",
+        "Cross-region backup replication",
+        "Faster backup storage",
+        "Larger backup retention"
+      ],
+      "answer": 1,
+      "explanation": "Regional outage makes same-region backups unavailable. Cross-region replication ensures access to backups for restoration elsewhere, meeting RTO during regional failures. Frequency affects RPO not regional availability. Storage speed helps but useless if inaccessible. Retention doesn't address availability. Objective 4.3"
+    },
+    {
+      "q": "Application logs are centralized in log aggregation service retaining 90 days. Compliance requires 7 years. Log volume is 1TB/month. What is the MOST cost-effective compliance solution?",
+      "options": [
+        "Increase log aggregation retention to 7 years",
+        "Archive logs older than 90 days to object storage with lifecycle policy to glacier/archive tiers",
+        "Delete old logs and accept compliance risk",
+        "Store logs in database with 7-year retention"
+      ],
+      "answer": 1,
+      "explanation": "Object storage with lifecycle policies archiving to glacier/deep archive provides 7-year retention at minimal cost. Keep 90 days in log service for analysis, archive rest. Extending log service retention is expensive at 1TB/month. Deletion violates compliance. Database storage is expensive and inappropriate for logs. Objective 4.3"
+    },
+    {
+      "q": "A database update patch is available fixing critical security vulnerability. The database supports a mission-critical application. What is the BEST patching approach?",
+      "options": [
+        "Apply patch immediately in production",
+        "Test patch in non-production environment, create backup, schedule maintenance window for production",
+        "Wait for next scheduled maintenance in 3 months",
+        "Apply patch only if exploitation occurs"
+      ],
+      "answer": 1,
+      "explanation": "Critical security patches require urgent but controlled deployment: test in staging, verify no regressions, backup production, then apply during emergency maintenance window with rollback plan. Immediate production application risks outage. Waiting 3 months leaves vulnerability. Reactive patching after exploit is too late. Objective 4.4"
+    },
+    {
+      "q": "Auto-scaling group has min=2, desired=5, max=10. A scaling policy adds 3 instances when CPU >80%. During load spike, CPU hits 85% but only 2 instances are added. Why?",
+      "options": [
+        "Insufficient capacity in availability zone",
+        "Current desired would exceed maximum after adding 3, so only adds to reach max",
+        "Auto-scaling is broken",
+        "Cooldown period active"
+      ],
+      "answer": 1,
+      "explanation": "Current desired=5, max=10 allows 5 more instances. Policy wants to add 3, resulting in desired=8. However, if desired was already 8, adding 3 would exceed max=10, so only 2 added to reach max. Auto-scaling honors maximum limits. Objective 4.2"
+    },
+    {
+      "q": "A company implements tiered storage: hot data in SSD, warm in HDD, cold in object storage. Data moves between tiers based on access patterns. What is this strategy called?",
+      "options": [
+        "Data replication",
+        "Data lifecycle management",
+        "Data backup",
+        "Data migration"
+      ],
+      "answer": 1,
+      "explanation": "Data lifecycle management automatically transitions data between storage tiers based on age, access patterns, or policies, optimizing cost and performance. Replication creates copies. Backup is for recovery. Migration is one-time movement. Objective 4.3"
+    },
+    {
+      "q": "Application performance degrades every day at 2 AM for 30 minutes. No deployments, traffic, or batch jobs occur at that time. CloudWatch shows brief CPU spikes on all instances. What is the MOST likely cause?",
+      "options": [
+        "Scheduled user activity",
+        "Automated patching or maintenance window",
+        "DDoS attack",
+        "Application memory leak"
+      ],
+      "answer": 1,
+      "explanation": "Consistent daily pattern suggests scheduled system activity like OS patching, anti-virus scans, or cloud provider maintenance. Check maintenance schedules and adjust timing if possible. User activity would show in metrics. DDoS is irregular. Memory leak shows growing trend, not periodic. Objective 4.1"
+    },
+    {
+      "q": "A monitoring alert triggers when disk utilization exceeds 80%. Alert fires frequently but investigation shows actual usage is 60%. What is the MOST likely cause?",
+      "options": [
+        "Monitoring system malfunction",
+        "Temporary files or log files consuming space then being cleaned",
+        "Disk is actually full",
+        "Incorrect disk size reporting"
+      ],
+      "answer": 1,
+      "explanation": "Temporary spikes to 80% triggering alerts, followed by cleanup returning to 60%, explains pattern. Check for log rotation, temp files, or cache cleanup. Adjust alert threshold or add sustained threshold. System malfunction would show consistently wrong data. Disk not actually full. Objective 4.1"
+    },
+    {
+      "q": "A company wants to implement chaos engineering testing failure resilience. What is the MOST appropriate initial experiment?",
+      "options": [
+        "Terminate all production instances simultaneously",
+        "Terminate single instance in multi-instance deployment observing auto-recovery",
+        "Delete production database",
+        "Disable all network connectivity"
+      ],
+      "answer": 1,
+      "explanation": "Start with small, controlled experiments: terminating single instance tests auto-healing and redundancy with minimal impact. Monitor closely, have rollback plan. Gradually increase complexity. Terminating all instances, deleting databases, or full network outage are too extreme for initial testing. Objective 4.1"
+    },
+    {
+      "q": "Application deployment includes database migrations. A migration fails halfway, leaving schema in inconsistent state. What database feature would have PREVENTED this?",
+      "options": [
+        "Database replication",
+        "Transactional migrations with rollback on failure",
+        "Database backups",
+        "Read replicas"
+      ],
+      "answer": 1,
+      "explanation": "Transactional migrations wrap schema changes in transaction, rolling back completely if any step fails, preventing inconsistent state. Replication doesn't prevent failures. Backups enable recovery but don't prevent. Read replicas are for read scaling. Objective 4.4"
+    }
+  ],
+  "5. DevOps Fundamentals": [
+    {
+      "q": "A CI/CD pipeline builds, tests, and deploys on every commit to main branch. Developers complain about long feedback cycles (30 minutes). What optimization BEST reduces cycle time?",
+      "options": [
+        "Remove test stages",
+        "Parallelize test execution and cache dependencies",
+        "Reduce number of tests",
+        "Deploy without building"
+      ],
+      "answer": 1,
+      "explanation": "Parallel test execution (unit, integration, security scans simultaneously) and dependency caching (avoiding repeated downloads) dramatically reduce pipeline time without sacrificing quality. Removing tests reduces safety. Fewer tests reduce coverage. Skipping builds breaks process. Objective 5.3"
+    },
+    {
+      "q": "A team uses GitFlow with main, develop, feature, and release branches. Hotfix for production bug must be deployed immediately. What is the CORRECT GitFlow process?",
+      "options": [
+        "Create feature branch from develop, merge to main",
+        "Create hotfix branch from main, fix bug, merge to main AND develop",
+        "Fix directly in main branch",
+        "Cherry-pick fix from develop to main"
+      ],
+      "answer": 1,
+      "explanation": "GitFlow hotfix branches from main (production), fixed immediately, then merged back to both main (production) and develop (ongoing work) to prevent regression. Feature branches for normal development. Direct main commits violate workflow. Cherry-picking risks missing proper merge. Objective 5.1"
+    },
+    {
+      "q": "An Ansible playbook must configure different settings for dev, staging, and production. What is the BEST approach?",
+      "options": [
+        "Create separate playbooks for each environment",
+        "Use inventory groups with environment-specific variable files",
+        "Hard-code environment checks in playbook",
+        "Manually edit playbook before each run"
+      ],
+      "answer": 1,
+      "explanation": "Ansible inventory groups (dev, staging, prod) with group_vars files provide environment-specific variables using single playbook. Separate playbooks create maintenance burden. Hard-coded checks complicate playbooks. Manual editing is error-prone. Objective 5.2"
+    },
+    {
+      "q": "A microservices application has 15 services in separate Git repositories. Deploying related changes across services is complex and error-prone. What repository strategy would IMPROVE this?",
+      "options": [
+        "Keep separate repositories for maximum separation",
+        "Monorepo containing all services enabling atomic cross-service changes",
+        "Reduce to single microservice",
+        "Manual coordination between repositories"
+      ],
+      "answer": 1,
+      "explanation": "Monorepo (single repository with multiple services) enables atomic commits across services, coordinated deployments, and simplified dependency management while maintaining service boundaries. Separate repos complicate coordination. Merging services defeats microservices benefits. Manual coordination doesn't scale. Objective 5.1"
+    },
+    {
+      "q": "A deployment pipeline stage fails with 'Docker image not found' error despite successful build stage pushing image. What is the MOST likely cause?",
+      "options": [
+        "Build stage didn't actually push image",
+        "Deploy stage uses wrong image tag or registry URL",
+        "Network connectivity issue",
+        "Docker daemon not running"
+      ],
+      "answer": 1,
+      "explanation": "Image tag mismatch (build pushed 'latest', deploy pulls specific version) or wrong registry URL are common issues. Verify image tags match between stages and registry is correct. Build logs would show push failure. Network issues show different errors. Daemon issues prevent Docker commands. Objective 5.3"
+    },
+    {
+      "q": "A company wants to implement configuration management ensuring servers match desired state continuously, not just at deployment. Which approach BEST achieves this?",
+      "options": [
+        "Run configuration scripts once at server creation",
+        "Agent-based CM with periodic convergence (Puppet/Chef) or pull-based reconciliation",
+        "Manual configuration audits",
+        "Immutable infrastructure replacing servers instead of configuring"
+      ],
+      "answer": 1,
+      "explanation": "Agent-based CM tools periodically check and correct drift, maintaining desired state continuously. One-time scripts don't detect drift. Manual audits don't scale. Immutable infrastructure is alternative approach replacing rather than correcting, but doesn't match 'configuration management' specifically. Objective 5.2"
+    },
+    {
+      "q": "A CI pipeline must fail if code coverage drops below 80%. Current coverage is 85%. What should be implemented?",
+      "options": [
+        "Manual coverage review",
+        "Quality gate in pipeline failing build if coverage threshold not met",
+        "Documentation requirement",
+        "Warning message only"
+      ],
+      "answer": 1,
+      "explanation": "Quality gates automatically enforce standards by failing pipeline if thresholds not met (coverage, security scans, performance). Prevents regression. Manual review doesn't scale. Documentation doesn't enforce. Warnings can be ignored. Objective 5.3"
+    },
+    {
+      "q": "Infrastructure as Code templates for multiple environments show significant duplication. Only a few parameters differ per environment. What is the BEST refactoring approach?",
+      "options": [
+        "Accept duplication for clarity",
+        "Create reusable modules/templates with environment-specific parameters",
+        "Use single template with complex conditionals",
+        "Maintain separate templates"
+      ],
+      "answer": 1,
+      "explanation": "IaC modules (Terraform modules, CloudFormation nested stacks) eliminate duplication while parameterizing differences. Single source of truth reduces errors. Accepting duplication creates maintenance burden. Complex conditionals reduce readability. Separate templates multiply maintenance. Objective 5.2"
+    },
+    {
+      "q": "A development team needs to share secrets (API keys, passwords) across team members securely. What is the BEST practice?",
+      "options": [
+        "Share secrets via email",
+        "Use secrets management tool (Vault, Secrets Manager) with access control",
+        "Store in shared document",
+        "Commit to private Git repository"
+      ],
+      "answer": 1,
+      "explanation": "Secrets management tools provide encryption, access control, audit logging, rotation, and secure retrieval. Never email or document secrets. Git history retains secrets even if removed. Private repos are better than public but still inappropriate for secrets. Objective 5.2"
+    }
+  ],
+  "6. Troubleshooting": [
+    {
+      "q": "Users report application slowness. Ping to application servers shows 150ms latency from user location (normally 20ms). Traceroute shows delay starting at user's ISP. What is the MOST likely issue?",
+      "options": [
+        "Application performance problem",
+        "Network problem at user's ISP or routing path",
+        "Server overload",
+        "Database bottleneck"
+      ],
+      "answer": 1,
+      "explanation": "Traceroute identifying delay at ISP level indicates network problem outside application control. Application problems wouldn't show in ping latency. Server overload affects processing not ping. Database issues don't affect ICMP. Contact ISP or consider CDN to bypass problem. Objective 6.2"
+    },
+    {
+      "q": "An application intermittently fails with 'connection timeout' when calling external API. The API provider confirms no issues on their end. What troubleshooting step should be taken FIRST?",
+      "options": [
+        "Increase application timeout values",
+        "Check security group and network ACL rules for outbound HTTPS; verify NAT gateway health",
+        "Restart application servers",
+        "Contact API provider again"
+      ],
+      "answer": 1,
+      "explanation": "Intermittent outbound connection timeouts often indicate network configuration (security groups blocking outbound HTTPS), NAT gateway capacity issues, or route table problems. Increasing timeout masks issue. Restarting doesn't fix network config. Provider already confirmed operational. Objective 6.2"
+    },
+    {
+      "q": "After deploying new application version, users report seeing old and new versions randomly. Load balancer configuration hasn't changed. What is the MOST likely cause?",
+      "options": [
+        "Load balancer malfunction",
+        "Rolling deployment in progress with mixed versions behind load balancer",
+        "Browser caching",
+        "DNS issues"
+      ],
+      "answer": 1,
+      "explanation": "During rolling deployment, load balancer routes traffic to both old (not yet updated) and new (updated) instances causing users to see different versions randomly. Normal behavior during deployment. Wait for completion or use blue-green for instant cutover. Browser cache wouldn't be random. Objective 6.5"
+    },
+    {
+      "q": "A database query that normally completes in 100ms now takes 30 seconds. Database CPU and memory are normal. No schema changes occurred. What is the MOST likely cause?",
+      "options": [
+        "Application bug",
+        "Missing or fragmented index; outdated statistics",
+        "Network latency",
+        "Application server overload"
+      ],
+      "answer": 1,
+      "explanation": "Sudden dramatic query slowdown with normal resources suggests index problem (dropped, fragmented) or outdated statistics causing poor execution plans. Check query execution plan. Application bug would show different symptoms. Network affects all queries. App server overload shows in app metrics. Objective 6.3"
+    },
+    {
+      "q": "Users receive SSL certificate error accessing application. Certificate is valid and not expired. The application worked yesterday. What should be checked FIRST?",
+      "options": [
+        "User's browser settings",
+        "Certificate chain: intermediate certificates may be missing from server configuration",
+        "Replace certificate",
+        "Restart web server"
+      ],
+      "answer": 1,
+      "explanation": "Sudden SSL errors often indicate missing intermediate certificates in server configuration. Client browsers don't have intermediate cert cached. Verify complete certificate chain deployed. Browser settings don't change suddenly across all users. Certificate is valid. Restart doesn't fix configuration. Objective 6.2"
+    },
+    {
+      "q": "A web application shows normal response times (200ms) for most requests but 5% experience 10+ second delays. Investigating one slow request shows application waits on external service call that eventually times out. What pattern would BEST prevent this?",
+      "options": [
+        "Increase external service timeout",
+        "Implement circuit breaker: stop calling failing service after threshold, return fallback response",
+        "Add more application servers",
+        "Cache all external service responses"
+      ],
+      "answer": 1,
+      "explanation": "Circuit breaker detects failing external service and stops calling it temporarily, returning cached/fallback responses immediately instead of waiting for timeout. Protects user experience during external failures. Increasing timeout makes problem worse. More servers don't fix slow external calls. Can't cache all responses. Objective 6.3"
+    },
+    {
+      "q": "An EC2 instance status check shows instance check failing but system check passing. What does this indicate?",
+      "options": [
+        "AWS infrastructure problem",
+        "Instance-level problem: OS, network, or software issue inside instance",
+        "Both AWS and instance issues",
+        "Monitoring system error"
+      ],
+      "answer": 1,
+      "explanation": "Failed instance check with passing system check indicates problem within instance (OS crash, network misconfiguration, kernel panic). System check failing indicates AWS infrastructure issues. Both failing indicates escalation. Monitoring errors don't distinguish checks. Objective 6.6"
+    },
+    {
+      "q": "Application logs show 'java.lang.OutOfMemoryError: GC overhead limit exceeded'. The application has 8GB heap configured and actual memory usage shown in monitoring is 6GB. What is the issue?",
+      "options": [
+        "Insufficient heap memory; increase to 16GB",
+        "Memory leak causing excessive garbage collection without reclaiming space",
+        "Monitoring is incorrect",
+        "Too many threads"
+      ],
+      "answer": 1,
+      "explanation": "'GC overhead limit exceeded' indicates JVM spending >98% time in GC recovering <2% memory, classic memory leak symptom. Objects are referenced but no longer useful. Memory usage may appear normal but is unreclaimable. Analyze heap dump. Simply increasing heap delays problem. Thread issues show differently. Objective 6.3"
+    },
+    {
+      "q": "Users in Europe report slow page loads (5+ seconds) while US users load pages in under 1 second. Content is served from US-based origin servers. What is the BEST solution?",
+      "options": [
+        "Increase origin server capacity",
+        "Implement CDN caching static content at European edge locations",
+        "Deploy application servers in Europe",
+        "Optimize application code"
+      ],
+      "answer": 1,
+      "explanation": "Geographic latency (US-Europe distance) causes slowness. CDN caches static content at European edge locations dramatically reducing latency and load times. Server capacity doesn't fix distance. Deploying to Europe helps but CDN is simpler for static content. Code optimization has limited impact on geographic latency. Objective 6.2"
+    },
+    {
+      "q": "After cloud migration, application occasionally fails with 'No route to host' errors connecting to database. Database is in private subnet, application in public subnet. Same VPC. What is the MOST likely cause?",
+      "options": [
+        "Database is down",
+        "Route table for public subnet missing route to private subnet, or network ACL blocking traffic",
+        "Security group misconfiguration",
+        "DNS resolution failure"
+      ],
+      "answer": 1,
+      "explanation": "'No route to host' indicates network routing problem. Within same VPC, check route tables ensure subnets can communicate and network ACLs allow traffic. Security group denial shows 'connection timeout'. DB down shows 'connection refused'. DNS failure shows 'cannot resolve'. Objective 6.2"
+    },
+    {
+      "q": "A company experiences complete cloud account lockout - no one can log in. What is the MOST likely cause and recovery method?",
+      "options": [
+        "Network outage; wait for resolution",
+        "Root account credentials compromised or MFA device lost; use account recovery process",
+        "Cloud provider outage; wait",
+        "Billing issue; contact support"
+      ],
+      "answer": 1,
+      "explanation": "Complete lockout suggests root account credential or MFA issues. Account recovery process (email verification, support case) restores access. Network outage affects applications not authentication. Provider outage announced publicly. Billing issues notify but don't lock immediately. Objective 6.1"
+    }
+  ]
+}

@@ -1,0 +1,1003 @@
+{
+  "1. Cloud Architecture": [
+    {
+      "q": "A company needs to connect their on-premises data center to cloud resources with consistent network performance and low latency. Internet VPN experiences variable performance. What connectivity solution provides predictable performance?",
+      "options": [
+        "Increase internet bandwidth for VPN",
+        "Implement dedicated network connection (AWS Direct Connect, Azure ExpressRoute, Google Cloud Interconnect) bypassing public internet",
+        "Use multiple VPN connections",
+        "Deploy SD-WAN solution"
+      ],
+      "answer": 1,
+      "explanation": "Dedicated network connections provide consistent performance: private connection between on-premises and cloud, predictable bandwidth and latency, bypasses internet variability, SLA-backed performance. Internet VPN always subject to internet conditions. Multiple VPNs still use internet. SD-WAN helps manage but doesn't eliminate internet variability. Objective 1.6"
+    },
+    {
+      "q": "An application processes sensitive healthcare data requiring HIPAA compliance. Data must be encrypted at rest and in transit. Who is responsible for ensuring proper encryption implementation?",
+      "options": [
+        "Cloud provider handles all encryption automatically",
+        "Shared responsibility: cloud provider ensures infrastructure encryption capability, customer configures and enables encryption for their resources and manages encryption keys",
+        "Customer has no responsibility for encryption",
+        "Third-party security vendor"
+      ],
+      "answer": 1,
+      "explanation": "Shared responsibility model: provider supplies encryption mechanisms (platform capability), customer must enable and configure encryption (at-rest, in-transit), customer manages keys and access controls, customer responsible for data classification. Provider doesn't automatically encrypt customer data. Customer must actively implement. Third-party optional not required. Objective 1.4"
+    },
+    {
+      "q": "A web application requires 99.95% availability. Single-region deployment with three availability zones achieves 99.9%. What architectural change improves availability to meet requirement?",
+      "options": [
+        "Add more availability zones in region",
+        "Deploy application across multiple geographic regions with automatic failover",
+        "Use larger instance types",
+        "Increase redundancy within single region"
+      ],
+      "answer": 1,
+      "explanation": "Multi-region deployment protects against regional failures: active-passive or active-active across regions, automatic regional failover, geographic redundancy beyond AZ-level. 99.95% requires protection from region-wide events. Additional AZs in region don't protect regional outages. Instance type doesn't affect availability. Single-region redundancy already maximized with multi-AZ. Objective 1.2"
+    },
+    {
+      "q": "A data analytics pipeline processes 10TB of raw data daily. Processing takes 4 hours on current dedicated compute cluster costing $500/day. Cluster is idle 20 hours daily. What compute model optimizes cost?",
+      "options": [
+        "Maintain dedicated cluster for instant availability",
+        "Use serverless compute or batch processing service that scales from zero, processes data on-demand, charges only for compute time used",
+        "Smaller dedicated cluster",
+        "Manual start/stop of cluster"
+      ],
+      "answer": 1,
+      "explanation": "Serverless or batch processing optimizes cost for intermittent workloads: automatically provisions compute when jobs submitted, scales based on data volume, terminates after completion, pay only for 4 hours used not 24. AWS Batch, Azure Batch, GCP Dataflow examples. Dedicated cluster pays for idle time. Manual start/stop requires management. Objective 1.5"
+    },
+    {
+      "q": "A machine learning application requires specialized GPU instances for training models. Training jobs run weekly and take 12 hours. GPU instances cost $8/hour. What compute purchasing option minimizes cost?",
+      "options": [
+        "On-demand instances for all training",
+        "Spot instances for training workloads (can tolerate interruption with checkpointing), fallback to on-demand if spot unavailable",
+        "Reserved instances for GPUs",
+        "Run training continuously"
+      ],
+      "answer": 1,
+      "explanation": "Spot instances provide steep discounts (70-90%) for interruptible workloads: ML training can checkpoint and resume, spot suitable for fault-tolerant batch jobs, fallback ensures completion. Weekly 12-hour usage doesn't justify reserved instances (need consistent utilization). On-demand full price. Continuous training wasteful. Objective 1.5"
+    },
+    {
+      "q": "An application must maintain user session data shared across multiple application servers. Session data includes user preferences and shopping cart contents. What provides shared session state?",
+      "options": [
+        "Store sessions locally on each server with sticky sessions",
+        "Implement distributed cache (Redis, Memcached) accessible to all application servers providing shared session storage",
+        "Database for all session data",
+        "File system replication between servers"
+      ],
+      "answer": 1,
+      "explanation": "Distributed cache provides fast shared session storage: low-latency access, all servers read/write same session data, survives individual server failures, scales independently. Enables stateless application servers. Sticky sessions create stateful servers (lose sessions on restart). Database too slow for session access. File replication complex and slow. Objective 1.3"
+    },
+    {
+      "q": "A company wants to minimize vendor lock-in while using cloud services. What architectural approach provides the MOST portability?",
+      "options": [
+        "Use only provider-specific managed services",
+        "Use containerized applications with Kubernetes, open standards, cloud-agnostic APIs, and Infrastructure as Code with abstraction layers",
+        "Multi-cloud deployment of everything",
+        "Avoid cloud services entirely"
+      ],
+      "answer": 1,
+      "explanation": "Cloud-agnostic architecture maximizes portability: containers package applications consistently, Kubernetes provides consistent orchestration across providers, open standards (S3-compatible storage), IaC with provider abstraction (Terraform modules). Balance portability with managed service benefits. Provider-specific creates lock-in. Multi-cloud everything expensive. Avoiding cloud loses benefits. Objective 1.1"
+    },
+    {
+      "q": "A SaaS application serves customers globally from a single region. European customers experience high latency. Content is dynamically generated per user (cannot be cached). What improves latency for European users?",
+      "options": [
+        "CDN for dynamic content",
+        "Deploy application tier in European region, route European users to local deployment, shared global database or regional read replicas",
+        "Increase bandwidth",
+        "Compress data more"
+      ],
+      "answer": 1,
+      "explanation": "Regional deployment reduces latency: application servers in Europe serve European users locally, database read replicas provide local data access, writes may go to primary region. Significant latency improvement for dynamic content. CDN limited benefit for dynamic content. Bandwidth doesn't reduce distance latency. Compression helps marginally. Objective 1.6"
+    },
+    {
+      "q": "A database stores time-series data from IoT sensors. Recent data (last 7 days) accessed frequently, older data (7-90 days) accessed occasionally, ancient data (>90 days) rarely accessed but must be retained for compliance. What storage strategy optimizes cost?",
+      "options": [
+        "Store all data in highest performance tier",
+        "Implement data lifecycle policies with tiered storage: hot tier for recent data (7 days), warm tier for occasional access (7-90 days), cold/archive tier for compliance retention (90+ days)",
+        "Delete data after 90 days",
+        "Compress all data equally"
+      ],
+      "answer": 1,
+      "explanation": "Tiered storage matches access patterns to storage cost: hot tier (SSD) for frequent access, warm tier for occasional access (lower cost), cold/archive for retention (cheapest), automated lifecycle transitions. Optimizes cost while maintaining access. Single tier expensive. Deleting violates compliance. Compression helps but tiering provides greater savings. Objective 1.3"
+    },
+    {
+      "q": "An application handles financial transactions requiring ACID compliance. Current NoSQL database doesn't guarantee ACID properties. Developers experience data consistency issues. What database type addresses this requirement?",
+      "options": [
+        "Continue with NoSQL and implement application-level consistency",
+        "Use relational database with ACID transactions (PostgreSQL, MySQL, SQL Server) providing built-in consistency guarantees",
+        "Use multiple NoSQL databases",
+        "Implement eventual consistency"
+      ],
+      "answer": 1,
+      "explanation": "Relational databases provide ACID guarantees: Atomicity (all or nothing), Consistency (valid states), Isolation (concurrent transactions), Durability (committed data persists). Essential for financial transactions. NoSQL typically eventual consistency. Application-level consistency complex and error-prone. Multiple databases don't solve consistency. Eventual consistency inappropriate for financial data. Objective 1.3"
+    },
+    {
+      "q": "A cloud migration project needs to categorize applications for migration strategy. An application has tightly coupled dependencies on specific OS kernel versions and hardware drivers. What migration approach is MOST appropriate?",
+      "options": [
+        "Rehost (lift-and-shift) moving VM with minimal changes",
+        "Refactor application to cloud-native architecture",
+        "Replace with SaaS solution",
+        "Retire the application"
+      ],
+      "answer": 0,
+      "explanation": "Tightly coupled dependencies favor rehost: move VM as-is to cloud, preserves dependencies and configurations, minimal risk, quick migration. Refactoring complex and risky for tightly coupled apps. SaaS may not exist or fit requirements. Retiring may not be viable if application still needed. Rehost then optimize over time. Objective 1.1"
+    },
+    {
+      "q": "A company uses reserved instances for steady-state workload but has burst capacity requirements that are unpredictable. What purchasing combination optimizes cost?",
+      "options": [
+        "Reserved instances only scaled for peak capacity",
+        "Reserved instances for baseline capacity, on-demand or spot instances for burst capacity exceeding baseline",
+        "All on-demand instances",
+        "All spot instances"
+      ],
+      "answer": 1,
+      "explanation": "Hybrid purchasing model: reserved instances cover predictable baseline (1-3 year commitment, discount 30-70%), on-demand for bursts (flexibility, no commitment), spot if workload tolerates interruption (additional savings). Optimizes cost and flexibility. Reserved-only at peak wastes capacity during non-peak. All on-demand expensive for baseline. All spot risks interruption. Objective 1.5"
+    },
+    {
+      "q": "An API gateway receives requests that must be processed by multiple independent microservices. Each service performs different operation on the data. What integration pattern is MOST appropriate?",
+      "options": [
+        "Direct synchronous calls to all services sequentially",
+        "Publish request to message queue or pub/sub topic, multiple services subscribe and process independently",
+        "Store data in shared database for services to poll",
+        "Service mesh for synchronous calls"
+      ],
+      "answer": 1,
+      "explanation": "Pub/sub messaging decouples services: API publishes message to topic, multiple services subscribe and process independently (parallel processing), services don't need to know about each other, adds resilience. Sequential synchronous calls slow and tightly coupled. Shared database polling inefficient and creates coupling. Service mesh for communication but messaging better for independent processing. Objective 1.1"
+    },
+    {
+      "q": "A disaster recovery plan specifies RPO of 1 hour and RTO of 4 hours. Which backup and recovery approach meets these requirements?",
+      "options": [
+        "Weekly full backup only",
+        "Continuous replication or hourly backups for RPO, automated recovery procedures and warm standby for RTO",
+        "Daily backups with manual recovery",
+        "Manual backups as needed"
+      ],
+      "answer": 1,
+      "explanation": "Meeting RPO and RTO requires: frequent backups or replication (hourly or continuous for 1-hour RPO), automated recovery procedures (minimize manual steps), warm standby or quick provisioning (meet 4-hour RTO). Weekly backups lose 7 days data (RPO violation). Daily backups lose 24 hours data. Manual recovery too slow. Objective 1.2"
+    },
+    {
+      "q": "A video streaming application serves content globally. 90% of views are for top 10% of content. Storage costs are high. What architecture optimizes cost and performance?",
+      "options": [
+        "Store all content in highest performance storage",
+        "Use CDN with origin tiered storage: popular content in CDN edge locations, origin uses hot storage for popular content and cold storage for long-tail content",
+        "Delete unpopular content",
+        "Reduce video quality"
+      ],
+      "answer": 1,
+      "explanation": "CDN with tiered origin optimizes for access patterns: CDN caches popular content at edge (fast delivery, reduces origin load), origin hot storage for frequently accessed content, cold storage for long-tail (cheaper), automated tiering. Balances cost and performance. Single tier expensive. Deleting reduces catalog. Quality reduction poor experience. Objective 1.6"
+    },
+    {
+      "q": "An application requires processing user-uploaded images: resize, format conversion, thumbnail generation. Processing takes 30 seconds per image. Upload volume varies from 10/hour to 1000/hour. What compute architecture handles this efficiently?",
+      "options": [
+        "Dedicated image processing servers running 24/7",
+        "Event-driven serverless functions triggered by upload events, auto-scaling based on queue depth",
+        "Single large server processing all images",
+        "Manual batch processing"
+      ],
+      "answer": 1,
+      "explanation": "Serverless event-driven architecture ideal: upload triggers function, automatic scaling (10 to 1000 concurrent executions), pay per processing (not idle time), queue buffers spikes. Cost-effective for variable workload. Dedicated servers pay for capacity whether used or not. Single server bottleneck during peaks. Manual processing delays. Objective 1.5"
+    },
+    {
+      "q": "A database experiences performance degradation during nightly batch reporting queries that scan large tables. Transactional queries during day perform acceptably. What solution separates workloads?",
+      "options": [
+        "Run reports only on weekends",
+        "Create read replica dedicated to reporting queries, direct analytical/reporting workload to replica while primary handles transactions",
+        "Upgrade to larger database instance",
+        "Optimize all queries"
+      ],
+      "answer": 1,
+      "explanation": "Read replica separates workloads: primary database handles transactional writes and reads, reporting replica handles analytical queries (scans, aggregations), no performance impact on primary. Larger instance helps but doesn't separate workloads. Weekend-only restricts business. Query optimization helps but doesn't address workload separation. Objective 1.3"
+    },
+    {
+      "q": "A company must implement network security controls to prevent unauthorized access between application tiers in cloud. What provides network segmentation and access control?",
+      "options": [
+        "Physical network separation",
+        "Virtual networks (VPC/VNet) with subnets, security groups/firewall rules defining allowed traffic between tiers",
+        "Different IP addresses",
+        "Application-level authentication only"
+      ],
+      "answer": 1,
+      "explanation": "Cloud network segmentation uses virtual networks: VPC/VNet with subnets per tier, security groups define allowed inbound/outbound traffic, network ACLs provide subnet-level control, least privilege network access. Physical separation impractical in cloud. IP addresses don't provide access control. Application auth doesn't replace network controls. Objective 1.4"
+    },
+    {
+      "q": "An application generates audit logs that must be retained for 7 years for compliance but are rarely accessed after 90 days. What storage approach minimizes cost while meeting retention?",
+      "options": [
+        "Store all logs in standard storage for 7 years",
+        "Use lifecycle policies to transition logs from standard storage (first 90 days) to glacier/archive storage (remaining 7 years) for long-term retention",
+        "Delete logs after 90 days",
+        "Compress logs but keep in standard storage"
+      ],
+      "answer": 1,
+      "explanation": "Tiered storage with lifecycle policies: standard storage for active period (90 days), automatic transition to archive storage (glacier/cold tier) for compliance retention (7 years), archive storage 90% cheaper. Meets retention at minimal cost. Standard storage for 7 years expensive. Deleting violates compliance. Compression helps but archive tier provides greater savings. Objective 1.3"
+    },
+    {
+      "q": "A web application experiences traffic spikes during promotions (100x normal load). Current fixed capacity handles normal load but fails during spikes. Application is containerized. What enables handling spikes cost-effectively?",
+      "options": [
+        "Maintain capacity for 100x load continuously",
+        "Use Kubernetes cluster autoscaling: Horizontal Pod Autoscaler scales pods based on metrics, Cluster Autoscaler adds nodes when needed, scales down after spike",
+        "Implement rate limiting to prevent spikes",
+        "Manual scaling before promotions"
+      ],
+      "answer": 1,
+      "explanation": "Kubernetes autoscaling handles dynamic load: HPA adds pods when CPU/memory/custom metrics increase, Cluster Autoscaler adds nodes for pod demand, both scale down automatically, cost-effective (pay for capacity when needed). Maintaining 100x capacity expensive. Rate limiting poor user experience. Manual scaling doesn't handle unexpected spikes. Objective 1.5"
+    },
+    {
+      "q": "A cloud architecture must support both Linux and Windows workloads with different scaling requirements. What approach provides flexibility?",
+      "options": [
+        "Use only Linux instances running Wine for Windows apps",
+        "Deploy separate auto-scaling groups for Linux and Windows instances with independent scaling policies based on workload requirements",
+        "Use only Windows instances for everything",
+        "Manually manage mixed instance types"
+      ],
+      "answer": 1,
+      "explanation": "Separate auto-scaling groups per OS/workload type: Linux ASG with Linux-optimized instances and scaling policies, Windows ASG with Windows instances and different scaling, each optimized for workload characteristics. Provides flexibility and optimization. Single OS limits capabilities. Wine compatibility issues. Manual management doesn't scale. Objective 1.5"
+    }
+  ],
+  "2. Deployment": [
+    {
+      "q": "A containerized application deployment uses environment variables for configuration. Different environments (dev, staging, prod) require different values. What is the BEST way to manage environment-specific configuration?",
+      "options": [
+        "Hard-code values in Dockerfile per environment",
+        "Use Kubernetes ConfigMaps and Secrets for environment-specific values, reference them in pod specs",
+        "Rebuild container images per environment",
+        "Store configuration in application code"
+      ],
+      "answer": 1,
+      "explanation": "ConfigMaps and Secrets separate configuration from images: same image across environments, ConfigMap for non-sensitive config, Secrets for sensitive data, environment-specific values injected at deployment. Enables immutable images. Hard-coding requires rebuilds. Rebuilding per environment violates immutable image principle. Code storage creates tight coupling. Objective 2.2"
+    },
+    {
+      "q": "A deployment script uses hard-coded resource IDs (subnet IDs, security group IDs) from development environment. Deployment to production fails. What practice prevents this?",
+      "options": [
+        "Manually update IDs for each environment",
+        "Use Infrastructure as Code with parameterized templates or variables for environment-specific values, resource discovery, or tagging",
+        "Document all IDs for each environment",
+        "Clone development resources to production"
+      ],
+      "answer": 1,
+      "explanation": "IaC parameterization prevents hard-coding: variables for environment-specific values, resource discovery by tags or names (not IDs), outputs from other stacks as inputs. Single template works across environments. Manual updates error-prone. Documentation doesn't automate. Cloning inappropriate and doesn't scale. Objective 2.2"
+    },
+    {
+      "q": "A zero-downtime deployment strategy is required for a stateful application with database. Current approach causes brief downtime during cutover. What deployment sequence achieves zero-downtime?",
+      "options": [
+        "Stop old version, deploy new version, start new version",
+        "Deploy new version in parallel, run both versions simultaneously with backward-compatible schema, gradually shift traffic, decommission old version",
+        "Deploy new version to single instance first",
+        "Schedule maintenance window"
+      ],
+      "answer": 1,
+      "explanation": "Parallel deployment with compatibility: new version deployed alongside old, database schema backward-compatible (both versions work), gradual traffic shift (10%, 50%, 100%), old version decommissioned after validation. True zero-downtime. Stop-start causes downtime. Single instance still has downtime. Maintenance window is planned downtime. Objective 2.3"
+    },
+    {
+      "q": "A CI pipeline builds application artifacts successfully but deployment to production fails with resource dependency errors. Same deployment works in staging. What is the likely cause?",
+      "options": [
+        "Build process is faulty",
+        "Production environment missing prerequisite resources (IAM roles, network resources, dependencies) that exist in staging",
+        "Application code issue",
+        "CI pipeline bug"
+      ],
+      "answer": 1,
+      "explanation": "Environment parity issue: production missing resources that staging has (IAM roles, VPCs, S3 buckets, database endpoints), dependency ordering problems, or permission differences. Build succeeds (artifact valid). Code works in staging. CI pipeline successful. Environment configuration difference. Objective 2.2"
+    },
+    {
+      "q": "A Kubernetes deployment rollout gets stuck at 50% with message 'Waiting for rollout to finish: 5 out of 10 new replicas updated.' Investigation shows new pods in ImagePullBackOff state. What is the issue?",
+      "options": [
+        "Insufficient cluster capacity",
+        "Image cannot be pulled from registry: wrong image name/tag, registry authentication failure, or network connectivity to registry",
+        "Application error",
+        "Kubernetes bug"
+      ],
+      "answer": 1,
+      "explanation": "ImagePullBackOff indicates registry pull failure: image name/tag typo, image doesn't exist in registry, missing pull secrets for private registry, network firewall blocking registry access. Prevents pod startup. Capacity issues show different error (Pending). Application error shows CrashLoopBackOff. Not Kubernetes bug. Objective 2.3"
+    },
+    {
+      "q": "A deployment pipeline has stages: Build → Test → Deploy Dev → Deploy Staging → Deploy Prod. Staging deployment fails but the pipeline shows as successful. What is missing?",
+      "options": [
+        "Pipeline is configured correctly",
+        "Deployment stage lacks proper failure detection: no health checks after deployment, missing exit code checks, or deployment command not propagating failures",
+        "Staging environment issue only",
+        "False positive is acceptable"
+      ],
+      "answer": 1,
+      "explanation": "Pipeline must detect deployment failures: check deployment command exit codes, validate health checks after deployment, verify application availability. Pipeline showing success despite failure means checks missing. Not configured correctly. Environment issue would still show as failure with proper checks. False positives unacceptable. Objective 2.3"
+    },
+    {
+      "q": "A Terraform deployment creates resources successfully in first run. Second run with no code changes shows plan to modify resources. What causes this drift?",
+      "options": [
+        "Terraform bug",
+        "Manual changes made to resources outside Terraform, or resources have non-deterministic attributes (timestamps, auto-generated IDs)",
+        "State file corruption",
+        "Cloud provider issue"
+      ],
+      "answer": 1,
+      "explanation": "Drift from manual changes or non-deterministic attributes: someone modified resources via console/CLI, resource attributes that change automatically (timestamps, auto-assigned values), missing ignore_changes for expected drift. Terraform detects actual state differs from desired. Not bug. State corruption shows errors. Provider stable. Objective 2.2"
+    },
+    {
+      "q": "A Docker build copies entire source code directory including node_modules (500MB). Each build takes 10 minutes to upload context. What optimization reduces build context size?",
+      "options": [
+        "Faster internet connection",
+        "Use .dockerignore file excluding unnecessary files (node_modules, .git, test files, build artifacts)",
+        "Compress source code",
+        "Use smaller base image"
+      ],
+      "answer": 1,
+      "explanation": ".dockerignore excludes files from build context: exclude node_modules (will reinstall in container), .git directories, test files, IDE configs, documentation. Dramatically reduces context size and upload time. Connection speed helps but doesn't address bloated context. Compression built-in. Base image doesn't affect context size. Objective 2.2"
+    },
+    {
+      "q": "An application version deployed to production has critical bug. Fix is ready and tested. Deployment pipeline requires 2-hour full testing cycle. Business cannot wait 2 hours. What enables fast hotfix deployment while maintaining safety?",
+      "options": [
+        "Skip all testing and deploy immediately",
+        "Implement hotfix pipeline with reduced testing for critical fixes: smoke tests, security scans, deploy to small percentage, gradual rollout with close monitoring",
+        "Wait for standard pipeline",
+        "Manual deployment"
+      ],
+      "answer": 1,
+      "explanation": "Hotfix pipeline balances speed and safety: focused testing on fix area (not full regression), critical security checks maintained, deploy to canary first, gradual rollout with rollback ready, enhanced monitoring. Faster than full pipeline, safer than no testing. Skipping testing too risky. Waiting may violate SLA. Manual deployment lacks safeguards. Objective 2.3"
+    },
+    {
+      "q": "A Helm chart deploys application with multiple dependent services that must start in specific order. What Helm feature ensures correct startup sequence?",
+      "options": [
+        "Helm automatically handles ordering",
+        "Use init containers to wait for dependencies or readiness probes ensuring services ready before dependent services start",
+        "Deploy services individually in order",
+        "Use sleep commands"
+      ],
+      "answer": 1,
+      "explanation": "Dependency management in Kubernetes: init containers can wait for dependencies (check database ready before app starts), readiness probes prevent traffic until ready, liveness probes restart failed containers. Helm applies manifests but Kubernetes handles runtime readiness. Helm doesn't automatically manage runtime dependencies. Individual deployment impractical at scale. Sleep commands fragile. Objective 2.2"
+    },
+    {
+      "q": "A deployment requires updating application configuration without redeploying containers. Configuration changes should take effect immediately. What approach enables this?",
+      "options": [
+        "Rebuild and redeploy containers",
+        "Use external configuration service with dynamic reload: application polls config service or receives config update notifications, reloads without restart",
+        "Update ConfigMap and restart pods",
+        "Store config in database"
+      ],
+      "answer": 1,
+      "explanation": "Dynamic configuration: external config service (Spring Cloud Config, Consul, etcd), application watches for changes, hot reload without restart. Truly dynamic. Redeployment defeats purpose. ConfigMap update requires pod restart (not dynamic). Database adds dependency and complexity. Objective 2.2"
+    },
+    {
+      "q": "A microservices deployment has 20 services with complex version dependencies. Service A v2.0 incompatible with Service B v1.5. What prevents incompatible versions from deploying together?",
+      "options": [
+        "Manual compatibility checking",
+        "Implement semantic versioning with automated compatibility testing, contract testing between services, integration tests validating service interactions",
+        "Deploy all services simultaneously always",
+        "Version pinning in all services"
+      ],
+      "answer": 1,
+      "explanation": "Automated compatibility validation: semantic versioning communicates breaking changes, contract tests validate interfaces, integration tests catch incompatibilities, automated checks in pipeline prevent incompatible deployments. Manual checking doesn't scale. Simultaneous deployment impractical. Version pinning creates tight coupling. Objective 2.3"
+    },
+    {
+      "q": "A stateful application stores data on container's local filesystem. Container restart causes data loss. What provides persistent storage for containerized stateful applications?",
+      "options": [
+        "Use larger containers with more storage",
+        "Use persistent volumes (Kubernetes PV/PVC) mounted to containers, data persists across container restarts and rescheduling",
+        "Don't restart containers",
+        "Backup data before restart"
+      ],
+      "answer": 1,
+      "explanation": "Persistent Volumes provide durable storage: PersistentVolume defined in cluster, PersistentVolumeClaim requests storage, volume mounted to pod, data survives container/pod restarts, follows pod if rescheduled. Proper solution for stateful apps. Container storage ephemeral. Larger containers don't change ephemeral nature. Preventing restart impractical. Backups don't prevent loss. Objective 2.2"
+    },
+    {
+      "q": "A deployment rollout uses RollingUpdate strategy with maxSurge=1 and maxUnavailable=0. Deployment has 10 replicas. How does rollout proceed?",
+      "options": [
+        "All 10 replicas updated simultaneously",
+        "Create 1 new replica (surge), wait until ready, terminate 1 old replica, repeat maintaining total 10-11 replicas, zero unavailability",
+        "Terminate 1 old, create 1 new, repeat",
+        "Update replicas in pairs"
+      ],
+      "answer": 1,
+      "explanation": "RollingUpdate with maxSurge=1, maxUnavailable=0 ensures zero downtime: create 1 new pod (total 11), wait for ready, delete 1 old pod (back to 10), repeat until all updated. Always 10-11 healthy pods. Maintains capacity throughout rollout. All at once isn't rolling. Terminate-then-create has unavailability. Pairs not specified by configuration. Objective 2.3"
+    },
+    {
+      "q": "A CI/CD pipeline stores deployment credentials in plain text in source code repository. What is the security issue and solution?",
+      "options": [
+        "Private repository makes this secure",
+        "Credentials in code is security risk; use CI/CD platform's secret management, reference secrets at runtime, rotate credentials regularly, use temporary credentials when possible",
+        "Encrypt credentials in repository",
+        "Use .gitignore"
+      ],
+      "answer": 1,
+      "explanation": "Never store credentials in code: CI platforms have secret stores (GitHub Secrets, GitLab CI Variables, Jenkins Credentials), inject at runtime, use IAM roles for cloud access (no static credentials), rotate regularly. Private repo insufficient (many have access, Git history). Encryption key management problem. .gitignore doesn't remove from history. Objective 2.2"
+    },
+    {
+      "q": "An application deployment requires pre-deployment validation (database schema version check) and post-deployment verification (smoke tests). Where should these be implemented?",
+      "options": [
+        "Manual steps before and after deployment",
+        "Kubernetes pre-upgrade hooks for validation, post-upgrade hooks for verification, or integrate into deployment pipeline stages",
+        "Inside application startup code",
+        "Scheduled checks after deployment"
+      ],
+      "answer": 1,
+      "explanation": "Automated deployment hooks: pre-upgrade hook runs validation (schema version check, dependency verification), post-upgrade hook runs smoke tests (health checks, basic functionality), pipeline stages enforce checks, deployment fails if checks fail. Application startup too late for pre-checks. Manual doesn't scale. Scheduled checks delayed. Objective 2.3"
+    },
+    {
+      "q": "A blue-green deployment completes traffic switch to green. Monitoring shows slightly higher error rate in green. What is the IMMEDIATE action?",
+      "options": [
+        "Rollback immediately to blue without investigation",
+        "Investigate error rate increase: verify it's statistically significant, check error types, compare against error budget, keep blue running for potential rollback",
+        "Continue with green and ignore errors",
+        "Deploy hotfix to green"
+      ],
+      "answer": 1,
+      "explanation": "Investigate before action: determine if error increase significant (not noise), analyze error types (critical vs minor), compare to SLO error budget, blue still available for quick rollback if needed. Immediate rollback without investigation may reject valid release. Ignoring errors inappropriate. Hotfix without understanding problem risky. Objective 2.3"
+    }
+  ],
+  "3. Security": [
+    {
+      "q": "A security policy requires all data encrypted in transit. Which protocols and configurations ensure encryption between client and server?",
+      "options": [
+        "HTTP with VPN",
+        "TLS/HTTPS with strong cipher suites, minimum TLS 1.2 or TLS 1.3, valid certificates",
+        "Application-level encryption only",
+        "IPsec tunnel for all traffic"
+      ],
+      "answer": 1,
+      "explanation": "TLS/HTTPS provides transport encryption: TLS 1.2+ with strong ciphers (disable weak ciphers), valid certificates for authentication, protects data in transit from interception. HTTP with VPN encrypts but HTTPS standard. Application encryption defense-in-depth but doesn't replace transport. IPsec for site-to-site not client-server web traffic. Objective 3.4"
+    },
+    {
+      "q": "A cloud environment uses root account for daily administrative tasks. What is the security risk and best practice?",
+      "options": [
+        "Root account use is appropriate for administrators",
+        "Root account has unrestricted access; create IAM users with least privilege for daily tasks, enable MFA on root account, use root only for account-level tasks, secure root credentials",
+        "Share root password with all admins",
+        "Use root account but with strong password"
+      ],
+      "answer": 1,
+      "explanation": "Root account security best practices: never use for daily tasks (unlimited privileges), create IAM users/roles with specific permissions (least privilege), MFA on root account, secure root credentials (password manager), use only for account-level operations. Shared passwords violate accountability. Strong password alone insufficient. Objective 3.2"
+    },
+    {
+      "q": "An application logs all user activity including full API request payloads. Payloads contain credit card numbers. What is the security and compliance issue?",
+      "options": [
+        "No issue, logs are secure",
+        "Logging sensitive data like credit cards violates PCI DSS; implement data masking or tokenization, log only necessary transaction IDs, sanitize logs",
+        "Logs should be encrypted only",
+        "Store logs in secure location only"
+      ],
+      "answer": 1,
+      "explanation": "Sensitive data in logs violates compliance: PCI DSS prohibits storing full credit card numbers in logs, implement log sanitization (redact/mask sensitive data), log transaction IDs instead of full data, prevent sensitive data from entering logs. Encryption doesn't satisfy PCI DSS (data still exists). Secure storage doesn't address data presence. Objective 3.5"
+    },
+    {
+      "q": "A company implements multi-factor authentication for cloud console access but not for API access. What security gap exists?",
+      "options": [
+        "API access doesn't need MFA",
+        "API access without MFA vulnerable to credential compromise; implement MFA for API using temporary session tokens, API keys with IP restrictions, or certificate-based authentication",
+        "API keys are sufficient security",
+        "VPN provides adequate protection"
+      ],
+      "answer": 1,
+      "explanation": "Comprehensive MFA includes API access: console MFA alone incomplete, API access with long-lived keys vulnerable, implement MFA for API token generation, temporary credentials from MFA-authenticated session, certificate-based auth, IP allowlisting. API keys alone can be stolen. VPN doesn't provide authentication. Objective 3.6"
+    },
+    {
+      "q": "A security audit finds S3 bucket with server access logging disabled. What security capability is missing?",
+      "options": [
+        "Logging not necessary for security",
+        "Missing access logs prevent audit trail of who accessed bucket and when; enable server access logging or CloudTrail data events for compliance and security investigation",
+        "Encryption provides sufficient security",
+        "Bucket policies provide adequate control"
+      ],
+      "answer": 1,
+      "explanation": "Access logging provides audit trail: who accessed bucket, when, from where, what operations, essential for security investigations, compliance requirements (HIPAA, PCI DSS), detect unauthorized access. Logging should be enabled. Encryption protects data not access monitoring. Policies control access but don't log it. Objective 3.5"
+    },
+    {
+      "q": "An application requires secure storage of encryption keys. Keys currently stored in application configuration. What provides proper key management?",
+      "options": [
+        "Environment variables for keys",
+        "Use dedicated key management service (AWS KMS, Azure Key Vault, GCP KMS) with hardware security modules, access controls, audit logging, automatic rotation",
+        "Encrypted configuration files",
+        "Database storage for keys"
+      ],
+      "answer": 1,
+      "explanation": "KMS provides secure key management: HSM-backed key storage, fine-grained access controls (IAM), automatic key rotation, comprehensive audit logs, envelope encryption pattern. Keys never exposed to applications. Environment variables not secure. Encrypted files require key management (circular problem). Database not designed for key security. Objective 3.4"
+    },
+    {
+      "q": "A web application accepts file uploads from users. What security measures prevent malicious file upload attacks?",
+      "options": [
+        "Accept all file types",
+        "Validate file types by content not extension, scan uploaded files for malware, store in separate storage bucket with restrictive permissions, limit file sizes, never execute uploaded files",
+        "File size limits only",
+        "Antivirus scanning only"
+      ],
+      "answer": 1,
+      "explanation": "Multi-layered file upload security: validate file type by magic bytes (not extension), malware scanning, isolated storage (not in web root), restrictive bucket policies, size limits, content security policy. Defense-in-depth approach. Accepting all types dangerous. Size limits alone insufficient. Scanning necessary but not sufficient alone. Objective 3.3"
+    },
+    {
+      "q": "A company must implement principle of least privilege for cloud access. What does this mean in practice?",
+      "options": [
+        "Give users read-only access to everything",
+        "Grant users and services minimum permissions required to perform their job functions, regularly review and remove unnecessary permissions",
+        "One permission set for all users",
+        "Administrator access for all employees"
+      ],
+      "answer": 1,
+      "explanation": "Least privilege means minimum necessary permissions: users get only permissions needed for their role, role-based access control (RBAC), regular permission audits, remove unused permissions, time-limited elevated access when needed. Read-only too restrictive for many roles. Single permission set doesn't match varied roles. Admin access violates principle. Objective 3.2"
+    },
+    {
+      "q": "A cloud account has no resource tagging strategy. What security and operational challenge does this create?",
+      "options": [
+        "Tags are optional and not important",
+        "Without tags, difficult to identify resource ownership, track costs, enforce security policies, automate compliance, or manage resource lifecycle",
+        "Tags only help with cost tracking",
+        "Manual tracking is sufficient"
+      ],
+      "answer": 1,
+      "explanation": "Tags enable security and operations: identify resource owners (accountability), enforce tag-based policies, track costs by project/environment, automate compliance checks (ensure production resources encrypted), lifecycle management (auto-delete dev resources). Essential for governance at scale. Tags support multiple use cases. Manual tracking doesn't scale. Objective 3.1"
+    },
+    {
+      "q": "An application experiences brute force login attempts. What technical control mitigates this attack?",
+      "options": [
+        "Stronger passwords only",
+        "Implement account lockout after failed attempts, CAPTCHA challenges, rate limiting on login endpoint, MFA requirement",
+        "Log monitoring only",
+        "User education only"
+      ],
+      "answer": 1,
+      "explanation": "Anti-brute-force controls: account lockout (temporary lock after N failed attempts), rate limiting (limit attempts per IP/account), CAPTCHA makes automation difficult, MFA even if password compromised. Multi-layer defense. Passwords alone don't prevent attempts. Logging detects but doesn't prevent. Education doesn't block automated attacks. Objective 3.3"
+    },
+    {
+      "q": "A security group rule allows SSH (port 22) from 10.0.0.0/8 (private network). Is this appropriate?",
+      "options": [
+        "No, should be 0.0.0.0/0 for flexibility",
+        "Depends on trust model: if 10.0.0.0/8 is trusted corporate network and least privilege satisfied, may be appropriate, but bastion host approach more secure",
+        "No, SSH should never be allowed",
+        "Yes, always secure because it's private network"
+      ],
+      "answer": 1,
+      "explanation": "Context-dependent security: if 10.0.0.0/8 is trusted corporate network and users need direct SSH, may be acceptable with additional controls (MFA, jump box), but bastion host pattern more secure (single controlled entry point). Private network doesn't automatically mean secure (insider threats, compromised workstations). 0.0.0.0/0 inappropriate. SSH has legitimate uses. Private network alone insufficient. Objective 3.2"
+    },
+    {
+      "q": "A compliance requirement mandates separation of duties. What does this mean for cloud access control?",
+      "options": [
+        "Different people work different days",
+        "Critical operations require multiple people: one person requests, another approves, prevents single person from having complete control over sensitive operations",
+        "Users must change passwords regularly",
+        "Separate accounts for each application"
+      ],
+      "answer": 1,
+      "explanation": "Separation of duties prevents fraud and errors: critical operations (production deployments, permission changes, financial transactions) require multi-person approval, no single person has complete control, audit trail of approver. Work schedule unrelated. Password changes different control. Application separation different concept. Objective 3.2"
+    },
+    {
+      "q": "A container image uses 'latest' tag from public registry. What security risk does this present?",
+      "options": [
+        "No risk, latest is always up-to-date",
+        "'Latest' tag can change unexpectedly, may pull untested or compromised version, breaks reproducibility; use specific version tags and scan images",
+        "Latest tag is most secure",
+        "Registry automatically validates latest"
+      ],
+      "answer": 1,
+      "explanation": "Latest tag security issues: tag mutable (points to different image over time), cannot reproduce builds (latest changes), may pull untested version, base image vulnerabilities without notice, supply chain risk. Use immutable tags (v1.2.3, sha256 digest), scan images, use private registry with approved images. Latest not inherently secure. Registries don't validate content. Objective 3.3"
+    },
+    {
+      "q": "A web application is vulnerable to Cross-Site Request Forgery (CSRF). What mitigation prevents CSRF attacks?",
+      "options": [
+        "Input validation only",
+        "Implement CSRF tokens in forms, validate token on server, SameSite cookie attribute, verify Origin/Referer headers",
+        "HTTPS only",
+        "Strong authentication only"
+      ],
+      "answer": 1,
+      "explanation": "CSRF protection mechanisms: anti-CSRF tokens (unique per session, validated on submission), SameSite cookie attribute prevents cross-site cookie sending, Origin/Referer header validation. Prevents unauthorized actions on behalf of authenticated user. Input validation addresses different issue. HTTPS protects transport not CSRF. Authentication doesn't prevent CSRF (attack uses authenticated session). Objective 3.3"
+    },
+    {
+      "q": "A company must comply with data sovereignty requirements restricting where data can be stored. How should cloud architecture address this?",
+      "options": [
+        "Store all data in company's home country",
+        "Use region selection to store data in compliant regions, data residency controls, encryption with regional keys, audit data location",
+        "Data sovereignty not applicable to cloud",
+        "Avoid cloud entirely"
+      ],
+      "answer": 1,
+      "explanation": "Data sovereignty compliance: select cloud regions in allowed countries, configure services for data residency (no cross-region replication), use regional encryption keys, monitor data location, document compliance. Home country may not serve all users. Data sovereignty very applicable to cloud. Cloud can comply with proper architecture. Objective 3.1"
+    },
+    {
+      "q": "An application must prevent privilege escalation where users gain unauthorized elevated permissions. What access control model addresses this?",
+      "options": [
+        "Give all users administrator access initially",
+        "Role-Based Access Control with principle of least privilege, permission boundaries, service control policies, regular permission audits",
+        "Password-only authentication",
+        "Network segmentation only"
+      ],
+      "answer": 1,
+      "explanation": "Privilege escalation prevention: RBAC with least privilege (minimum permissions), permission boundaries limit maximum permissions, deny policies override allow, regular audits detect escalation, just-in-time privilege elevation. Admin access increases risk. Passwords don't control permissions. Network segmentation different layer. Objective 3.2"
+    },
+    {
+      "q": "A security assessment identifies that infrastructure changes are not reviewed before implementation. What process improvement addresses this?",
+      "options": [
+        "No review necessary for trusted administrators",
+        "Implement change approval workflow: infrastructure as code in version control, pull requests for changes, peer review required, automated security scanning, approval before merge",
+        "Quarterly reviews after changes",
+        "Manager notification only"
+      ],
+      "answer": 1,
+      "explanation": "Change control process: all infrastructure changes via code (IaC), pull request workflow, peer review (two-person integrity), automated security/compliance scans, required approval before implementation, audit trail. Prevents unauthorized or erroneous changes. Trust alone insufficient (human error, insider threats). Post-implementation review too late. Notification doesn't provide review. Objective 3.1"
+    }
+  ],
+  "4. Operations": [
+    {
+      "q": "A monitoring system generates alerts but 70% are false positives. Team ignores alerts due to fatigue. What improves alert quality?",
+      "options": [
+        "Increase alert thresholds",
+        "Tune alert thresholds based on historical data, implement alert severity levels, create runbooks for each alert, aggregate related alerts, use anomaly detection instead of static thresholds",
+        "Disable noisy alerts",
+        "Send fewer alerts"
+      ],
+      "answer": 1,
+      "explanation": "Alert quality improvement: tune thresholds to reduce false positives (analyze historical data), severity levels prioritize critical alerts, runbooks provide context, aggregation reduces alert storm, anomaly detection adapts to patterns. Increases raising threshold blindly may miss real issues. Disabling alerts creates blind spots. Fewer alerts needs to be based on relevance not volume. Objective 4.1"
+    },
+    {
+      "q": "An application requires maintaining 99.9% uptime SLA. Current monitoring only checks infrastructure availability. What additional monitoring is needed?",
+      "options": [
+        "Infrastructure monitoring is sufficient",
+        "End-to-end synthetic monitoring simulating user transactions, API health checks, application-level metrics, dependency monitoring",
+        "Server CPU monitoring only",
+        "Network monitoring only"
+      ],
+      "answer": 1,
+      "explanation": "Application availability monitoring: synthetic transactions test user journeys (login, checkout), API health checks validate endpoints, application metrics (error rates, response times), external dependency monitoring. Infrastructure up doesn't mean application working. CPU alone insufficient. Network alone insufficient. Need full stack visibility. Objective 4.1"
+    },
+    {
+      "q": "A cloud resource tagging policy requires all resources tagged with Owner, Environment, and CostCenter. Compliance checking is manual and infrequent. How can this be automated?",
+      "options": [
+        "Manual checking is adequate",
+        "Implement automated compliance checks: policy-as-code enforcing required tags, prevent creation of non-compliant resources, automated remediation or alerts for violations",
+        "Quarterly manual audits",
+        "Trust users to tag correctly"
+      ],
+      "answer": 1,
+      "explanation": "Automated compliance enforcement: policy-as-code (AWS Config Rules, Azure Policy, GCP Organization Policies) checks tags at creation, denies non-compliant resources, automated scanning identifies violations, auto-remediation or alerts. Continuous compliance. Manual checking doesn't scale and has gaps. Quarterly too infrequent. Trust requires verification. Objective 4.4"
+    },
+    {
+      "q": "An auto-scaling group has cool-down period of 5 minutes. During rapid traffic increases, scaling is too slow causing performance issues. What configuration change helps?",
+      "options": [
+        "Increase cool-down period",
+        "Reduce cool-down period or use target tracking policies with faster response, implement step scaling for faster scale-out",
+        "Disable auto-scaling",
+        "Use larger instances"
+      ],
+      "answer": 1,
+      "explanation": "Faster scaling response: reduce cool-down (allows more frequent scaling actions), target tracking policies more responsive than simple scaling, step scaling adds multiple instances based on breach magnitude. Cool-down prevents thrashing but can delay needed scaling. Increasing cool-down makes problem worse. Disabling breaks scaling. Larger instances don't address scaling speed. Objective 4.2"
+    },
+    {
+      "q": "A database backup window takes 4 hours during which performance degrades for users. Business operates 24/7 making traditional maintenance windows impossible. What backup approach minimizes impact?",
+      "options": [
+        "Continue with current approach",
+        "Use continuous backup or incremental backup with minimal performance impact, read replicas for backup source, snapshot-based backups for faster backup",
+        "Skip backups",
+        "Perform backups only weekly"
+      ],
+      "answer": 1,
+      "explanation": "Low-impact backup strategies: continuous backup captures changes with minimal overhead, incremental backups faster than full, backup from read replica (no primary impact), storage snapshots fast (seconds), point-in-time recovery. 24/7 operations need zero-impact backups. Current approach unacceptable. Skipping violates DR. Weekly increases RPO. Objective 4.3"
+    },
+    {
+      "q": "Infrastructure as Code deployment creates resources but team manually configures them post-deployment. What is the issue with this approach?",
+      "options": [
+        "Manual configuration is necessary and appropriate",
+        "Configuration drift: manual changes not captured in code, cannot reproduce environment, breaks infrastructure as code principles, should automate configuration in IaC",
+        "IaC only for creation not configuration",
+        "Manual configuration provides flexibility"
+      ],
+      "answer": 1,
+      "explanation": "IaC should include configuration: all infrastructure and configuration in code (Terraform, CloudFormation, Ansible), reproducible environments, version controlled, automated. Manual post-deployment changes create drift (code doesn't match reality). IaC covers configuration. Manual flexibility creates inconsistency. Objective 4.4"
+    },
+    {
+      "q": "A company uses multiple AWS accounts for different teams. Managing IAM users in each account is difficult. What approach simplifies identity management?",
+      "options": [
+        "Create IAM users in each account",
+        "Implement federated authentication with centralized identity provider (Azure AD, Okta) and cross-account roles, single sign-on to all accounts",
+        "Share account credentials",
+        "One account for all teams"
+      ],
+      "answer": 1,
+      "explanation": "Federated identity with SSO: centralized identity provider (IdP) authenticates users, SAML/OIDC federation to cloud accounts, cross-account roles for access, single credentials for all accounts, centralized provisioning/deprovisioning. Scales to many accounts. IAM users per account doesn't scale. Sharing violates security. Single account loses isolation. Objective 4.4"
+    },
+    {
+      "q": "Application performance monitoring shows slow database queries but database metrics appear normal. What additional investigation is needed?",
+      "options": [
+        "No investigation needed, monitoring is complete",
+        "Analyze query execution plans, check for missing indexes, examine table statistics, look for lock contention, review slow query logs",
+        "Increase database size",
+        "Ignore since metrics are normal"
+      ],
+      "answer": 1,
+      "explanation": "Query-level diagnosis: execution plans reveal inefficient queries, missing indexes cause table scans, outdated statistics cause poor plans, lock contention causes waits, slow query logs identify problematic queries. Infrastructure metrics don't show query efficiency. Investigation essential. Increasing size doesn't fix inefficient queries. Normal metrics don't mean no problems at query level. Objective 4.1"
+    },
+    {
+      "q": "A disaster recovery plan hasn't been tested in 2 years. What risk does this present?",
+      "options": [
+        "No risk, plan documented",
+        "Untested DR plan may not work: infrastructure changes, process gaps, personnel changes, recovery time unknown, regular testing (quarterly or annually) essential",
+        "DR plans don't need testing",
+        "Documentation is sufficient"
+      ],
+      "answer": 1,
+      "explanation": "DR testing essential: validates procedures actually work, identifies gaps (missing configuration, outdated documentation), measures actual RTO/RPO, trains staff, adapts to changes. Documentation doesn't guarantee effectiveness. Plans require regular testing (at least annually). Untested plan is high risk. Objective 4.3"
+    },
+    {
+      "q": "A Kubernetes cluster has nodes at 90% CPU utilization but pods are pending. What is the likely issue?",
+      "options": [
+        "Not enough CPU available for pods",
+        "Resource requests in pod specs exceed available capacity, or node selectors/affinity rules prevent scheduling, or taints on nodes",
+        "Kubernetes bug",
+        "Application issue"
+      ],
+      "answer": 1,
+      "explanation": "Pod scheduling issues despite utilization: pod resource requests larger than available node capacity, node affinity/selectors don't match available nodes, node taints without matching tolerations, pod anti-affinity prevents placement. Check scheduler events. High utilization means insufficient capacity but pending needs scheduling analysis. Not bug. Application runs once scheduled. Objective 4.2"
+    },
+    {
+      "q": "An organization has multiple cloud subscriptions/accounts with inconsistent security configurations. What approach standardizes security?",
+      "options": [
+        "Manual configuration of each account",
+        "Implement organizational-level policies (AWS Organizations SCP, Azure Management Groups, GCP Organization Policies) enforcing security standards across all accounts",
+        "Document standards and trust teams",
+        "Quarterly audits"
+      ],
+      "answer": 1,
+      "explanation": "Centralized governance: organization-level policies enforce standards (prevent disabling CloudTrail, require encryption, restrict regions), inherited by all accounts, prevents non-compliant configurations, consistent security baseline. Manual doesn't scale or prevent drift. Documentation doesn't enforce. Audits detect after fact. Objective 4.4"
+    },
+    {
+      "q": "Application logs are stored on each application server. Server terminated during scaling down causes log loss. What ensures log retention?",
+      "options": [
+        "Don't terminate servers",
+        "Centralized logging: stream logs to central logging service (CloudWatch, ELK, Splunk), logs persisted independent of server lifecycle",
+        "Backup servers before termination",
+        "Longer termination grace period"
+      ],
+      "answer": 1,
+      "explanation": "Centralized logging ensures retention: logging agent streams logs off-server in real-time, central service retains logs, searchable aggregated logs, survives server termination. Essential for auto-scaled environments. Preventing termination defeats auto-scaling. Backups don't capture recent logs. Grace period doesn't address fundamental issue. Objective 4.1"
+    },
+    {
+      "q": "A runbook for incident response is 50 pages long with manual steps. During incidents, engineers cannot follow it completely under pressure. What improves incident response?",
+      "options": [
+        "Train engineers to memorize runbook",
+        "Automate common incident response: automated remediation for known issues, shorter focused runbooks for manual steps, incident playbooks with decision trees, post-incident automation of manual steps",
+        "Make runbook longer and more detailed",
+        "Require reading runbook during incident"
+      ],
+      "answer": 1,
+      "explanation": "Incident response automation: auto-remediation for known issues (restart service, clear cache, scale resources), concise actionable runbooks, playbooks guide decision-making, continuous improvement (automate manual steps after incidents). Memorization unrealistic. Longer worse. Reading during incident too slow. Automation improves MTTR. Objective 4.1"
+    },
+    {
+      "q": "Cost optimization initiative identifies many unattached EBS volumes and unused elastic IPs. What process prevents this ongoing?",
+      "options": [
+        "Manual monthly reviews",
+        "Automated resource lifecycle management: tag resources with expiration dates, automated scanning for unused resources, automated cleanup or alerts, cost anomaly detection",
+        "Trust users to clean up",
+        "Annual audits"
+      ],
+      "answer": 1,
+      "explanation": "Automated lifecycle management: tag-based automation (delete resources after expiration), scheduled scans identify unused resources (unattached volumes, stopped instances, unused IPs), automated cleanup or alerts, cost monitoring detects anomalies. Prevents waste. Manual reviews don't prevent, only detect. Trust doesn't scale. Annual too infrequent. Objective 4.4"
+    },
+    {
+      "q": "An application SLO specifies 99.5% availability but current monitoring only shows infrastructure uptime at 99.9%. Customers report availability issues. What is missing?",
+      "options": [
+        "Infrastructure monitoring matches SLO",
+        "Missing service level indicators from user perspective: synthetic monitoring, error rates, successful transactions, latency measurements, not just infrastructure availability",
+        "Customer reports are wrong",
+        "Monitor more infrastructure"
+      ],
+      "answer": 1,
+      "explanation": "SLO requires user-centric SLIs: availability from user perspective (successful requests / total requests), latency measurements, error rates, synthetic monitoring simulating user journeys. Infrastructure uptime doesn't equal service availability. Customers experiencing real issues. More infrastructure monitoring doesn't capture user experience. Objective 4.1"
+    }
+  ],
+  "5. DevOps Fundamentals": [
+    {
+      "q": "A development team wants to adopt continuous delivery but operations team requires manual approval before production. What bridges this gap?",
+      "options": [
+        "Remove all approvals",
+        "Implement automated quality gates (security scans, tests, compliance checks) providing confidence, require manual approval only for high-risk changes, establish clear deployment criteria",
+        "Manual approval for every deployment",
+        "Separate teams completely"
+      ],
+      "answer": 1,
+      "explanation": "DevOps collaboration: automated quality gates provide objective safety measures (comprehensive testing, security scans, performance validation), manual approval for high-risk (schema changes, major versions), clear automated criteria for approval. Balances speed and control. No approval too risky. All manual slows delivery. Separation maintains silos. Objective 5.1"
+    },
+    {
+      "q": "A Git repository has 2,000 commits on main branch with no branches or tags. Code review and feature isolation is difficult. What Git workflow improves this?",
+      "options": [
+        "Continue with single branch",
+        "Implement feature branch workflow with pull requests: create branch per feature, code review via PR, squash merge to main, semantic versioning with tags",
+        "Create more commits",
+        "Reduce commits"
+      ],
+      "answer": 1,
+      "explanation": "Feature branch workflow: separate branch per feature (isolation), pull request for review (quality gate), code review before merge, squash preserves clean history, tags mark releases. Enables collaboration and quality. Single branch limits collaboration. Commit count not the issue. Need structured workflow. Objective 5.1"
+    },
+    {
+      "q": "A CI pipeline rebuilds entire application even when only documentation changes. Builds take 30 minutes. What optimization reduces unnecessary builds?",
+      "options": [
+        "Build everything always",
+        "Implement conditional pipeline execution: detect changed files, skip build steps when only docs change, separate pipelines for code vs documentation, cache dependencies",
+        "Remove documentation from repository",
+        "Manual trigger for builds"
+      ],
+      "answer": 1,
+      "explanation": "Conditional CI optimization: path filters trigger relevant pipelines (docs change = docs pipeline only), skip unnecessary steps, separate pipelines per concern (app build, docs build, infra deploy), dependency caching speeds builds. Efficient CI. Building everything wasteful. Documentation belongs in repo. Manual defeats continuous integration. Objective 5.3"
+    },
+    {
+      "q": "Developers make code changes but operations team handles deployments. Deployments occur weekly in batch. What DevOps practice improves flow?",
+      "options": [
+        "Maintain separate responsibilities",
+        "Implement continuous deployment with automated pipelines: developers own deployment automation, small frequent deployments, operations provides platforms and guardrails",
+        "Reduce deployment frequency",
+        "Require operations approval for all changes"
+      ],
+      "answer": 1,
+      "explanation": "DevOps shared ownership: developers responsible for deployment automation (you build it, you deploy it), operations provides secure platforms and tooling, frequent small deployments reduce risk, automated pipelines enable self-service. Removes handoff delays. Separation creates bottleneck. Less frequent increases risk. More approvals slows delivery. Objective 5.1"
+    },
+    {
+      "q": "Application configuration is hard-coded in application binary requiring rebuild for configuration changes. What pattern externalizes configuration?",
+      "options": [
+        "Continue hard-coding for simplicity",
+        "Twelve-factor app: externalize configuration via environment variables, configuration files, or configuration service, same artifact across environments",
+        "Different binary per environment",
+        "Database for all configuration"
+      ],
+      "answer": 1,
+      "explanation": "Configuration externalization: environment variables, config files, or config service provide environment-specific values, single application artifact works everywhere, change config without rebuild. Twelve-factor principle. Hard-coding requires rebuilds. Different binaries per environment creates inconsistency. Database adds dependency. Objective 5.2"
+    },
+    {
+      "q": "A team practices continuous integration but merges to main branch monthly. Feature branches stay open for weeks. Is this continuous integration?",
+      "options": [
+        "Yes, they use CI tools",
+        "No, continuous integration requires frequent integration (daily or more) to main branch with small incremental changes, not long-lived branches",
+        "Yes, monthly is frequent enough",
+        "CI frequency doesn't matter"
+      ],
+      "answer": 1,
+      "explanation": "Continuous integration requires frequent integration: daily or multiple times per day to main/trunk, small incremental changes, detect integration issues early. Long-lived branches (weeks) is not CI despite using CI tools. Monthly integration is batch integration. Frequency fundamental to CI practice. Objective 5.1"
+    },
+    {
+      "q": "A deployment pipeline has 20 sequential stages taking 2 hours. Many stages could run in parallel. What improves pipeline speed?",
+      "options": [
+        "Maintain sequential execution",
+        "Implement parallel execution for independent stages: analyze dependencies, run independent stages simultaneously, use pipeline orchestration capabilities",
+        "Remove testing stages",
+        "Accept 2-hour pipeline"
+      ],
+      "answer": 1,
+      "explanation": "Pipeline parallelization: identify independent stages (unit tests, linting, security scans can run parallel), dependency graph determines parallelization, simultaneous execution reduces total time. Can reduce 2 hours to 30 minutes. Sequential simpler but slow. Removing tests reduces quality. Long pipelines delay feedback. Objective 5.3"
+    },
+    {
+      "q": "Application deployments cause downtime while database schema is updated. What deployment pattern enables zero-downtime database migrations?",
+      "options": [
+        "Accept downtime for database changes",
+        "Expand-contract pattern: expand (add new schema elements), migrate (dual-write), contract (remove old schema), backward and forward compatible changes",
+        "Faster migrations only",
+        "Scheduled maintenance windows"
+      ],
+      "answer": 1,
+      "explanation": "Expand-contract (parallel change) enables zero-downtime: expand phase adds new columns/tables (old code still works), migrate phase transitions data and code, contract phase removes old schema. Both versions work during transition. Speed alone doesn't eliminate downtime. Maintenance windows are planned downtime. Objective 5.2"
+    },
+    {
+      "q": "A team uses infrastructure as code but makes emergency changes manually through console. IaC becomes out of sync with reality. What practice prevents drift?",
+      "options": [
+        "Allow manual changes for emergencies",
+        "Enforce all changes through code: automated drift detection, read-only console access except break-glass, emergency changes require immediate IaC update, drift remediation automation",
+        "Manual changes are necessary",
+        "Update code monthly"
+      ],
+      "answer": 1,
+      "explanation": "Prevent drift through discipline: all changes via IaC (emergency process still uses code), automated drift detection alerts violations, restrict console to read-only (break-glass for true emergencies), emergency changes immediately captured in code. Maintains IaC benefits. Manual changes undermine IaC. Monthly updates too infrequent. Objective 5.2"
+    }
+  ],
+  "6. Troubleshooting": [
+    {
+      "q": "An application works locally but fails in container with error 'command not found.' Same base image. What is the likely cause?",
+      "options": [
+        "Container platform bug",
+        "Missing PATH environment variable in container, or executable not in expected location, or missing dependencies in container image",
+        "Application code error",
+        "Network issue"
+      ],
+      "answer": 1,
+      "explanation": "Container environment differences: PATH may differ between local and container, executables in different locations, missing system packages in container image, environment variables not set. Check Dockerfile for complete environment setup. Not platform bug. Code works locally. Network unrelated to command not found. Objective 6.5"
+    },
+    {
+      "q": "Users report website intermittently shows 'SSL certificate error.' Certificate is valid and most users don't experience issues. What could cause intermittent SSL errors?",
+      "options": [
+        "Certificate is actually expired",
+        "Missing intermediate certificates in certificate chain, or load balancer serving wrong certificate for some requests, or certificate not propagated to all instances",
+        "Client browsers broken",
+        "DNS issue"
+      ],
+      "answer": 1,
+      "explanation": "Intermittent SSL issues: incomplete certificate chain (missing intermediates), load balancer configuration mismatch (multiple certificates, wrong one served), certificate not deployed to all backend instances, SNI configuration issues. Certificate valid doesn't mean properly configured. Browsers function correctly. DNS doesn't cause SSL errors. Objective 6.2"
+    },
+    {
+      "q": "A Kubernetes pod shows status Running but application not responding. What troubleshooting steps identify the issue?",
+      "options": [
+        "Pod running means application working",
+        "Check pod logs (kubectl logs), exec into pod to test application, verify liveness/readiness probes, check service endpoints, examine application metrics",
+        "Restart pod immediately",
+        "Delete and recreate"
+      ],
+      "answer": 1,
+      "explanation": "Running pod doesn't guarantee working application: logs show application errors, exec into pod for testing (curl localhost), probes may not be configured or failing silently, service endpoints show if pod receiving traffic. Systematic diagnosis. Running status only means container process started. Restart may be temporary. Delete doesn't identify root cause. Objective 6.5"
+    },
+    {
+      "q": "Database connection errors occur at exactly 100 concurrent connections. Application has 200 instances each configured with max 5 connections. What is the issue?",
+      "options": [
+        "Application configuration error",
+        "Database max_connections limit is 100, total connections from all instances (200 instances × 5 = 1000 potential) exceeds database limit when 100 reached",
+        "Network bandwidth issue",
+        "Application bug"
+      ],
+      "answer": 1,
+      "explanation": "Connection math: database configured for 100 max connections, application instances collectively attempting more, errors at 100 indicate database limit reached. Need to either increase database max_connections or reduce per-instance connection pool size. Application correctly configured (5 per instance reasonable). Network doesn't cause connection limit errors. Code correctly attempts connections. Objective 6.3"
+    },
+    {
+      "q": "A load balancer returns 502 Bad Gateway errors. Backend instances appear healthy. What should be investigated?",
+      "options": [
+        "Load balancer is faulty",
+        "Backend application returning errors or taking too long to respond (exceeding load balancer timeout), or backend security group blocking load balancer",
+        "DNS problem",
+        "Client issue"
+      ],
+      "answer": 1,
+      "explanation": "502 Bad Gateway means load balancer cannot get valid response from backend: application errors (500 errors), timeout (application too slow), connection refused (security group blocking LB), application not listening on expected port. Instances healthy (pass health checks) but may still fail requests. LB rarely faulty. DNS would show different error. Client would see error not cause it. Objective 6.2"
+    },
+    {
+      "q": "An auto-scaling group is not scaling despite high CPU. Scaling policy configured to add 2 instances when CPU > 80%. CPU is at 90%. What should be checked?",
+      "options": [
+        "CPU metric is wrong",
+        "Check if already at max instance count, IAM permissions for auto-scaling, cooldown period preventing scaling, CloudWatch alarm state, recent scaling activity",
+        "Policy is misconfigured",
+        "Disable and re-enable auto-scaling"
+      ],
+      "answer": 1,
+      "explanation": "Non-scaling troubleshooting: already at max count (scaling limit reached), IAM permissions required for launching instances, cooldown period preventing action, CloudWatch alarm in INSUFFICIENT_DATA state, recent scaling activity visible in history. Systematic diagnosis. Metric appears correct (90% > 80%). Policy seems correct. Restart doesn't diagnose issue. Objective 6.2"
+    },
+    {
+      "q": "Application performance degrades only for requests from specific geographic region. What investigation approach identifies the issue?",
+      "options": [
+        "Application code issue",
+        "Trace network path from region to application, check CDN performance by region, verify regional routing configuration, test from multiple locations in region",
+        "Infrastructure capacity issue",
+        "Random issue"
+      ],
+      "answer": 1,
+      "explanation": "Geographic-specific issues require regional investigation: network path tracing shows routing differences, CDN performance varies by region, regional DNS resolution issues, ISP peering problems, regional infrastructure differences. Code same for all regions. Capacity would affect all regions. Geographic pattern not random. Objective 6.2"
+    },
+    {
+      "q": "A container image runs successfully on developer's laptop but fails in production with permission denied errors. What is the likely cause?",
+      "options": [
+        "Different application code",
+        "Production runs containers as non-root user (security policy) but image assumes root, or production has restrictive security context (AppArmor, SELinux)",
+        "Production network issue",
+        "Container registry issue"
+      ],
+      "answer": 1,
+      "explanation": "Permission errors indicate security context differences: production enforces non-root containers (security best practice), security contexts (SELinux, AppArmor) restrict actions, volume mount permissions differ. Laptop runs as root by default. Code identical. Network doesn't cause permission errors. Registry serves image successfully. Objective 6.5"
+    },
+    {
+      "q": "Application logs show 'Out of Memory' errors but container memory metrics show only 40% utilization. What explains this discrepancy?",
+      "options": [
+        "Metrics are wrong",
+        "Application heap size or memory limit set lower than container memory limit (JVM Xmx parameter), or memory leak consuming native memory not tracked by heap",
+        "Logging error",
+        "No actual OOM issue"
+      ],
+      "answer": 1,
+      "explanation": "Container vs application memory: JVM/application heap limit may be smaller than container limit (container has 4GB, JVM Xmx=1GB), native memory (direct buffers, thread stacks) not in heap, memory leak. Container metrics show total, app uses subset. Metrics accurate at container level. Logging shows real issue. OOM is real. Objective 6.3"
+    },
+    {
+      "q": "After DNS change pointing domain to new load balancer, some users still reach old infrastructure. Others see new infrastructure. What causes this?",
+      "options": [
+        "DNS change hasn't propagated yet due to TTL, or clients caching DNS, or ISP DNS caching old records",
+        "Load balancer configuration error",
+        "Split-brain network issue"
+      ],
+      "answer": 0,
+      "explanation": "DNS propagation and caching: DNS TTL determines cache duration, clients cache DNS responses, ISP/recursive DNS servers cache, users with cached records reach old infrastructure, those with refreshed cache reach new. Time solves this (wait for TTL to expire). Not load balancer (would affect all if misconfigured). Not network split-brain (would have other symptoms). Objective 6.2"
+    },
+    {
+      "q": "Kubernetes pods scheduled to specific nodes using node selectors suddenly cannot be scheduled. Nodes exist and have labels. What should be investigated?",
+      "options": [
+        "Delete nodes and recreate",
+        "Check node conditions (Ready, Disk/Memory/PID pressure), node taints, resource availability (CPU/memory capacity), pod resource requests exceeding node capacity",
+        "Remove node selectors",
+        "Restart Kubernetes"
+      ],
+      "answer": 1,
+      "explanation": "Pod scheduling troubleshooting: node conditions may prevent scheduling (NotReady, pressure), taints block pods without tolerations, insufficient resources (CPU/memory), node cordoned. Selector matches but node unsuitable. Deleting doesn't identify issue. Removing selectors doesn't address why nodes unavailable. Restart unnecessary. Objective 6.5"
+    }
+  ]
+}

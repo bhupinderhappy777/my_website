@@ -1,0 +1,1005 @@
+{
+  "1. Cloud Architecture": [
+    {
+      "q": "A global SaaS platform processes 50,000 transactions per second across 5 regions. A data consistency audit reveals that 0.01% of transactions show conflicting states across regions. The application uses eventual consistency with asynchronous replication. Customers in regulated industries now demand strict consistency guarantees. What architectural change provides the LEAST performance impact while meeting this requirement?",
+      "options": [
+        "Switch all regions to synchronous replication with two-phase commit",
+        "Implement conflict-free replicated data types (CRDTs) with operational transformation",
+        "Use single-region deployment with global load balancing",
+        "Implement optimistic locking with version vectors and conflict resolution UI"
+      ],
+      "answer": 1,
+      "explanation": "CRDTs provide mathematically provable eventual consistency without coordination overhead, allowing concurrent updates that converge to consistent state. They minimize performance impact compared to synchronous replication (high latency) or single-region (doesn't meet global requirements). Optimistic locking requires user intervention for conflicts. Objective 1.1"
+    },
+    {
+      "q": "An organization operates a machine learning inference service requiring GPU instances that cost $8/hour. Workload patterns show: 40% of requests need <100ms response (interactive), 60% can tolerate 5-minute delays (batch). Current architecture uses always-on GPU instances with 30% average utilization. Which combination achieves the MOST cost optimization while meeting SLAs?",
+      "options": [
+        "Use all spot instances with fallback to on-demand",
+        "Implement tiered processing: on-demand GPU for interactive, spot instances with SQS queuing for batch workloads",
+        "Use Lambda with GPU layers for all workloads",
+        "Migrate everything to smaller CPU instances with inference optimization"
+      ],
+      "answer": 1,
+      "explanation": "Separating workloads by latency requirements optimizes costs: on-demand GPUs handle interactive requests requiring immediate response; spot instances (70-90% cheaper) process batch workloads where 5-minute tolerance allows handling spot interruptions via queue. All-spot risks interactive SLA. Lambda doesn't support GPU. CPU instances provide insufficient performance. Objective 1.5"
+    },
+    {
+      "q": "A financial services application processes transactions through multiple microservices with strict ordering requirements within each customer's transaction stream, but transactions across customers are independent. Current implementation uses single message queue causing head-of-line blocking. Daily transaction volume: 10 million transactions, 500K customers. What architecture eliminates the bottleneck while maintaining ordering guarantees?",
+      "options": [
+        "Implement single Kafka topic with 1000 partitions using customer ID as partition key",
+        "Use separate queue per customer (500K queues)",
+        "Implement distributed locking with timestamp ordering",
+        "Use single-threaded processing with priority queue"
+      ],
+      "answer": 0,
+      "explanation": "Kafka partitioning with customer ID as key maintains per-customer ordering while enabling massive parallelism across customers. Messages for same customer route to same partition (ordered), different customers to different partitions (parallel). 500K queues is management nightmare. Distributed locking doesn't provide ordering. Single-threaded can't scale. Objective 1.1"
+    },
+    {
+      "q": "A video streaming platform experiences cache hit ratio degradation from 95% to 60% during peak hours despite 80TB cache capacity. Analysis reveals: 1M unique videos, top 10K videos account for 80% of requests during off-peak but only 40% during peak (user interests diversify). Cache uses LRU eviction. What strategy BEST optimizes cache efficiency?",
+      "options": [
+        "Increase cache size to 160TB",
+        "Implement multi-tier caching: hot tier (predictive prefetch of trending), warm tier (LRU for recent), cold tier (on-demand)",
+        "Switch to LFU (Least Frequently Used) eviction policy",
+        "Use CDN edge caching only"
+      ],
+      "answer": 1,
+      "explanation": "Multi-tier strategy addresses peak diversity: hot tier prefetches predicted trending content, warm tier handles temporal locality via LRU, cold tier serves long-tail. Simple LRU fails with diversified access patterns. Doubling cache is expensive and doesn't address pattern. LFU alone doesn't adapt to trending. CDN alone insufficient for streaming performance. Objective 1.3"
+    },
+    {
+      "q": "An IoT platform ingests sensor data from 10M devices. Each device sends 1KB every 30 seconds. Business requirements: real-time alerting on anomalies (0.1% of data), 7-year cold storage for compliance, 90-day hot storage for analytics. Current architecture stores all data in time-series database costing $50K/month. What architecture reduces costs by >70% while meeting requirements?",
+      "options": [
+        "Compress data in time-series database",
+        "Implement stream processing: filter anomalies to real-time store, raw data to S3 with lifecycle policies (Intelligent-Tiering to Glacier Deep Archive), Athena for analytics",
+        "Use NoSQL database with TTL",
+        "Reduce data ingestion frequency"
+      ],
+      "answer": 1,
+      "explanation": "Stream processing separates hot paths (anomalies to fast store) from cold paths (S3 lifecycle management). S3 Intelligent-Tiering automatically optimizes costs, Glacier Deep Archive for long-term. Athena provides SQL analytics without maintaining expensive database. Compression helps but insufficient. NoSQL still expensive. Reducing frequency violates requirements. Objective 1.3"
+    },
+    {
+      "q": "A distributed system spans 3 regions with active-active configuration. During a network partition between Region A and Regions B+C, both sides continue processing writes independently. When partition heals, 50,000 conflicting writes exist. Application cannot tolerate data loss. Current resolution: manual reconciliation taking weeks. What automated approach provides deterministic conflict resolution?",
+      "options": [
+        "Last-write-wins using timestamp",
+        "Implement vector clocks with application-specific merge functions based on business rules",
+        "Reject all writes during partition",
+        "Maintain write log and replay chronologically"
+      ],
+      "answer": 1,
+      "explanation": "Vector clocks track causality, identifying concurrent (conflicting) vs. sequential writes. Application-specific merge functions apply business logic (e.g., banking: sum account deposits, choose max for user preferences). Last-write-wins loses data. Rejecting writes violates availability. Chronological replay doesn't resolve conflicts. Objective 1.2"
+    },
+    {
+      "q": "A microservices architecture has 50 services with complex dependencies. Cascading failures occur when services timeout waiting for downstream dependencies. Recent incident: single service failure caused 45-minute outage affecting 80% of platform. What architectural pattern MOST effectively prevents cascading failures?",
+      "options": [
+        "Increase all timeout values to 60 seconds",
+        "Implement bulkheads isolating thread pools per dependency, circuit breakers, and fallback responses",
+        "Add more instances to all services",
+        "Implement retry with exponential backoff"
+      ],
+      "answer": 1,
+      "explanation": "Bulkhead pattern isolates failures (thread pool per dependency prevents one slow dependency from exhausting all threads), circuit breakers stop calling failed services (fail fast), fallbacks provide degraded functionality. Long timeouts worsen cascades. More instances don't prevent cascades. Retries amplify load on failing services. Objective 1.1"
+    },
+    {
+      "q": "A data analytics platform processes 500TB daily using Spark clusters. Cost analysis shows 60% of compute spend on data shuffling across network. Data scientists primarily filter large datasets then perform aggregations. Input data stored in Parquet format in S3. What optimization reduces shuffle costs by >50%?",
+      "options": [
+        "Use faster instance types with 100Gbps networking",
+        "Implement predicate pushdown with partitioned storage and columnar projection reading only required columns",
+        "Compress data using GZIP",
+        "Add more worker nodes"
+      ],
+      "answer": 1,
+      "explanation": "Predicate pushdown filters data at source before shuffle, columnar projection reads only required columns, partitioning enables massive data skipping. Combined, they dramatically reduce shuffled data volume (primary cost driver). Faster networking doesn't reduce data volume. GZIP increases CPU. More nodes increase cost. Objective 1.3"
+    },
+    {
+      "q": "An e-commerce platform requires sub-10ms P99 latency for product catalog queries (100M products). Current architecture: RDS with 50 read replicas showing replication lag of 5-30 seconds. Peak traffic: 500K queries/second. Query pattern: 80% exact product ID lookups, 20% complex filters. What architecture meets latency requirements cost-effectively?",
+      "options": [
+        "Upgrade to larger RDS instance with more IOPS",
+        "Implement multi-layer caching: Redis for product IDs, ElasticSearch for filtered queries, RDS for writes only",
+        "Use DynamoDB with global secondary indexes",
+        "Implement database sharding across 100 instances"
+      ],
+      "answer": 1,
+      "explanation": "Multi-layer approach addresses both patterns: Redis provides microsecond latency for ID lookups (80% of traffic), ElasticSearch handles complex filtered queries efficiently, RDS only receives writes. Maintains consistency with cache invalidation. Single DB can't achieve 10ms at 500K QPS. DynamoDB GSI has different characteristics. Sharding adds complexity. Objective 1.3"
+    },
+    {
+      "q": "A serverless application processes uploaded files through a pipeline: validation, transformation, enrichment, storage. Files range from 10KB to 5GB. Current Lambda implementation fails on large files (15-minute timeout, 10GB memory limit). Processing time: 2 minutes per GB. What architecture handles all file sizes while optimizing costs?",
+      "options": [
+        "Increase Lambda timeout and memory to maximum",
+        "Implement hybrid: Lambda for files under 500MB, Fargate containers for large files triggered by S3 events",
+        "Use EC2 instances only",
+        "Split large files into chunks"
+      ],
+      "answer": 1,
+      "explanation": "Hybrid approach leverages Lambda's cost-effectiveness for majority of files while handling large files with Fargate (no time limit, scales memory to 120GB). S3 event triggers appropriate compute based on file size. Lambda can't handle 5GB files in 15 minutes. EC2 loses serverless benefits. Chunking adds complexity. Objective 1.5"
+    },
+    {
+      "q": "A multi-tenant SaaS application stores tenant data in shared database tables with tenant_id column. Largest tenant represents 40% of total data. Queries for large tenant degrade performance for all tenants. Compliance requires physical data separation for enterprise tier. What architecture addresses both performance and compliance?",
+      "options": [
+        "Add database indexes on tenant_id",
+        "Implement tiered storage: dedicated database per enterprise tenant for isolation, shared database sharded by tenant_id for standard tier",
+        "Use separate schemas in same database",
+        "Implement row-level security"
+      ],
+      "answer": 1,
+      "explanation": "Tiered architecture provides dedicated databases for large tenants (performance isolation, compliance), sharded shared database for smaller tenants (cost-effective). Meets both requirements. Indexes help but don't provide isolation. Separate schemas share resources. Row-level security is logical, not physical separation. Objective 1.1"
+    },
+    {
+      "q": "A real-time bidding platform processes 5 million bid requests per second with 50ms latency SLA. Current architecture: stateless application servers with Redis cluster. During traffic spikes, Redis memory eviction causes cache misses, triggering database stampede (10K QPS on database rated for 1K QPS). What prevents database overload?",
+      "options": [
+        "Increase Redis cluster memory",
+        "Implement request coalescing and probabilistic early recomputation with jittered expiration",
+        "Add read replicas to database",
+        "Use larger database instance"
+      ],
+      "answer": 1,
+      "explanation": "Request coalescing prevents thundering herd (multiple requests for same key wait for single fetch), probabilistic early recomputation refreshes hot keys before expiration (preventing synchronized miss), jittered expiration spreads cache miss load. Addresses root cause. More memory delays but doesn't prevent. Database scaling is expensive and has limits. Objective 1.3"
+    },
+    {
+      "q": "A disaster recovery architecture requires RPO=0 (no data loss) and RTO=15 minutes across 1000 miles. Current async replication shows 30-second lag during peak. Synchronous replication tested at 250ms latency increases application response time from 50ms to 300ms (unacceptable). What solution achieves RPO=0 with acceptable performance?",
+      "options": [
+        "Use semi-synchronous replication with one synchronous replica in nearby availability zone plus async to distant region",
+        "Implement synchronous replication with asynchronous log shipping",
+        "Accept 30-second RPO",
+        "Use active-active with conflict resolution"
+      ],
+      "answer": 0,
+      "explanation": "Semi-synchronous replication to nearby AZ (low latency approximately 5-10ms) provides zero data loss with minimal performance impact, async replication to distant region for DR. Balances RPO and performance. Async to distant region alone can't achieve RPO=0. Accepting 30s violates requirement. Active-active has consistency challenges. Objective 1.2"
+    },
+    {
+      "q": "An API gateway handles 100K requests per second with complex routing logic, rate limiting per customer, and request transformation. Current Lambda implementation shows cold start latency spikes (P99: 5 seconds) during traffic bursts. Provisioned concurrency costs $15K/month. What architecture reduces cold starts while optimizing costs?",
+      "options": [
+        "Increase provisioned concurrency to handle all traffic",
+        "Implement Fargate with auto-scaling and ALB for steady-state traffic, Lambda for overflow bursts",
+        "Use EC2 with auto-scaling groups",
+        "Rewrite application in compiled language"
+      ],
+      "answer": 1,
+      "explanation": "Hybrid approach runs Fargate containers for baseline (no cold starts, lower cost than provisioned concurrency for sustained load), Lambda handles unexpected bursts (scales instantly). Optimizes cost and performance. Full provisioned concurrency is expensive. EC2 loses serverless benefits. Language rewrite doesn't eliminate cold starts. Objective 1.5"
+    },
+    {
+      "q": "A data lake stores 5PB across 500M objects. Analytics queries scan 50% of data but only 5% is relevant after filtering. Queries take 3 hours costing $5K each. Data stored in CSV format without partitioning. What optimization reduces query time and cost by >80%?",
+      "options": [
+        "Use Parquet format with snappy compression, partition by date and category, maintain statistics for query planning",
+        "Add more compute resources for parallel scanning",
+        "Compress CSV files with GZIP",
+        "Move to relational database"
+      ],
+      "answer": 0,
+      "explanation": "Parquet columnar format enables reading only required columns (vs full rows), snappy compression reduces storage/transfer, partitioning enables massive data skipping, statistics allow query optimizer to skip irrelevant files. Combined effect: >90% data reduction. More compute doesn't reduce data scanned. GZIP adds CPU overhead. RDB inappropriate for data lake. Objective 1.3"
+    },
+    {
+      "q": "A globally distributed application requires single-digit millisecond latency for 99.99% of requests from any location. Current architecture: single-region deployment with CDN for static assets. Dynamic API calls show 200ms latency for distant users. Database is single-region PostgreSQL. What architecture achieves global low latency?",
+      "options": [
+        "Add CDN for API responses with 1-hour cache",
+        "Deploy application to all regions with global database (multi-master replication) and intelligent routing",
+        "Use database read replicas in all regions",
+        "Increase server capacity in primary region"
+      ],
+      "answer": 1,
+      "explanation": "Full global deployment with multi-master database and intelligent routing (route to nearest healthy region) provides consistently low latency worldwide. Long CDN cache violates data freshness for dynamic content. Read replicas help reads but writes still incur latency. Single-region capacity doesn't address distance. Objective 1.6"
+    },
+    {
+      "q": "A container orchestration platform runs 5,000 microservices across 2,000 nodes. Service mesh overhead (CPU: 10%, Memory: 500MB per node, Latency: +5ms) impacts performance. Cost: $200K/month just for mesh. Without mesh: no observability, difficult debugging. What approach reduces overhead while maintaining observability?",
+      "options": [
+        "Remove service mesh entirely",
+        "Implement eBPF-based observability with selective tracing (1% sampling) and centralized control plane",
+        "Use service mesh only for critical services",
+        "Increase node sizes to absorb overhead"
+      ],
+      "answer": 1,
+      "explanation": "eBPF operates at kernel level with minimal overhead (<1% CPU), provides observability without sidecars. Selective tracing (1% sampling) provides sufficient data for debugging while reducing cost. Maintains visibility. Removing mesh loses observability. Selective mesh creates gaps. Larger nodes waste resources. Objective 1.1"
+    },
+    {
+      "q": "An ML training pipeline processes 10TB datasets requiring 100 GPUs for 8 hours daily. Training must complete overnight (10pm-6am). Current approach: dedicated GPU cluster ($150K/month) idle 16 hours daily. Spot instances unreliable (frequent interruptions). What architecture reduces costs by >60% while meeting deadlines?",
+      "options": [
+        "Use spot instances with checkpointing and automatic restart",
+        "Use scheduled reserved instances for 8-hour daily commitment with spot or on-demand overflow for failures",
+        "Reduce model complexity to require fewer GPUs",
+        "Use CPU instances instead"
+      ],
+      "answer": 1,
+      "explanation": "Scheduled Reserved Instances provide significant discount (up to 70%) for predictable 8-hour daily usage. Spot/on-demand overflow handles spot interruptions or insufficient spot capacity, ensuring deadline met. Spot alone risks deadline. Reducing model complexity may sacrifice accuracy. CPUs can't match GPU performance for ML. Objective 1.5"
+    },
+    {
+      "q": "A trading platform requires exactly-once message processing for financial transactions. Current implementation uses SQS standard queue with at-least-once delivery, causing duplicate transactions (1 in 10,000). Database unique constraints catch some but not all duplicates. What ensures exactly-once semantics?",
+      "options": [
+        "Switch to SQS FIFO queue",
+        "Implement idempotency tokens with distributed transaction coordination and outbox pattern",
+        "Use database transactions only",
+        "Implement deduplication cache"
+      ],
+      "answer": 1,
+      "explanation": "Idempotency tokens ensure same logical operation executed once despite retries, outbox pattern couples message sending with database transaction (atomic), distributed coordination ensures exactly-once across systems. FIFO queue helps ordering but still at-least-once. DB transactions alone don't cover message processing. Cache has consistency challenges. Objective 1.1"
+    },
+    {
+      "q": "A graph database stores social network with 1 billion users, 50 billion relationships. Query pattern: find friends-of-friends (2-hop traversal) for recommendations. Current implementation scans all relationships causing 30-second queries. Cache hit ratio: 5% (users explore new connections). What optimization enables sub-second queries?",
+      "options": [
+        "Add more database memory and indexes",
+        "Pre-compute 2-hop for top 1% users, use graph partitioning by community detection, on-demand computation with caching for cold paths",
+        "Use relational database with joins",
+        "Implement breadth-first search optimization"
+      ],
+      "answer": 1,
+      "explanation": "Hybrid strategy: precompute for celebrities (small percentage, high query volume), partition graph by communities (reduces traversal scope), cache on-demand results. Reduces query scope dramatically. Memory/indexes help but insufficient for scale. Relational joins worse for graph traversal. BFS optimization still scans too much data. Objective 1.3"
+    },
+    {
+      "q": "A log aggregation system ingests 10TB/day of application logs. Logs stored in ElasticSearch cluster costing $30K/month for 30-day retention. 90% of queries target logs from last 3 days. Compliance requires 1-year retention but older logs rarely queried. What architecture reduces costs while maintaining query performance?",
+      "options": [
+        "Compress ElasticSearch data",
+        "Implement hot-warm architecture: recent 3 days in high-performance ElasticSearch, older data in S3 with Athena for ad-hoc queries",
+        "Delete logs after 30 days",
+        "Use cheaper storage class in ElasticSearch"
+      ],
+      "answer": 1,
+      "explanation": "Hot-warm architecture keeps frequently accessed data (3 days) in fast ElasticSearch, archives older data to S3 (much cheaper) with Athena for occasional queries. Meets performance and compliance at fraction of cost. Compression helps but insufficient. Deleting violates compliance. ElasticSearch storage classes limited. Objective 1.3"
+    }
+  ],
+  "2. Deployment": [
+    {
+      "q": "A blue-green deployment for a stateful application with active WebSocket connections (avg: 50K concurrent) and in-memory session data needs zero-downtime cutover. Current approach terminates connections during switch. What strategy enables graceful migration?",
+      "options": [
+        "Use connection draining with 5-minute timeout before switching",
+        "Implement connection draining, session replication to new environment, gradual traffic shift with sticky sessions, and WebSocket reconnection logic",
+        "Force disconnect and rely on client reconnect",
+        "Use canary deployment instead"
+      ],
+      "answer": 1,
+      "explanation": "Complete graceful migration requires: connection draining (existing connections finish), session replication (state migrated), gradual shift with sticky sessions (new connections to green), client reconnection logic (graceful WebSocket reconnect). Simple draining loses session state. Forced disconnect poor UX. Canary doesn't address WebSocket state. Objective 2.3"
+    },
+    {
+      "q": "A microservices deployment involves 30 interdependent services with complex dependency graph. Service A depends on B, C; B depends on D, E; etc. Manual deployment takes 6 hours and frequently fails due to ordering violations. What deployment strategy minimizes failures?",
+      "options": [
+        "Deploy all services simultaneously",
+        "Implement topological sort of dependency DAG with automated rollout respecting dependencies, health checks between stages, automated rollback",
+        "Deploy in alphabetical order",
+        "Use Kubernetes operators only"
+      ],
+      "answer": 1,
+      "explanation": "Topological sort ensures dependencies deployed before dependents, health checks validate each stage, automated rollback on failure maintains system integrity. Simultaneous deployment violates dependencies. Alphabetical ignores dependencies. Operators help but don't solve ordering. Objective 2.3"
+    },
+    {
+      "q": "Infrastructure as Code templates across 50 projects show 70% code duplication. Changes require updating 50 repositories. Inconsistencies cause production incidents. What approach reduces duplication while maintaining flexibility?",
+      "options": [
+        "Copy-paste approved templates to each project",
+        "Implement shared module library with versioned, tested modules; policy as code for compliance; automated testing pipeline",
+        "Use single template for all projects",
+        "Manual code reviews only"
+      ],
+      "answer": 1,
+      "explanation": "Shared module library enables reuse with version control (teams choose when to upgrade), policy as code enforces compliance automatically, automated testing ensures quality. Single source with flexibility. Copy-paste perpetuates problem. Single template too rigid. Manual reviews don't scale. Objective 2.2"
+    },
+    {
+      "q": "A canary deployment releases new version to 1% of traffic showing 0.5% error rate vs 0.1% baseline. Team debates: is 0.4% increase acceptable? What metrics-driven approach makes this decision?",
+      "options": [
+        "Immediately rollback any error increase",
+        "Define error budget based on SLO; measure business impact, user experience metrics, and error severity; automated decision with manual override capability",
+        "Continue to 100% deployment",
+        "Let product managers decide subjectively"
+      ],
+      "answer": 1,
+      "explanation": "Error budget (derived from SLO like 99.9% availability) provides objective threshold. Measure business impact (revenue, conversions), UX metrics (page load, completion rates), error severity (fatal vs warning). Automated gates with manual override for edge cases. Immediate rollback too conservative. Continuing risks users. Subjective decisions inconsistent. Objective 2.3"
+    },
+    {
+      "q": "A database migration changes schema in backwards-incompatible way. Application has 200 instances with rolling deployment taking 30 minutes. How do you handle schema incompatibility during transition?",
+      "options": [
+        "Take application offline for migration",
+        "Use expand-contract pattern: add new schema alongside old, deploy code supporting both, migrate data, deploy code using only new schema, remove old schema",
+        "Deploy code and schema simultaneously",
+        "Use feature flags to toggle schema versions"
+      ],
+      "answer": 1,
+      "explanation": "Expand-contract (aka parallel change) maintains compatibility: expand (add new schema elements), migrate (code + data support both), contract (remove old elements). Enables zero-downtime migration. Offline violates availability. Simultaneous deployment fails during rolling update. Feature flags don't handle data schema. Objective 2.3"
+    },
+    {
+      "q": "A Terraform apply in CI/CD pipeline shows 'no changes' but manual inspection reveals significant drift between actual and desired state. State file was last updated 3 weeks ago. What caused this issue?",
+      "options": [
+        "Terraform bug",
+        "Out-of-band changes made directly in cloud console not reflected in state; manual changes bypassed Terraform",
+        "Incorrect provider version",
+        "Network connectivity issues"
+      ],
+      "answer": 1,
+      "explanation": "Manual changes via console create drift - actual infrastructure differs from Terraform state. Terraform compares state file to desired config (both unchanged), reports 'no changes', unaware of actual differences. Solution: terraform refresh, enforce all changes through IaC, detect drift with policy. Not bug. Provider version affects syntax. Network affects execution. Objective 2.2"
+    },
+    {
+      "q": "Container image builds in CI pipeline show inconsistent results: same code produces images with different vulnerabilities when built on different days. Security scans block deployment 30% of the time despite no code changes. What causes non-deterministic builds?",
+      "options": [
+        "Random build failures",
+        "Base image tags using 'latest' pulling different versions; package managers installing latest versions without pinning; build timestamps creating different layers",
+        "Compiler bugs",
+        "Network issues"
+      ],
+      "answer": 1,
+      "explanation": "Non-deterministic builds from: 'latest' tags change over time, unpinned dependencies get new versions, timestamps create unique layers. Solutions: use specific base image tags (sha256), pin all dependencies with lock files, use build arguments instead of timestamps. Not random. Not compiler. Network causes failures not variation. Objective 2.2"
+    },
+    {
+      "q": "A multi-region deployment requires identical configuration across 8 regions. Deployments use region-specific parameter files. After incident caused by configuration mismatch between regions, what prevents future inconsistencies?",
+      "options": [
+        "Manual verification before deployment",
+        "Implement configuration validation CI checks, schema validation, automated cross-region consistency tests, policy as code enforcing standards",
+        "Deploy to one region only",
+        "Email notifications for changes"
+      ],
+      "answer": 1,
+      "explanation": "Automated validation prevents configuration drift: CI checks validate syntax, schema validation ensures structure, cross-region tests verify consistency, policy as code enforces required standards. Prevents errors before deployment. Manual verification doesn't scale and misses issues. Single region defeats multi-region purpose. Notifications reactive not preventive. Objective 2.2"
+    },
+    {
+      "q": "A GitOps deployment watches Git repository for infrastructure changes. A developer accidentally commits and pushes delete operation for production database. Automated system begins executing deletion within seconds. How should GitOps be configured to prevent this?",
+      "options": [
+        "Remove developer write access to production branches",
+        "Implement branch protection, required reviews, automated testing, manual approval gates for destructive operations, dry-run preview, and blast radius limiting",
+        "Disable GitOps automation",
+        "Alert on deletions only"
+      ],
+      "answer": 1,
+      "explanation": "Defense in depth: branch protection prevents direct commits, required reviews catch errors, automated tests validate changes, manual gates for destructive ops (delete, replace), dry-run shows impact, blast radius limits scope. Multiple safeguards. Removing access too restrictive. Disabling loses automation benefits. Alerts are reactive. Objective 2.3"
+    },
+    {
+      "q": "A Kubernetes deployment fails with 'ImagePullBackOff' but image exists in registry with correct tag. Investigation reveals regional rate limiting on container registry (1000 pulls/hour exceeded). Cluster has 500 nodes pulling images. What prevents this issue?",
+      "options": [
+        "Increase rate limit quota",
+        "Implement pull-through cache registry in cluster, image pre-warming on nodes, staggered rollouts, and image layer caching",
+        "Deploy fewer instances",
+        "Use different registry"
+      ],
+      "answer": 1,
+      "explanation": "Pull-through cache (proxy registry in cluster) caches images locally reducing external pulls, pre-warming loads images before deployment, staggered rollouts spread load, layer caching reuses common layers. Addresses root cause. Quota increase has limits and cost. Fewer instances reduces capacity. Different registry may have same limits. Objective 2.2"
+    },
+    {
+      "q": "A deployment strategy requires atomic switchover of traffic across 12 microservices simultaneously. Any partial deployment causes user-facing errors. Current rolling deployment creates 15-minute window with mixed versions. What deployment pattern enables atomic switchover?",
+      "options": [
+        "Speed up rolling deployment",
+        "Implement service mesh traffic routing with unified control plane enabling coordinated traffic shift across all services simultaneously",
+        "Deploy services sequentially faster",
+        "Use feature flags in each service"
+      ],
+      "answer": 1,
+      "explanation": "Service mesh with unified control plane allows coordinated traffic management across services, enabling atomic percentage-based traffic shifts for all services simultaneously. Preserves atomicity. Faster rolling still creates window. Sequential faster still has gap. Feature flags in services lack coordination. Objective 2.3"
+    },
+    {
+      "q": "A Terraform workspace manages infrastructure across 5 environments (dev, test, staging, prod, dr). Prod workspace accidentally deleted causing complete infrastructure loss. Backups exist but restoration takes 8 hours. How should Terraform be configured to prevent workspace deletion?",
+      "options": [
+        "Daily backups only",
+        "Implement remote state locking, workspace protection policies, separate state backends per criticality, automated state backups, and immutable prod workspace with separate approval process",
+        "Use local state files",
+        "Disable terraform destroy command"
+      ],
+      "answer": 1,
+      "explanation": "Multi-layer protection: remote state with locking prevents concurrent modifications, protection policies prevent deletion, critical environments use separate backends, automated backups enable recovery, immutable prod requires special approval. Backups alone don't prevent. Local state risky. Disabling destroy too restrictive. Objective 2.2"
+    },
+    {
+      "q": "A deployment pipeline deploys to 15 Kubernetes clusters across different cloud providers and regions. Configuration drift occurs as clusters age and manual changes accumulate. What approach maintains consistency across clusters?",
+      "options": [
+        "Manual synchronization quarterly",
+        "Implement GitOps with ArgoCD or Flux, declarative configuration, automated drift detection and remediation, and policy enforcement",
+        "Deploy to one cluster and clone",
+        "Document all manual changes"
+      ],
+      "answer": 1,
+      "explanation": "GitOps continuously reconciles desired state (Git) with actual state (clusters), automatically correcting drift. Declarative configs ensure consistency, policy enforcement prevents non-compliant changes. Scales across clusters. Manual sync doesn't prevent drift. Cloning doesn't maintain over time. Documentation doesn't prevent drift. Objective 2.2"
+    },
+    {
+      "q": "A migration from VM-based to container-based architecture involves 100 applications. Some applications have undocumented dependencies, hardcoded IP addresses, and require specific OS configurations. What systematic approach ensures successful migration?",
+      "options": [
+        "Migrate all applications simultaneously",
+        "Implement discovery phase (dependency mapping, network analysis), refactoring pipeline (containerization, configuration extraction), automated testing, phased rollout with rollback capability",
+        "Manually containerize applications",
+        "Use lift-and-shift to containers"
+      ],
+      "answer": 1,
+      "explanation": "Systematic approach: discovery maps dependencies and configurations, refactoring addresses architectural issues (service discovery vs IPs, environment configs), automated testing validates, phased rollout reduces risk. Simultaneous too risky. Manual doesn't scale. Lift-and-shift doesn't address architectural issues. Objective 2.1"
+    },
+    {
+      "q": "A production deployment requires approval from security, compliance, and operations teams. Current process: manual email approval taking 2-5 days, blocking urgent hotfixes. How do you maintain governance while improving velocity?",
+      "options": [
+        "Remove approval requirements",
+        "Implement automated compliance checks, risk-based approval routing (critical changes require full approval, low-risk auto-approved), approval SLAs with escalation, and audit trail",
+        "Approve all changes automatically",
+        "Reduce number of approvers"
+      ],
+      "answer": 1,
+      "explanation": "Balanced approach: automated checks handle compliance mechanically (faster, consistent), risk-based routing sends only high-risk changes for manual review, SLAs with escalation prevent blocking, audit trail maintains accountability. Maintains governance accelerates delivery. Removing approvals loses oversight. Auto-approve all too risky. Fewer approvers may miss issues. Objective 2.3"
+    },
+    {
+      "q": "A database migration from single-region to multi-region deployment requires zero downtime and zero data loss. Database handles 50K writes/second. What migration sequence ensures requirements are met?",
+      "options": [
+        "Take outage and copy data",
+        "Set up replication, wait for sync, switch reads to nearest region, switch writes to multi-master with conflict resolution, verify consistency, decommission single-region",
+        "Use database backup and restore",
+        "Deploy multi-region and switchover immediately"
+      ],
+      "answer": 1,
+      "explanation": "Phased approach: establish replication (zero-downtime setup), verify sync (zero data loss), migrate reads first (validates without risk), migrate writes with conflict resolution (handles concurrency), verify (ensures correctness), cleanup. Minimizes risk. Outage violates requirement. Backup/restore has downtime. Immediate switch risks data loss. Objective 2.1"
+    },
+    {
+      "q": "A Helm chart deploys application across multiple environments with environment-specific configurations. Chart has grown to 5000 lines with complex templating logic causing maintenance issues and deployment errors. What improves maintainability?",
+      "options": [
+        "Split into multiple smaller charts with shared library chart for common components, use Kustomize for environment-specific overlays, and implement automated validation",
+        "Add more comments to chart",
+        "Rewrite in plain Kubernetes YAML",
+        "Reduce number of resources"
+      ],
+      "answer": 0,
+      "explanation": "Modular approach: library chart contains shared templates (DRY), smaller charts easier to understand, Kustomize handles environment differences declaratively (no complex templating), automated validation catches errors. Improves maintainability. Comments don't reduce complexity. Plain YAML loses templating benefits. Reducing resources may not be possible. Objective 2.2"
+    }
+  ],
+  "3. Security": [
+    {
+      "q": "A zero-trust architecture requires continuous authentication and authorization. Current implementation verifies identity once at session start (valid 8 hours). Threat model shows 30% of breaches involve session hijacking. What zero-trust control MOST effectively mitigates this?",
+      "options": [
+        "Reduce session timeout to 1 hour",
+        "Implement continuous risk assessment with context-aware authentication (device, location, behavior) and dynamic re-authentication based on risk score",
+        "Require MFA for every request",
+        "Use shorter-lived tokens only"
+      ],
+      "answer": 1,
+      "explanation": "Continuous authentication with risk-based re-authentication monitors device posture, location changes, behavioral anomalies, and triggers step-up authentication when risk increases. True zero-trust. Short sessions help but attackers work within window. MFA every request poor UX. Tokens alone don't detect hijacking. Objective 3.6"
+    },
+    {
+      "q": "A cryptographic key rotation policy requires rotating encryption keys every 90 days for 5PB of encrypted data. Re-encrypting all data takes 30 days and costs $100K. Business requires continuous data access. What strategy enables rotation without re-encrypting all data?",
+      "options": [
+        "Extend rotation period to 2 years",
+        "Implement envelope encryption with DEK versioning: rotate KEK, re-wrap DEKs (fast), lazy re-encryption of data on access",
+        "Accept the cost and time",
+        "Use single key without rotation"
+      ],
+      "answer": 1,
+      "explanation": "Envelope encryption decouples KEK (master key) from DEKs (data keys). Rotate KEK and re-wrap DEKs (minutes, cheap), data stays encrypted with existing DEKs. Optionally re-encrypt data gradually on access. Maintains security and availability. Extending rotation increases risk exposure. Accepting cost unsustainable. No rotation violates policy. Objective 3.4"
+    },
+    {
+      "q": "A penetration test reveals that attackers gained lateral movement across 50 servers after compromising single server. All servers use same service account with elevated privileges. What principle violation enabled this?",
+      "options": [
+        "Missing firewall rules",
+        "Violation of least privilege and service segmentation; should use unique credentials per service with minimal permissions",
+        "Weak passwords",
+        "Missing antivirus"
+      ],
+      "answer": 1,
+      "explanation": "Shared elevated credentials enable lateral movement. Principle of least privilege requires unique credentials per service with minimum necessary permissions. Service segmentation limits blast radius. Firewall helps but doesn't prevent credential reuse. Password strength irrelevant if shared. AV doesn't prevent authorized access. Objective 3.2"
+    },
+    {
+      "q": "An application stores PII in database encrypted at rest. Compliance audit reveals database administrators can decrypt and export PII violating data governance. Application uses cloud provider-managed encryption keys. What prevents unauthorized access while maintaining operational capabilities?",
+      "options": [
+        "Encrypt at application layer before database storage using customer-managed keys with split-key or dual-control access requiring two roles",
+        "Enable database audit logging",
+        "Implement column-level encryption with cloud keys",
+        "Use VPN for database access"
+      ],
+      "answer": 0,
+      "explanation": "Application-layer encryption with customer-managed keys prevents DBAs from accessing plaintext. Split-key or dual-control requires two parties to decrypt (separation of duties). Data unreadable to infrastructure admins. Audit logging detects but doesn't prevent. Column encryption with provider keys still accessible to admins. VPN doesn't control decryption. Objective 3.4"
+    },
+    {
+      "q": "A supply chain attack compromised a widely-used npm package your application depends on. Malicious code was present for 3 days before detection and removal. Your application deployed twice during this period. What prevents this class of attack?",
+      "options": [
+        "Scan dependencies daily",
+        "Implement software bill of materials (SBOM), dependency pinning with lock files, signature verification, isolated build environments, and runtime integrity monitoring",
+        "Use only well-known packages",
+        "Manual code review of all dependencies"
+      ],
+      "answer": 1,
+      "explanation": "Layered defense: SBOM tracks all dependencies, lock files pin specific versions (prevents automatic update to compromised), signature verification ensures authenticity, isolated builds limit attack surface, runtime monitoring detects anomalous behavior. Daily scans delayed. Well-known packages still compromised. Manual review doesn't scale (thousands of transitive dependencies). Objective 3.3"
+    },
+    {
+      "q": "A DDoS mitigation strategy uses rate limiting (100 req/min per IP). Attack evolves to distributed attack from 100K unique IPs each under threshold. Application becomes unavailable. What adaptive defense handles this?",
+      "options": [
+        "Lower rate limit to 10 req/min per IP",
+        "Implement multi-layer defense: global rate limiting, connection limiting, proof-of-work challenges during suspected attacks, behavior analysis, and automatic scaling",
+        "Block all traffic temporarily",
+        "Increase server capacity only"
+      ],
+      "answer": 1,
+      "explanation": "Adaptive multi-layer: global rate limit caps total (regardless of distribution), connection limits prevent resource exhaustion, PoW raises attacker cost, behavior analysis identifies bots, auto-scaling absorbs legitimate spikes. Lower per-IP may block legitimate users. Blocking all loses availability. Scaling alone expensive and has limits. Objective 3.3"
+    },
+    {
+      "q": "A security incident response investigation requires analyzing network traffic from 2 weeks ago. Current logging retains only 3 days due to cost. Compliance requires 90-day retention. How do you meet requirements cost-effectively?",
+      "options": [
+        "Extend hot storage to 90 days",
+        "Implement tiered retention: 7 days hot (indexed, searchable), 83 days cold in object storage (retrievable for investigation), with automated lifecycle management",
+        "Reduce logging verbosity",
+        "Store logs locally"
+      ],
+      "answer": 1,
+      "explanation": "Tiered approach: keep recent logs hot for active monitoring (fast access), archive older logs to cold storage (S3 Glacier) meeting retention at fraction of cost, lifecycle policies automate transitions. Retrieve for investigations when needed. 90-day hot expensive. Reducing verbosity may miss critical data. Local storage doesn't scale. Objective 3.5"
+    },
+    {
+      "q": "A side-channel attack analysis shows that response time variations from your authentication API leak information about user existence (400ms for valid username, 100ms for invalid). Attackers enumerate valid accounts. What mitigates timing-based information leakage?",
+      "options": [
+        "Rate limit authentication attempts",
+        "Implement constant-time authentication: always check password even for invalid users, add jitter to normalize response times",
+        "Use CAPTCHA",
+        "Require username and email",
+        "Implement constant-time authentication operations with password hash comparison even for non-existent users and normalized response timing"
+      ],
+      "answer": 1,
+      "explanation": "Constant-time operations prevent timing attacks: hash password for non-existent users (same computation cost), normalize response times (similar duration regardless of path), optionally add small random jitter. Eliminates timing oracle. Rate limiting helps but doesn't eliminate leak. CAPTCHA helps bots not timing. Extra fields don't fix timing. Objective 3.3"
+    },
+    {
+      "q": "A cloud environment uses RBAC with 200 custom roles assigned across 1000 users. Security audit finds 60% of users have excessive permissions rarely used. Manual permission review infeasible. What automated approach right-sizes permissions?",
+      "options": [
+        "Remove all custom roles",
+        "Implement access analytics tracking actual permission usage, automated recommendation engine for role optimization, gradual permission removal with monitoring for impact",
+        "Assign everyone viewer role",
+        "Annual manual review"
+      ],
+      "answer": 1,
+      "explanation": "Data-driven approach: access analytics log actual API calls and permissions used (not just assigned), ML recommendation engine suggests right-sized roles based on actual usage patterns, gradual permission removal with monitoring catches legitimate needs. Scales and data-driven. Removing all breaks workflows. Viewer too restrictive. Annual review doesn't scale. Objective 3.2"
+    },
+    {
+      "q": "A ransomware attack encrypted production data. Backups discovered to be encrypted too (attacker had access for 3 weeks). Immutable backup requirement was not implemented. What backup strategy prevents this?",
+      "options": [
+        "More frequent backups",
+        "Implement immutable backups with object lock, air-gapped offline copies, separate credential domain for backup system, and regular restore testing",
+        "Encrypt backups",
+        "Multiple backup vendors"
+      ],
+      "answer": 1,
+      "explanation": "Immutable backups prevent modification/deletion (object lock), air-gapped copies not accessible from compromised systems, separate credentials prevent attacker from accessing backup infrastructure, restore testing validates integrity. Frequency doesn't prevent encryption. Encrypting protects confidentiality not availability. Multiple vendors help but need immutability. Objective 3.5"
+    },
+    {
+      "q": "A microservices architecture requires service-to-service authentication. Current approach uses long-lived API keys stored in environment variables. Keys leaked in logs twice. What authentication model improves security?",
+      "options": [
+        "Rotate API keys monthly",
+        "Implement mutual TLS with short-lived certificates issued by internal CA, or service mesh with transparent encryption and identity",
+        "Use stronger API keys",
+        "Store keys in secret manager"
+      ],
+      "answer": 1,
+      "explanation": "mTLS or service mesh provides strong cryptographic identity, short-lived certificates (auto-rotated), encrypted communication, no secrets in configuration. Service mesh (Istio, Linkerd) automates certificate management transparently. Rotation helps but keys still leaked. Stronger keys don't prevent leaks. Secret manager better storage but still long-lived keys. Objective 3.6"
+    },
+    {
+      "q": "A container vulnerability scan shows high-severity CVE in base image OS package. Application doesn't use the vulnerable package but scanner blocks deployment. Patch won't be available for 2 weeks. What is the appropriate action?",
+      "options": [
+        "Override scanner and deploy",
+        "Assess actual risk: if package not reachable (not installed, not in execution path), implement runtime controls, document exception with business justification and compensating controls",
+        "Wait for patch",
+        "Use different base image"
+      ],
+      "answer": 1,
+      "explanation": "Risk-based approach: determine exploitability (package installed but library not loaded? network exposure?), implement runtime controls (AppArmor, seccomp profiles restrict syscalls), document exception with compensation. Balance security and business needs. Blanket override unsafe. Waiting 2 weeks may impact business. Different base may have other issues. Objective 3.3"
+    },
+    {
+      "q": "A security team wants to implement network segmentation for 500 microservices with complex communication patterns. Manual firewall rule management is error-prone and blocks legitimate traffic. What approach provides fine-grained control at scale?",
+      "options": [
+        "Flat network with no segmentation",
+        "Implement zero-trust networking with service mesh: identity-based policies, automated discovery of communication patterns, policy as code, and drift detection",
+        "Use VLANs only",
+        "Network ACLs only"
+      ],
+      "answer": 1,
+      "explanation": "Service mesh with zero-trust: services identified cryptographically not by IP, policies based on identity, auto-discovery maps actual communication, policy-as-code enables versioning/review, drift detection catches violations. Scales with microservices. Flat network no protection. VLANs coarse-grained and manual. ACLs don't provide identity-based control. Objective 3.2"
+    },
+    {
+      "q": "A compliance requirement mandates audit logging of all data access including exact rows accessed. Current logging only records queries without parameters. Database performance impacts prevent row-level logging. What solution meets requirement without performance degradation?",
+      "options": [
+        "Accept performance impact",
+        "Implement database triggers for audit tables (poor performance), or use change data capture streaming to external audit store with asyncronous processing",
+        "Query logging only",
+        "Disable audit logging"
+      ],
+      "answer": 1,
+      "explanation": "CDC streams database changes asynchronously to dedicated audit storage without impacting transactional performance. External processing generates comprehensive audit trail. Query logging alone doesn't capture actual rows. Triggers synchronous and impact performance. Disabling violates compliance. Performance impact may be unavoidable but CDC minimizes it. Objective 3.5"
+    },
+    {
+      "q": "An OAuth 2.0 implementation stores tokens in browser localStorage. Security review identifies XSS vulnerability risk. What token storage approach mitigates XSS-based token theft?",
+      "options": [
+        "Store tokens in sessionStorage",
+        "Use httpOnly, Secure, SameSite cookies for token storage, implement token binding to TLS channel, short token lifetimes",
+        "Encrypt tokens before localStorage",
+        "Use longer tokens"
+      ],
+      "answer": 1,
+      "explanation": "httpOnly cookies prevent JavaScript access (XSS can't read), Secure ensures HTTPS only, SameSite prevents CSRF, token binding cryptographically ties token to TLS connection, short lifetimes limit exposure. sessionStorage has same XSS risk. Encryption doesn't prevent XSS from accessing. Token length irrelevant. Objective 3.6"
+    },
+    {
+      "q": "A secrets rotation process for 500 services requires updating application configurations. Current manual process takes 2 weeks causing extended exposure during compromise. What enables rapid rotation?",
+      "options": [
+        "Faster manual process",
+        "Implement dynamic secrets with secrets manager: applications fetch secrets at runtime, automated rotation without application updates, versioned secrets with rollback capability",
+        "Automated configuration file updates",
+        "Reduce number of secrets"
+      ],
+      "answer": 1,
+      "explanation": "Dynamic secrets eliminate configuration updates: applications retrieve current secret from manager at runtime/startup, rotation updates manager only (instant), applications automatically get new secrets on next retrieval. Enables rapid response. Manual doesn't scale. Config automation still requires application restarts. Reducing secrets doesn't address rotation speed. Objective 3.4"
+    },
+    {
+      "q": "A security tool generates 10K alerts daily with 99% false positive rate. Security team can investigate 20 alerts daily. This tool is effectively useless. What improves signal-to-noise ratio?",
+      "options": [
+        "Hire more security analysts",
+        "Implement SIEM with correlation rules, machine learning for anomaly detection, risk-based prioritization, automated enrichment and response for low-severity alerts",
+        "Disable the tool",
+        "Increase alert thresholds"
+      ],
+      "answer": 1,
+      "explanation": "SIEM correlates events to reduce false positives, ML learns normal behavior patterns improving detection, risk-based prioritization surfaces critical alerts, automated response handles routine issues. Makes alerts actionable. More analysts doesn't address root cause. Disabling loses protection. Raising thresholds risks missing real attacks. Objective 3.3"
+    }
+  ],
+  "4. Operations": [
+    {
+      "q": "Auto-scaling based on CPU averages works well for steady growth but responds slowly to sudden traffic spikes (5-minute scale-out delay causes errors). Predictive scaling based on schedule doesn't capture unpredictable viral events. What improves responsiveness?",
+      "options": [
+        "Reduce scale-out cooldown period",
+        "Implement composite scaling policy combining multiple metrics (CPU, request count, queue depth) with step scaling for rapid response, plus target tracking for steady-state",
+        "Always run at peak capacity",
+        "Use larger instances"
+      ],
+      "answer": 1,
+      "explanation": "Composite policy responds to leading indicators: queue depth/request count signal demand before CPU saturates, step scaling adds multiple instances for severe spikes (vs single instance), target tracking maintains steady state efficiently. Faster than CPU alone. Cooldown reduction helps but doesn't add leading indicators. Peak capacity wastes money. Larger instances don't solve scaling speed. Objective 4.2"
+    },
+    {
+      "q": "A database backup RTO requirement is 2 hours but actual restore time testing shows 6 hours for 10TB database. Incremental backups were used. What causes the discrepancy and how to achieve RTO?",
+      "options": [
+        "Use faster storage for backups",
+        "Full restore requires applying multiple incremental backups sequentially; switch to differential backups or implement continuous backup with point-in-time recovery capabilities",
+        "Compress backups more",
+        "Use multiple restore threads"
+      ],
+      "answer": 1,
+      "explanation": "Incremental restore requires full backup plus ALL incrementals sequentially (slow). Differential requires full plus latest differential only (faster). Continuous backup/PITR enables rapid recovery to any point. Meets RTO. Faster storage helps but doesn't address fundamental issue. Compression trades restore time for space. Threads help but sequential dependency limits parallelism. Objective 4.3"
+    },
+    {
+      "q": "Monitoring dashboards show all green, CPU 40%, memory 50%, but users experience intermittent 10-second delays. Application logs show no errors. What monitoring gap explains this blind spot?",
+      "options": [
+        "Monitoring is accurate, problem elsewhere",
+        "Missing application-level metrics: database query latency, external API response times, queue processing delays, or thread pool exhaustion",
+        "Need more detailed CPU metrics",
+        "Network monitoring missing"
+      ],
+      "answer": 1,
+      "explanation": "Infrastructure metrics (CPU, memory) don't reveal application-level bottlenecks. Long database queries, slow external calls, queue backlogs, or thread pool exhaustion cause delays despite healthy infrastructure. Instrument application code for these metrics. Problem exists but not visible. More CPU detail insufficient. Network affects all requests consistently. Objective 4.1"
+    },
+    {
+      "q": "A disaster recovery test reveals that while data restores correctly, application dependencies (DNS, certificates, IAM roles, network routes) are not automated causing 6-hour manual recovery vs 1-hour RTO. What DR practice was missed?",
+      "options": [
+        "Test DR quarterly instead of annually",
+        "Infrastructure as Code for entire environment including networking, security, and supporting services; automated orchestrated recovery playbooks; documented runbooks are insufficient",
+        "Faster manual recovery process",
+        "Replicate only database"
+      ],
+      "answer": 1,
+      "explanation": "DR requires automating entire environment recovery: IaC for infrastructure, security, networking, not just data. Orchestrated playbooks execute all steps. Frequent testing validates automation. Manual runbooks too slow and error-prone. More frequent testing helps but doesn't solve manual process. Faster manual still violates RTO. Database replication alone incomplete. Objective 4.3"
+    },
+    {
+      "q": "Log aggregation system ingests 50TB/day. Search queries take 30+ seconds. Adding more ElasticSearch nodes costs $100K/year but only improves speed 20%. What architectural change provides better performance per dollar?",
+      "options": [
+        "Continue adding nodes",
+        "Implement hot-warm-cold architecture with index lifecycle management: recent data in hot nodes (fast search), older data in warm nodes (cheaper), cold data in S3 with selective rehydration",
+        "Reduce log retention",
+        "Use faster storage"
+      ],
+      "answer": 1,
+      "explanation": "Tiered architecture optimizes for query patterns: 90% of queries hit recent data (hot), warm tier for occasional access to older data, cold tier (S3) for rarely accessed logs. 10x cost reduction with acceptable performance. Adding nodes expensive with diminishing returns. Reducing retention may violate requirements. Faster storage helps but expensive. Objective 4.3"
+    },
+    {
+      "q": "A monitoring alert storm generates 5000 alerts in 10 minutes during infrastructure failure. On-call engineer pages overloaded, misses critical database failure alert. What alerting strategy prevents this?",
+      "options": [
+        "Send all alerts to ticket system instead",
+        "Implement alert prioritization by severity, dependency-aware suppression (downstream alerts suppressed when upstream fails), correlation to reduce noise, and escalation policies",
+        "Silence all alerts during incidents",
+        "Ignore all but critical alerts"
+      ],
+      "answer": 1,
+      "explanation": "Intelligent alerting: severity determines notification method (page vs email), dependency-aware suppression prevents cascade (web server alert suppressed when load balancer down), correlation groups related alerts, escalation ensures visibility. Actionable alerts. Tickets lose urgency. Silencing during incidents dangerous. Ignoring non-critical alerts risks missing escalations. Objective 4.1"
+    },
+    {
+      "q": "Kubernetes pods are OOMKilled frequently but memory request=limit=2GB. Monitoring shows actual usage peaks at 1.8GB before kill. Investigation reveals memory accounting includes page cache. What corrects this?",
+      "options": [
+        "Increase memory limit to 4GB",
+        "Understand memory accounting: page cache counted toward limit; applications should be designed for container memory constraints; implement memory tuning, reduce memory limit to force efficient cache usage, or use memory QoS classes",
+        "Disable memory limits",
+        "Restart pods regularly"
+      ],
+      "answer": 1,
+      "explanation": "Container memory limits include page cache which Linux uses aggressively. Applications unaware of containerization may not manage cache efficiently. Solutions: tune applications for containerized environments, implement memory QoS for cache management, optimize application caching strategy. Increasing limits treats symptom not cause. Disabling limits risks node instability. Restarting doesn't fix root cause. Objective 4.1"
+    },
+    {
+      "q": "A stateful application using persistent volumes experiences data loss during node failure despite having backups. Investigation shows 15-minute gap between last backup and failure. RPO requirement is 5 minutes. What satisfies RPO?",
+      "options": [
+        "Backup every 5 minutes",
+        "Implement continuous replication to standby with WAL shipping or database replication, not periodic backups for short RPO requirements",
+        "Use RAID for redundancy",
+        "Snapshot more frequently"
+      ],
+      "answer": 1,
+      "explanation": "Short RPO (5 minutes) requires continuous replication not periodic backups. Database replication, WAL shipping, or block-level replication provides near-zero RPO. Backups every 5 minutes too frequent, high overhead, still has gap. RAID protects against disk failure not node failure. Frequent snapshots have overhead and gaps. Objective 4.3"
+    },
+    {
+      "q": "An SRE team tracks SLO of 99.9% availability (43 minutes downtime/month allowed). Month shows 99.95% actual availability but 200 customer complaints about outages. What explains the discrepancy?",
+      "options": [
+        "Customers are wrong",
+        "Availability measured at infrastructure level doesn't reflect user experience; need user-journey based SLIs (successful transaction completion rate, not just uptime)",
+        "SLO target too low",
+        "Monitoring is broken"
+      ],
+      "answer": 1,
+      "explanation": "Infrastructure availability (servers up) ≠ service availability (users can complete tasks). Measure user-facing SLIs: successful logins, successful checkouts, API success rate. Partial failures affect users without triggering infrastructure alerts. Customers experiencing real issues. SLO may need adjustment but measure right thing first. Monitoring may miss partial failures. Objective 4.1"
+    },
+    {
+      "q": "Application uses connection pooling (pool size: 100 per instance, 10 instances = 1000 connections theoretically). Database max_connections=1000 but frequently exhausted causing errors. What's the issue?",
+      "options": [
+        "Database misconfigured",
+        "Connection pool misconfiguration: pools don't release connections (leak), or pools create connections on-demand even beyond configured size, or idle connections not timing out",
+        "Need more database connections",
+        "Too many application instances"
+      ],
+      "answer": 1,
+      "explanation": "Common pool issues: connection leaks (app doesn't close), pool library defaults allow overflow beyond configured size, idle connections never released, monitoring shows active but actually idle. Debug: track connection lifecycle, implement connection leak detection, configure pool maximums strictly. Database config likely correct. Increasing connections treats symptom. Instance count appropriate. Objective 4.1"
+    },
+    {
+      "q": "A runbook for incident response is 50 pages of manual steps. During 3AM incident, on-call engineer makes mistakes due to fatigue leading to extended outage. How do you improve reliability?",
+      "options": [
+        "Better training for on-call engineers",
+        "Automate incident response: automated diagnostics, automated remediation for known issues, decision trees instead of long procedures, chaos engineering to test automation",
+        "Simplify runbook",
+        "Add more on-call engineers"
+      ],
+      "answer": 1,
+      "explanation": "Automation reduces human error: automated diagnostics gather information, automated remediation fixes known issues (restart service, scale capacity), decision trees guide humans through complex scenarios, chaos engineering validates automation. Improves reliability and response time. Training helps but tired humans err. Simplifying helps but 50 pages suggests automation opportunities. More engineers don't prevent errors. Objective 4.1"
+    },
+    {
+      "q": "Multi-region active-active architecture shows latency differences causing inconsistent user experience: 50ms in home region, 250ms when routed to distant region. Traffic routing uses simple round-robin. What improves user experience?",
+      "options": [
+        "Route all traffic to single region",
+        "Implement latency-based routing directing users to nearest healthy region, or GeoDNS routing to geographically closest region",
+        "Add more regions",
+        "Use faster networking"
+      ],
+      "answer": 1,
+      "explanation": "Latency-based routing measures actual latency and routes to fastest region, GeoDNS routes based on geographic proximity. Both improve user experience by minimizing distance. Single region loses multi-region benefits. More regions help coverage but routing optimization still needed. Faster networking helps but doesn't overcome physics of distance. Objective 4.2"
+    },
+    {
+      "q": "Capacity planning based on historical trends predicted 30% growth. Actual growth was 200% causing performance degradation. Business cannot predict future growth accurately. What capacity management approach handles uncertainty?",
+      "options": [
+        "Always maintain 3x current capacity",
+        "Implement auto-scaling with headroom, monitor leading indicators (new customer signups, marketing campaigns), have surge capacity plans with rapid provisioning capability",
+        "Manual scaling based on requests",
+        "Reduce features to limit growth"
+      ],
+      "answer": 1,
+      "explanation": "Dynamic capacity management: auto-scaling handles gradual growth automatically, leading indicators provide early warning of growth acceleration, surge plans enable rapid capacity addition. Adapts to uncertainty. 3x capacity expensive and may be insufficient. Manual scaling too slow. Reducing features limits business. Objective 4.2"
+    },
+    {
+      "q": "A performance optimization reduced API response time from 500ms to 100ms but user-reported experience unchanged. Frontend analysis reveals 3-second page load time with API call taking 100ms. What was missed?",
+      "options": [
+        "Optimize API further",
+        "Frontend performance is actual bottleneck: large JavaScript bundles, render-blocking resources, lack of caching, serial resource loading; API optimization alone insufficient",
+        "Users are measuring incorrectly",
+        "Network latency"
+      ],
+      "answer": 1,
+      "explanation": "End-to-end performance requires optimizing entire stack. 100ms API in 3-second page means 2.9 seconds elsewhere: frontend parsing, rendering, resource loading, client-side processing. Optimize holistically. API optimization good but insufficient. Users feel real experience. Network is part but not entire 2.9 seconds. Objective 4.1"
+    },
+    {
+      "q": "Database slow query log shows same query taking 10ms during off-peak but 5 seconds during peak despite identical execution plans. CPU and memory normal during both periods. What explains performance degradation?",
+      "options": [
+        "Query optimizer problem",
+        "Lock contention or I/O saturation: concurrent queries waiting for locks, or disk I/O queue depth increasing during peak despite normal CPU/memory",
+        "Network congestion",
+        "Index fragmentation"
+      ],
+      "answer": 1,
+      "explanation": "Concurrency-related issues: lock contention (queries waiting for locks held by other queries), I/O saturation (disk queue depth increases with concurrency despite CPU/memory OK). Check: lock wait stats, disk queue depth, IOPS utilization. Execution plan same rules out optimizer. Network affects all operations. Fragmentation causes gradual degradation not peak-specific. Objective 4.1"
+    }
+  ],
+  "5. DevOps Fundamentals": [
+    {
+      "q": "A CI/CD pipeline for 100 microservices builds all services on every commit to monorepo despite changes affecting only 1-2 services. Build time: 2 hours. Developers frustrated by slow feedback. What optimization reduces build time while maintaining safety?",
+      "options": [
+        "Faster build servers",
+        "Implement change detection to build only affected services and their dependents using dependency graph analysis, with periodic full builds for validation",
+        "Split monorepo into 100 separate repos",
+        "Remove testing stages"
+      ],
+      "answer": 1,
+      "explanation": "Smart builds: detect changed files, map to affected services via dependency graph, build only necessary services plus downstream dependents. Periodic full builds validate approach. 50x+ speedup. Faster servers help but don't address wasteful builds. Splitting repos loses monorepo benefits. Removing tests unsafe. Objective 5.3"
+    },
+    {
+      "q": "A GitFlow workflow causes merge conflicts when 15 feature branches merge to develop simultaneously. Resolving conflicts delays releases by days. Hotfixes require emergency merges to main, develop, and open feature branches. What workflow reduces complexity?",
+      "options": [
+        "Stricter merge discipline",
+        "Adopt trunk-based development: short-lived feature branches (1-2 days), frequent integration to main, feature flags for incomplete features, reduced merge conflict surface",
+        "Use merge queues",
+        "Assign merge coordinators"
+      ],
+      "answer": 1,
+      "explanation": "Trunk-based development eliminates long-lived branches: integrate to main frequently (reduces divergence), feature flags hide incomplete work, small changes easier to integrate, hotfixes simple (patch main, no branch complexity). Reduces conflicts by design. Discipline doesn't reduce inherent conflict risk. Merge queues serialize, don't prevent conflicts. Coordinators don't scale. Objective 5.1"
+    },
+    {
+      "q": "Ansible playbooks deploy to 500 servers sequentially taking 8 hours. Playbooks are idempotent. What parallelization strategy reduces deployment time while maintaining reliability?",
+      "options": [
+        "Deploy to all servers simultaneously",
+        "Implement batch parallel execution with rolling deployment: execute on N servers concurrently with health checks between batches, automated rollback on failure threshold",
+        "Use faster playbook execution",
+        "Reduce playbook complexity"
+      ],
+      "answer": 1,
+      "explanation": "Controlled parallelism: deploy to batches (e.g., 50 servers) simultaneously, validate success via health checks, proceed to next batch or rollback on failure threshold. 10x speedup with safety. All simultaneous risks entire fleet. Faster execution helps but doesn't address serial approach. Complexity reduction good but doesn't address parallelism. Objective 5.2"
+    },
+    {
+      "q": "A configuration management tool maintains desired state but detects drift every night (manual changes reverted causing incidents). Culture clash: ops team makes emergency changes, automation reverts them. How do you resolve this?",
+      "options": [
+        "Disable drift detection",
+        "Implement change approval workflow integrated with CM system: emergency changes submitted via system, approved automatically with audit trail, or detection-only mode with alerts not automatic reversion",
+        "Fire ops team",
+        "Manual changes only"
+      ],
+      "answer": 1,
+      "explanation": "Balance automation with reality: create workflow for legitimate emergency changes through CM system (documented, approved), or set CM to detect/alert not auto-revert (manual review). Maintains auditability and eventual consistency. Disabling drift detection loses control. Personnel change doesn't address process. Manual-only loses automation benefits. Objective 5.2"
+    },
+    {
+      "q": "A CI pipeline caches dependencies to speed builds. After security incident, need to rebuild all artifacts with patched dependencies. Cache contains vulnerable versions. What cache strategy balances speed and security?",
+      "options": [
+        "Disable caching entirely",
+        "Implement cache validation: periodically refresh cache from source, cache invalidation on security advisories, cache keys include dependency versions, automated cache rebuilds",
+        "Manual cache clearing",
+        "Cache for 24 hours only"
+      ],
+      "answer": 1,
+      "explanation": "Smart caching: cache keys include dependency version fingerprints (automatic invalidation on upgrade), periodic full rebuilds validate, security advisory triggers automatic cache purge, source verification ensures cache integrity. Maintains speed and security. No caching slow. Manual doesn't scale. 24-hour arbitrary and may be too long or short. Objective 5.3"
+    },
+    {
+      "q": "A pull request requires approval from 5 teams (security, compliance, architecture, ops, QA). Median approval time: 1 week. Critical bugs wait in queue. How do you maintain governance while improving velocity?",
+      "options": [
+        "Remove approval requirements",
+        "Implement automated checks for each team's concerns, risk-based routing (only high-risk PRs require all approvals), parallel approvals not sequential, approval SLAs with auto-escalation",
+        "Reduce to 1 approver",
+        "Self-approval for senior developers"
+      ],
+      "answer": 1,
+      "explanation": "Efficient governance: automate mechanical checks (security scans, compliance tests), risk-based routing (trivial changes auto-approved or single approval), parallel not sequential review, SLAs prevent blocking, escalation for urgent. Maintains control, improves speed. Removing approvals loses governance. Single approver may miss issues. Self-approval reduces accountability. Objective 5.3"
+    },
+    {
+      "q": "Infrastructure as Code templates use hardcoded values requiring code changes for different environments. 50 instances of duplicated code. What patterns reduce duplication and improve maintainability?",
+      "options": [
+        "Accept duplication",
+        "Implement modules for reusable components, composition over inheritance, variables for environment-specific values, separate data from code using external configuration files",
+        "Use configuration management instead",
+        "Fewer environments"
+      ],
+      "answer": 1,
+      "explanation": "DRY principles: modules encapsulate reusable components, composition assembles modules, variables parameterize environment differences, external configuration separates data from code. Single source of truth. Duplication increases maintenance burden and error risk. CM and IaC serve different purposes. Fewer environments may not be viable. Objective 5.2"
+    },
+    {
+      "q": "A secret scanning tool finds 47 secrets committed to Git history over 2 years (API keys, passwords). Secrets are now revoked but remain in history. What remediates this while maintaining repository integrity?",
+      "options": [
+        "Delete repository and start fresh",
+        "Use git-filter-repo or BFG to rewrite history removing secrets, force push to remote, revoke all exposed secrets, implement pre-commit hooks and secret scanning in CI to prevent future commits",
+        "Leave secrets in history if revoked",
+        "Make repository private"
+      ],
+      "answer": 1,
+      "explanation": "Complete remediation: rewrite history removing secrets (git-filter-repo), force push (rewrites history), revoke all secrets, implement prevention (pre-commit hooks, CI scanning). Defense in depth. Fresh start loses history and doesn't prevent recurrence. Revoked secrets in history still risk (rotation missed). Private repos don't prevent committed secrets from being compromised. Objective 5.1"
+    },
+    {
+      "q": "A deployment artifact built in CI pipeline cannot be reproduced: same source code + build instructions produce different artifacts with different checksums. Causes debugging issues and security concerns. What enables reproducible builds?",
+      "options": [
+        "Builds are inherently non-reproducible",
+        "Eliminate non-determinism: pin all dependencies with lock files, use fixed build tools versions, avoid timestamps in artifacts, fixed build environment (containerized), document build environment",
+        "Accept variability",
+        "Build multiple times and compare"
+      ],
+      "answer": 1,
+      "explanation": "Reproducible builds require: pinned dependencies (exact versions), pinned build tools, no timestamps/random values, deterministic file ordering, documented environment. Enables verification and debugging. Builds can be reproducible with discipline. Variability unacceptable for security. Multiple builds don't address root cause. Objective 5.3"
+    }
+  ],
+  "6. Troubleshooting": [
+    {
+      "q": "An application shows normal performance 99% of time but experiences 30-second delays exactly every 10 minutes. No deployments, no batch jobs, no monitoring alerts. Logs show no errors. What troubleshooting approach identifies root cause?",
+      "options": [
+        "Increase logging verbosity",
+        "Correlate timing with system events: garbage collection pauses, cache eviction, certificate validation, connection pool recreation, scheduled health checks, or background threads",
+        "Restart application",
+        "Review recent code changes"
+      ],
+      "answer": 1,
+      "explanation": "Periodic issues suggest scheduled system activity: GC full collections (heap pressure), cache eviction cycles, TLS certificate validation (10-minute cache), connection pool maintenance, health checks. Correlate timing with these events. Enable GC logging, thread dumps, connection pool metrics. Logging may miss cause. Restart temporary. No recent changes given. Objective 6.1"
+    },
+    {
+      "q": "A distributed tracing investigation shows request taking 5 seconds with 4.8 seconds unaccounted for (span gaps). All measured service calls total 200ms. What explains the missing time?",
+      "options": [
+        "Tracing tool bug",
+        "Uninstrumented code paths: database queries without tracing, external API calls not instrumented, async processing delays, queue time, or internal locks/waits not captured",
+        "Network latency",
+        "Clock skew"
+      ],
+      "answer": 1,
+      "explanation": "Span gaps indicate uninstrumented operations: database calls without ORM tracing, manual HTTP clients without instrumentation, message queue wait times, lock contention, thread pool delays. Instrument missing paths. Tracing tools generally accurate. Network should show in spans. Clock skew affects timestamps not duration. Objective 6.3"
+    },
+    {
+      "q": "A Kubernetes pod is stuck in CrashLoopBackOff. Logs show 'Connection refused' to sidecar container on localhost. Init containers completed successfully. Sidecar container shows Running. What's the issue?",
+      "options": [
+        "Sidecar not actually running",
+        "Race condition: main container starts before sidecar ready; sidecar shows Running but service not listening yet; add readiness probe to sidecar and dependency orchestration",
+        "Network policy blocking localhost",
+        "Port conflict"
+      ],
+      "answer": 1,
+      "explanation": "Container running ≠ service ready. Sidecar container started but application inside not listening yet (startup time). Main container crashes trying to connect. Solution: sidecar readiness probe, main container init delay, or proper dependency ordering. Network policies don't affect localhost. Port conflict would show in sidecar logs. Objective 6.5"
+    },
+    {
+      "q": "Database queries show 100ms average but P99 is 10 seconds. Investigation shows P99 queries have same execution plan as average queries. CPU and disk I/O normal. What causes high tail latency?",
+      "options": [
+        "Query optimizer inconsistency",
+        "Lock contention, cache misses requiring disk reads, or operating system context switching during concurrent load",
+        "Network issues",
+        "Index corruption"
+      ],
+      "answer": 1,
+      "explanation": "Same execution plan but different performance suggests concurrency effects: queries wait for locks, cache thrashing causes disk reads for some queries, OS scheduling delays under high concurrency. Check lock wait statistics, buffer pool hit rate correlation with latency, system context switch rate. Not optimizer (same plan). Network affects all queries. Corruption would show in plan. Objective 6.3"
+    },
+    {
+      "q": "Users report application unresponsive during specific times (2-3 PM daily). Monitoring shows CPU 30%, memory 40%, low latency. Application uses third-party SaaS APIs. What troubleshooting identifies the issue?",
+      "options": [
+        "Application code issue",
+        "External dependency problem: monitor third-party API response times, error rates, and implement distributed tracing across system boundaries",
+        "Database slow",
+        "User behavior pattern"
+      ],
+      "answer": 1,
+      "explanation": "Healthy internal metrics with user complaints suggests external dependencies. Third-party APIs may have performance issues, rate limiting, or regional problems at specific times. Implement external endpoint monitoring, distributed tracing covering external calls, timeouts and fallbacks. Infrastructure healthy rules out internal cause. DB issues would show in metrics. User pattern would show in request volume. Objective 6.2"
+    },
+    {
+      "q": "A network connectivity issue appears intermittent: requests succeed then fail randomly (30% failure rate). Packet capture shows failed requests have RST packets. Connection attempts to stateless application servers. What's the likely cause?",
+      "options": [
+        "Random server failures",
+        "Asymmetric routing or stateful firewall dropping return traffic from specific paths; network misconfiguration causing traffic through firewall without session state",
+        "Application bugs",
+        "Load balancer issues"
+      ],
+      "answer": 1,
+      "explanation": "RST packets indicate TCP connection rejected. Intermittent pattern with stateless apps suggests network path diversity: some paths through misconfigured firewall (stateful firewall sees response without original request, sends RST), asymmetric routing, or firewall state timeout. Troubleshoot: trace route diversity, firewall logs, asymmetric route detection. Servers stateless rules out app. LB would show consistent behavior. Objective 6.2"
+    },
+    {
+      "q": "After migrating to larger database instance (4x CPU, 4x memory), query performance improved marginally (10%) not 4x. Connection pool, indexes unchanged. What explains limited improvement?",
+      "options": [
+        "Database not using resources",
+        "Bottleneck moved to different resource not scaled: disk I/O, network bandwidth, lock contention, or inefficient queries limiting parallelization",
+        "Need even larger instance",
+        "Migration issue"
+      ],
+      "answer": 1,
+      "explanation": "Amdahl's Law: performance limited by unparallelizable bottleneck. If disk I/O is bottleneck (same storage), CPU/memory increases don't help. If queries have row-level locks, parallelism limited. If network-bound, more CPU irrelevant. Identify actual bottleneck. Database likely using resources but bottleneck elsewhere. Larger instance won't help without addressing bottleneck. Migration successful but wrong optimization. Objective 6.3"
+    },
+    {
+      "q": "An SSL/TLS handshake failure affects some clients but not others. Server certificate valid, not expired, intermediate certificates present. Failed clients get 'certificate not trusted' error. Successful clients use same CA bundle. What causes selective failure?",
+      "options": [
+        "Client misconfiguration",
+        "Server using SNI (Server Name Indication) with multiple certificates; clients not sending SNI get wrong certificate; or intermediate certificate order issue affecting specific client TLS implementations",
+        "Certificate is actually invalid",
+        "Firewall blocking some clients"
+      ],
+      "answer": 1,
+      "explanation": "Selective TLS failures often from: SNI issues (clients not sending SNI get default cert), intermediate certificate order (some client implementations strict about order), TLS version incompatibility, cipher suite mismatch. Debug: check if clients send SNI, test with specific TLS versions, verify intermediate chain order. Certificate valid (some clients work). Firewall would block all traffic not just TLS handshake. Objective 6.2"
+    },
+    {
+      "q": "Application deployment succeeded, health checks pass, but users report 404 errors for specific endpoints. Other endpoints work. No errors in application logs. Kubernetes ingress configuration recently updated. What's the investigation path?",
+      "options": [
+        "Application routing bug",
+        "Ingress path routing misconfiguration: path rules not matching expected URLs, path prefix vs exact match, URL rewriting rules incorrect, or ingress controller caching old config",
+        "DNS issues",
+        "Load balancer problem"
+      ],
+      "answer": 1,
+      "explanation": "Selective 404s after ingress changes point to routing config: path rules don't match (path: /api vs path: /api/), prefix vs exact match semantics, rewrite rules broken, ingress controller stale cache. Check ingress spec, test path matching, ingress controller logs. App logs clean suggests request not reaching app. DNS affects all endpoints. LB doesn't cause selective 404s. Objective 6.2"
+    },
+    {
+      "q": "Container memory limit set to 4GB. Application crashes with OOMKilled but monitoring shows max memory usage 3.2GB. Why is container killed below limit?",
+      "options": [
+        "Kubernetes bug",
+        "Memory accounting includes page cache and tmpfs; kernel OOM killer triggers based on different metrics than container runtime reports; or memory spike faster than monitoring samples",
+        "Monitoring lag",
+        "Wrong pod selected"
+      ],
+      "answer": 1,
+      "explanation": "Container memory accounting complex: includes page cache (Linux buffers), tmpfs mounts, memory spike between monitoring samples (monitoring every 10s, spike in 1s). Kernel OOM killer uses different metrics than Prometheus. Check: cgroup memory stats (memory.stat), increase monitoring granularity, review memory breakdown. Not bug. Monitoring lag partial factor. Right pod (OOM event confirms). Objective 6.3"
+    },
+    {
+      "q": "A database failover test succeeds: read replica promoted to primary in 30 seconds. Production failover takes 15 minutes causing outage. Test and production configurations identical. What was missed in testing?",
+      "options": [
+        "Production has more data",
+        "Test didn't account for application connection pool draining, DNS TTL propagation, client-side caching, or service discovery updates; infrastructure failed but application layer not tested",
+        "Hardware differences",
+        "Network speed differences"
+      ],
+      "answer": 1,
+      "explanation": "Database failover fast but application layer slow: connection pools must detect failure and reconnect (may take minutes with default settings), DNS TTL causes stale connections (clients cache old IP), service discovery propagation delay, client-side circuit breakers may keep old endpoint marked down. Test infrastructure in isolation missed application integration. Data volume affects replication not failover. Hardware irrelevant to failover time. Network sufficient for test. Objective 6.1"
+    }
+  ]
+}
