@@ -176,6 +176,13 @@
       border-radius: 8px;
     }
     .explanation.visible { display: block; }
+    .answer-feedback {
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .answer-feedback.correct { color: #28a745; }
+    .answer-feedback.incorrect { color: #dc3545; }
+    .answer-feedback.neutral { color: #666; }
 
     .btn {
       padding: 12px 20px;
@@ -439,6 +446,8 @@
     let currentExamQuestions = [];
     let currentQuestionIndex = 0;
     let userAnswers = [];
+    let currentDisplayedQuestions = [];
+    let browseAnswers = {};
     let timerInterval = null;
     let timeRemaining = 0;
     let examHistory = JSON.parse(localStorage.getItem('examHistory') || '[]');
@@ -684,6 +693,7 @@
         });
       }
 
+      currentDisplayedQuestions = questionsToDisplay;
       questionsToDisplay.forEach((q, globalIdx) => {
         const card = createQuestionCard(q, globalIdx);
         container.appendChild(card);
@@ -700,9 +710,10 @@
     function createQuestionCard(question, index) {
       const card = document.createElement('div');
       card.className = 'question-card';
+      const selectedIndex = browseAnswers[question._key];
 
       const optionsHTML = question.options.map((opt, i) =>
-        `<div class="option" onclick="selectOption(${index}, ${i})" id="option-${index}-${i}">${opt}</div>`
+        `<div class="option ${selectedIndex === i ? 'selected' : ''}" onclick="selectOption(${index}, ${i})" id="option-${index}-${i}">${opt}</div>`
       ).join('');
 
       card.innerHTML = `
@@ -711,6 +722,7 @@
         <div class="options">${optionsHTML}</div>
         <button class="show-answer-btn" onclick="showAnswer(${index})">Show Answer & Explanation</button>
         <div class="explanation" id="explanation-${index}">
+          <div class="answer-feedback" id="answer-feedback-${index}"></div>
           <strong>✅ Correct Answer: ${question.options[question.answer]}</strong><br><br>
           ${question.explanation}
         </div>
@@ -724,6 +736,9 @@
     }
 
     function selectOption(questionIndex, optionIndex) {
+      const question = currentDisplayedQuestions[questionIndex];
+      if (!question) return;
+      browseAnswers[question._key] = optionIndex;
       // Clear any previously selected option for this question
       document.querySelectorAll(`[id^="option-${questionIndex}-"]`).forEach(el => el.classList.remove('selected'));
       const selected = document.getElementById(`option-${questionIndex}-${optionIndex}`);
@@ -732,7 +747,42 @@
 
     function showAnswer(questionIndex) {
       const explanation = document.getElementById(`explanation-${questionIndex}`);
+      const feedback = document.getElementById(`answer-feedback-${questionIndex}`);
+      const question = currentDisplayedQuestions[questionIndex];
+      if (!question || !explanation) return;
+
       explanation.classList.toggle('visible');
+
+      const optionEls = document.querySelectorAll(`[id^="option-${questionIndex}-"]`);
+      optionEls.forEach(el => el.classList.remove('correct', 'wrong'));
+
+      if (!explanation.classList.contains('visible')) {
+        if (feedback) {
+          feedback.textContent = '';
+          feedback.className = 'answer-feedback';
+        }
+        return;
+      }
+
+      const chosen = browseAnswers[question._key];
+      const correctIndex = question.answer;
+      const correctEl = document.getElementById(`option-${questionIndex}-${correctIndex}`);
+      if (correctEl) correctEl.classList.add('correct');
+
+      if (feedback) {
+        if (chosen === null || chosen === undefined) {
+          feedback.textContent = 'No option selected yet.';
+          feedback.className = 'answer-feedback neutral';
+        } else if (chosen === correctIndex) {
+          feedback.textContent = 'Correct! You chose the right answer.';
+          feedback.className = 'answer-feedback correct';
+        } else {
+          feedback.textContent = 'Incorrect. Review the correct answer below.';
+          feedback.className = 'answer-feedback incorrect';
+          const chosenEl = document.getElementById(`option-${questionIndex}-${chosen}`);
+          if (chosenEl) chosenEl.classList.add('wrong');
+        }
+      }
     }
 
     function switchTab(tabName, btnEl) {
